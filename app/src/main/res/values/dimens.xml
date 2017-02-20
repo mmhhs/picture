@@ -1,0 +1,10 @@
+<resources>
+
+    <dimen name="navigation_bar_height_top">54dp</dimen>
+    <dimen name="navigation_bar_height_bottom">54dp</dimen>
+    <dimen name="navigation_text_bottom">12sp</dimen>
+
+    <dimen name="actionbar_vertival_padding">10dp</dimen>
+    <dimen name="line_h">0.1dp</dimen>
+
+</resources>

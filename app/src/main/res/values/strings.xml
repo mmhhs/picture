@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Picture</string>
+    <string name="choose_images_all">所有图片</string>
+    <string name="choose_images_query">查询图库</string>
+    <string name="choose_images_sd">SD卡不存在或者正在使用USB连接</string>
+    <string name="choose_images_max">最多能选择图片个数为</string>
+    <string name="choose_images_delete">确定删除该图片？</string>
+    <string name="choose_images_image">图片</string>
+    <string name="choose_images_unit">张</string>
+    <string name="choose_images_done">完成</string>
+    <string name="choose_images_preview">预览</string>
+    <string name="choose_images_choose">选择</string>
+    <string name="choose_images_fails">加载本地图片失败</string>
+</resources>
