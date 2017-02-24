@@ -55,6 +55,7 @@ public class PicturePickActivity extends Activity {
     public TextView folderText;
     public TextView previewText;
     public LinearLayout footerLayout;
+    public LinearLayout backLayout;
 
     private int screenWidth = 0;//屏幕宽度
     private int statusBarHeight = 0;//状态栏高度
@@ -76,6 +77,7 @@ public class PicturePickActivity extends Activity {
         FrescoUtils.init(this);
         gridView = (GridView)findViewById(R.id.picture_ui_home_gridview);
         doneText = (TextView)findViewById(R.id.picture_ui_title_done);
+        backLayout = (LinearLayout)findViewById(R.id.picture_ui_title_back_layout);
         folderText = (TextView)findViewById(R.id.picture_ui_footer_folder);
         previewText = (TextView)findViewById(R.id.picture_ui_footer_preview);
         footerLayout = (LinearLayout)findViewById(R.id.picture_ui_footer_layout);
@@ -101,6 +103,12 @@ public class PicturePickActivity extends Activity {
                         setFolderShow(position);
                     }
                 });
+            }
+        });
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
