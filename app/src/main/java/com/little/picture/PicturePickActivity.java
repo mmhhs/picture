@@ -111,6 +111,7 @@ public class PicturePickActivity extends Activity {
                 finish();
             }
         });
+        doneText.setEnabled(false);
 
         screenWidth = ImageUtil.getScreenWidth(this);
         statusBarHeight = ImageUtil.getStatusBarHeight(this);
@@ -290,9 +291,11 @@ public class PicturePickActivity extends Activity {
             if (chooseList!=null&&chooseList.size()>0){
                 doneText.setText(""+getString(R.string.picture_done)+"("+chooseList.size()+"/"+maxSize+")");
                 previewText.setText(""+getString(R.string.picture_preview)+"("+chooseList.size()+")");
+                doneText.setEnabled(true);
             }else {
                 doneText.setText(""+getString(R.string.picture_done));
                 previewText.setText(""+getString(R.string.picture_preview));
+                doneText.setEnabled(false);
             }
         }
     };
