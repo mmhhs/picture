@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class ImageBean implements Serializable{
+public class ImageEntity implements Serializable{
 	/**
 	 * 文件夹的第一张图片路径
 	 */

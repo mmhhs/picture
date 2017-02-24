@@ -1,10 +1,10 @@
 <resources>
 
-    <dimen name="navigation_bar_height_top">54dp</dimen>
-    <dimen name="navigation_bar_height_bottom">54dp</dimen>
-    <dimen name="navigation_text_bottom">12sp</dimen>
+    <dimen name="picture_navi_bar_height_top">54dp</dimen>
+    <dimen name="picture_navi_bar_height_bottom">44dp</dimen>
+    <dimen name="picture_navi_text">12sp</dimen>
 
-    <dimen name="actionbar_vertival_padding">10dp</dimen>
-    <dimen name="line_h">0.1dp</dimen>
+    <dimen name="picture_vertical_padding">10dp</dimen>
+    <dimen name="picture_line_height">0.1dp</dimen>
 
 </resources>

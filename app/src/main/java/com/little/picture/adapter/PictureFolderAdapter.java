@@ -1,4 +1,4 @@
-package com.little.picture;
+package com.little.picture.adapter;
 
 
 import android.content.Context;
@@ -10,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.little.picture.model.ImageBean;
+import com.little.picture.R;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.fresco.FrescoUtils;
 import com.little.picture.util.fresco.InstrumentedDraweeView;
@@ -18,11 +19,11 @@ import com.little.picture.util.fresco.InstrumentedDraweeView;
 import java.util.List;
 
 
-public class ChooseImagesFolderAdapter extends BaseAdapter{
+public class PictureFolderAdapter extends BaseAdapter{
     public Context context;
-    private List<ImageBean> list;
+    private List<ImageEntity> list;
 
-    public ChooseImagesFolderAdapter(Context context, List<ImageBean> list) {
+    public PictureFolderAdapter(Context context, List<ImageEntity> list) {
         this.context = context;
         this.list = list;
     }
@@ -47,17 +48,17 @@ public class ChooseImagesFolderAdapter extends BaseAdapter{
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.base_adapter_choose_images_folder, null);
+                    R.layout.picture_adapter_folder, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        ImageBean imageBean = list.get(position);
-        viewHolder.nameText.setText(imageBean.getFolderName());
-        viewHolder.countText.setText(imageBean.getImageCounts()+context.getString(R.string.choose_images_unit));
-        FrescoUtils.displayImage(viewHolder.topImage, ImageUtil.completeImagePath(imageBean.getTopImagePath()), ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
-        if (imageBean.getSelected()){
+        ImageEntity imageEntity = list.get(position);
+        viewHolder.nameText.setText(imageEntity.getFolderName());
+        viewHolder.countText.setText(imageEntity.getImageCounts()+context.getString(R.string.picture_unit));
+        FrescoUtils.displayImage(viewHolder.topImage, ImageUtil.completeImagePath(imageEntity.getTopImagePath()), ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        if (imageEntity.getSelected()){
             viewHolder.selectImage.setVisibility(View.VISIBLE);
         }else {
             viewHolder.selectImage.setVisibility(View.GONE);
@@ -73,11 +74,11 @@ public class ChooseImagesFolderAdapter extends BaseAdapter{
         public LinearLayout containLayout;
 
         public ViewHolder(View convertView) {
-            topImage = (InstrumentedDraweeView)convertView.findViewById(R.id.base_fresco_fitcenter_imageview);
-            selectImage = (ImageView)convertView.findViewById(R.id.base_adapter_choose_images_folder_select);
-            nameText = (TextView)convertView.findViewById(R.id.base_adapter_choose_images_folder_name);
-            countText = (TextView)convertView.findViewById(R.id.base_adapter_choose_images_folder_count);
-            containLayout = (LinearLayout)convertView.findViewById(R.id.base_adapter_choose_images_folder_layout);
+            topImage = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_center_crop_draweeView);
+            selectImage = (ImageView)convertView.findViewById(R.id.picture_adapter_folder_select);
+            nameText = (TextView)convertView.findViewById(R.id.picture_adapter_folder_name);
+            countText = (TextView)convertView.findViewById(R.id.picture_adapter_folder_count);
+            containLayout = (LinearLayout)convertView.findViewById(R.id.picture_adapter_folder_layout);
         }
     }
 

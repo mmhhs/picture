@@ -50,7 +50,7 @@ public class ChooseImagesSampleAdapter extends BaseAdapter{
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.base_adapter_choose_images_grid, null);
+                    R.layout.picture_adapter_grid, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -61,7 +61,7 @@ public class ChooseImagesSampleAdapter extends BaseAdapter{
         viewHolder.containLayout.getLayoutParams().height = itemWidth;
         viewHolder.checkBox.setVisibility(View.GONE);
         if (position==(list.size())){
-            viewHolder.contentImage.setImageResource(R.drawable.base_choose_images_button);
+            viewHolder.contentImage.setImageResource(R.drawable.picture_button_green);
         }else {
 //            imageLoader.displayImage("file://"+list.get(position),viewHolder.contentImage, OptionTools.getNoDiscOptions(context));
 
@@ -86,10 +86,10 @@ public class ChooseImagesSampleAdapter extends BaseAdapter{
         public RelativeLayout containLayout;
 
         public ViewHolder(View convertView) {
-            contentImage = (InstrumentedDraweeView)convertView.findViewById(R.id.base_fresco_fitcenter_imageview);
-            selectorImage = (ImageView)convertView.findViewById(R.id.base_adapter_choose_images_grid_selector);
-            checkBox = (CheckBox)convertView.findViewById(R.id.base_adapter_choose_images_grid_checkBox);
-            containLayout = (RelativeLayout)convertView.findViewById(R.id.base_adapter_choose_images_grid_layout);
+            contentImage = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_fit_center_draweeView);
+            selectorImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_selector);
+            checkBox = (CheckBox)convertView.findViewById(R.id.picture_adapter_grid_checkBox);
+            containLayout = (RelativeLayout)convertView.findViewById(R.id.picture_adapter_grid_layout);
         }
     }
 

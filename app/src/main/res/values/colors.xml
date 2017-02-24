@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_white">#ffffff</color>
-    <color name="put_on">#00000000</color>
-    <color name="put_off">#40000000</color>
-    <color name="grey">#3ce1e1e1</color>
-    <color name="white">#ffffff</color>
-    <color name="transparent">#70000000</color>
-    <color name="grey_deep">#484848</color>
-    <!-- 线条颜色 -->
-    <color name="line_color">#e6e6e6</color>
-    <color name="text_black">#000000</color>
-    <color name="text_grey_deep">#484848</color>
-    <color name="text_grey_light">#b8b8b8</color>
-    <color name="text_white">#ffffff</color>
-    <color name="choose_images_transparent">#e0000000</color>
-    <color name="choose_images_bg">#181818</color>
-    <color name="choose_images_title_bg">#22292c</color>
-    <color name="choose_images_done_on">#45c01a</color>
-    <color name="choose_images_done_off">#337523</color>
-    <color name="choose_images_text">#cfcfcf</color>
-    <color name="choose_images_line">#14191a</color>
+    <color name="picture_white">#ffffff</color>
+    <color name="picture_press_on">#00000000</color>
+    <color name="picture_press_off">#40000000</color>
+    <color name="picture_grey">#eeeeee</color>
+    <color name="picture_transparent">#70000000</color>
+    <color name="picture_transparent2">#ee000000</color>
+    <color name="picture_deep_grey">#484848</color>
+    <color name="picture_light_grey">#b8b8b8</color>
+    <color name="picture_black">#000000</color>
+    <color name="picture_bg">#181818</color>
+    <color name="picture_title_bg">#22292c</color>
+    <color name="picture_green_on">#45c01a</color>
+    <color name="picture_green_off">#337523</color>
+    <color name="picture_text">#cfcfcf</color>
+    <color name="picture_line">#14191a</color>
+    <color name="picture_line_color">#e6e6e6</color>
+    <color name="bordercolor">#e6e6e6</color>
 </resources>

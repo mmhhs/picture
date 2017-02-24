@@ -41,8 +41,8 @@ public class ConfigConstants {
     public static final int MAX_DISK_CACHE_SIZE = 50 * ByteConstants.MB;//默认图磁盘缓存的最大值
 
 
-    private static  String IMAGE_PIPELINE_SMALL_CACHE_DIR = "imagepipeline_cache";//小图所放路径的文件夹名
-    private static  String IMAGE_PIPELINE_CACHE_DIR = "imagepipeline_cache";//默认图所放路径的文件夹名
+    private static  String IMAGE_PIPELINE_SMALL_CACHE_DIR = "cache";//小图所放路径的文件夹名
+    private static  String IMAGE_PIPELINE_CACHE_DIR = "cache";//默认图所放路径的文件夹名
 
     private static ImagePipelineConfig sImagePipelineConfig;
 
@@ -249,10 +249,10 @@ public class ConfigConstants {
     @SuppressWarnings("deprecation")
     public static void init(final Resources resources) {
         if (sPlaceholderDrawable == null) {
-            sPlaceholderDrawable = resources.getDrawable(R.color.grey);
+            sPlaceholderDrawable = resources.getDrawable(R.color.picture_grey);
         }
         if (sErrorDrawable == null) {
-            sErrorDrawable = resources.getDrawable(R.color.grey_deep);
+            sErrorDrawable = resources.getDrawable(R.color.picture_grey);
         }
     }
 

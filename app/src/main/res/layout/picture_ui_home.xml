@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
-    style="@style/base_background_white"
+    style="@style/picture_background_white"
     >
-    <include layout="@layout/base_choose_images_title" />
+    <include layout="@layout/picture_ui_title" />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/choose_images_bg">
+        android:background="@color/picture_bg">
 
         <GridView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/base_choose_images_gridView"
+            android:id="@+id/picture_ui_home_gridview"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:numColumns="3"
@@ -23,8 +23,8 @@
 
         <include
             android:layout_width="match_parent"
-            android:layout_height="@dimen/navigation_bar_height_bottom"
-            layout="@layout/base_choose_images_footer"
+            android:layout_height="@dimen/picture_navi_bar_height_bottom"
+            layout="@layout/picture_ui_footer"
             android:layout_alignParentBottom="true" />
     </RelativeLayout>
 </LinearLayout>

@@ -23,7 +23,7 @@ import com.little.picture.listener.IOnLoadListener;
 public class InstrumentedDraweeView extends SimpleDraweeView {
 
   private ControllerListener<Object> mListener;
-  private IOnLoadListener iOnLoadListener;
+  private IOnLoadListener onLoadListener;
 
   public InstrumentedDraweeView(Context context, GenericDraweeHierarchy hierarchy) {
     super(context, hierarchy);
@@ -49,8 +49,8 @@ public class InstrumentedDraweeView extends SimpleDraweeView {
     mListener = new BaseControllerListener<Object>() {
       @Override
       public void onSubmit(String id, Object callerContext) {
-        if (iOnLoadListener!=null){
-          iOnLoadListener.onStart();
+        if (onLoadListener !=null){
+          onLoadListener.onStart();
         }
       }
       @Override
@@ -58,20 +58,20 @@ public class InstrumentedDraweeView extends SimpleDraweeView {
         String id,
         @Nullable Object imageInfo,
         @Nullable Animatable animatable) {
-        if (iOnLoadListener!=null){
-          iOnLoadListener.onSuccess();
+        if (onLoadListener !=null){
+          onLoadListener.onSuccess();
         }
       }
       @Override
       public void onFailure(String id, Throwable throwable) {
-        if (iOnLoadListener!=null){
-          iOnLoadListener.onFailure();
+        if (onLoadListener !=null){
+          onLoadListener.onFail();
         }
       }
       @Override
       public void onRelease(String id) {
-        if (iOnLoadListener!=null){
-          iOnLoadListener.onCancel();
+        if (onLoadListener !=null){
+          onLoadListener.onCancel();
         }
       }
     };
@@ -103,11 +103,11 @@ public class InstrumentedDraweeView extends SimpleDraweeView {
 
 
 
-  public IOnLoadListener getiOnLoadListener() {
-    return iOnLoadListener;
+  public IOnLoadListener getOnLoadListener() {
+    return onLoadListener;
   }
 
-  public void setiOnLoadListener(IOnLoadListener iOnLoadListener) {
-    this.iOnLoadListener = iOnLoadListener;
+  public void setOnLoadListener(IOnLoadListener onLoadListener) {
+    this.onLoadListener = onLoadListener;
   }
 }

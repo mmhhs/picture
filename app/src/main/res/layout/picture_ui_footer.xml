@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/navigation_bar_height_bottom"
+    android:layout_height="@dimen/picture_navi_bar_height_bottom"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:id="@+id/base_choose_images_footer_layout"
-    android:background="@color/choose_images_transparent"
+    android:id="@+id/picture_ui_footer_layout"
+    android:background="@color/picture_transparent2"
     >
-
-
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="40dp"
         android:text="1/1"
-        style="@style/base_text_choose_images_text_16"
+        style="@style/picture_text_16"
         android:layout_marginLeft="10dp"
         android:paddingLeft="10dp"
         android:paddingRight="20dp"
         android:gravity="center_vertical"
         android:minWidth="70dp"
-        android:background="@drawable/base_choose_images_folder_bg"
-        android:id="@+id/base_choose_images_footer_folder" />
+        android:background="@drawable/picture_menu_bg"
+        android:id="@+id/picture_ui_footer_folder" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1"></LinearLayout>
+        android:layout_weight="1">
+
+    </LinearLayout>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choose_images_choose"
+        android:text="@string/picture_choose"
         android:visibility="gone"
         android:layout_marginRight="15dp"
-        android:paddingLeft="40dp"
-        android:button="@drawable/base_choose_images_folder_check"
-        style="@style/base_text_choose_images_text_16"
-        android:id="@+id/base_choose_images_footer_choose" />
+        android:paddingLeft="20dp"
+        android:button="@drawable/picture_check"
+        style="@style/picture_text_16"
+        android:id="@+id/picture_ui_footer_choose" />
 
     <TextView
-        android:background="@drawable/base_put_effect"
+        android:background="@drawable/picture_press"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="40dp"
         android:gravity="center"
-        android:text="@string/choose_images_preview"
+        android:text="@string/picture_preview"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:layout_marginRight="15dp"
-        style="@style/base_text_choose_images_text_16"
-        android:id="@+id/base_choose_images_footer_preview" />
+        style="@style/picture_text_16"
+        android:id="@+id/picture_ui_footer_preview" />
 </LinearLayout>

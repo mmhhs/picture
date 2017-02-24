@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 /**
  * 图片工具类
@@ -47,6 +48,30 @@ public class ImageUtil {
     public static int getScreenHeight(Activity activity){
         int screenHeight = activity.getResources().getDisplayMetrics().heightPixels;
         return screenHeight;
+    }
+
+    /**
+     * 获取状态栏高度
+     * @param activity
+     * @return
+     */
+    public static int getStatusBarHeight(Activity activity){
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0, sbar = 38;//默认为38，貌似大部分是这样的
+
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            sbar = activity.getResources().getDimensionPixelSize(x);
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return sbar;
     }
 
     /**

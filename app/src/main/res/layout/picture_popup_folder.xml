@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/picture_popup_folder_layout">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/picture_style_listView"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="@dimen/picture_navi_bar_height_bottom"
+        android:id="@+id/picture_popup_folder_listView" />
+</LinearLayout>

@@ -4,115 +4,70 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
-    <style name="base_background_white">
-        <item name="android:background">@color/bg_white</item>
+    <style name="picture_background_white">
+        <item name="android:background">@color/picture_white</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:clipToPadding">true</item>
     </style>
-    <style name="base_text_choose_images_text_18">
-        <item name="android:textColor">@color/choose_images_text</item>
+    <style name="picture_text_16">
+        <item name="android:textColor">@color/picture_text</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="picture_text_14">
+        <item name="android:textColor">@color/picture_text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="picture_text_black_16">
+        <item name="android:textColor">@color/picture_black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="picture_text_grey_deep_14">
+        <item name="android:textColor">@color/picture_deep_grey</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="picture_text_white_18">
+        <item name="android:textColor">@color/picture_white</item>
         <item name="android:textSize">18sp</item>
     </style>
-    <style name="base_text_choose_images_text_16">
-        <item name="android:textColor">@color/choose_images_text</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="base_text_choose_images_text_14">
-        <item name="android:textColor">@color/choose_images_text</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="base_text_black_16">
-        <item name="android:textColor">@color/text_black</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="base_text_black_14">
-        <item name="android:textColor">@color/text_black</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="base_text_black_12">
-        <item name="android:textColor">@color/text_black</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-    <style name="base_text_grey_deep_16">
-        <item name="android:textColor">@color/text_grey_deep</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="base_text_grey_deep_14">
-        <item name="android:textColor">@color/text_grey_deep</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="base_text_grey_deep_12">
-        <item name="android:textColor">@color/text_grey_deep</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-    <style name="base_text_grey_light_16">
-        <item name="android:textColor">@color/text_grey_light</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="base_text_grey_light_14">
-        <item name="android:textColor">@color/text_grey_light</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="base_text_grey_light_12">
-        <item name="android:textColor">@color/text_grey_light</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-    <style name="base_text_white_18">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-    <style name="base_text_white_16">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="base_text_white_14">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-    <style name="base_text_white_12">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
 
     <!-- listview style -->
-    <style name="base_style_listview">
+    <style name="picture_style_listView">
         <item name="android:cacheColorHint">@android:color/transparent</item>
-        <item name="android:divider">@color/line_color</item>
-        <item name="android:dividerHeight">0.5dp</item>
+        <item name="android:divider">@color/picture_line_color</item>
+        <item name="android:dividerHeight">0.4dp</item>
         <item name="android:listSelector">@android:color/transparent</item>
     </style>
 
     <!-- fresco -->
-    <style name="fresco_centerCrop">
+    <style name="picture_fresco_centerCrop">
         <item name="fadeDuration">30</item>
         <item name="actualImageScaleType">centerCrop</item>
-        <item name="placeholderImage">@color/grey</item>
+        <item name="placeholderImage">@color/picture_grey</item>
         <item name="placeholderImageScaleType">fitXY</item>
-        <item name="failureImage">@color/grey</item>
+        <item name="failureImage">@color/picture_grey</item>
         <item name="failureImageScaleType">fitXY</item>
-        <item name="retryImage">@color/grey</item>
+        <item name="retryImage">@color/picture_grey</item>
         <item name="retryImageScaleType">fitXY</item>
     </style>
-    <style name="fresco_fitCenter">
+    <style name="picture_fresco_fitCenter">
         <item name="fadeDuration">30</item>
         <item name="actualImageScaleType">fitCenter</item>
-        <item name="placeholderImage">@color/grey</item>
+        <item name="placeholderImage">@color/picture_grey</item>
         <item name="placeholderImageScaleType">fitXY</item>
-        <item name="failureImage">@color/grey</item>
+        <item name="failureImage">@color/picture_grey</item>
         <item name="failureImageScaleType">fitXY</item>
-        <item name="retryImage">@color/grey</item>
+        <item name="retryImage">@color/picture_grey</item>
         <item name="retryImageScaleType">fitXY</item>
     </style>
-    <style name="fresco_oval">
+    <style name="picture_fresco_oval">
         <item name="fadeDuration">30</item>
         <item name="actualImageScaleType">fitCenter</item>
         <item name="roundAsCircle">true</item>
-        <item name="placeholderImage">@drawable/grzx_tx</item>
+        <item name="placeholderImage">@drawable/picture_avatar</item>
         <item name="placeholderImageScaleType">fitCenter</item>
-        <item name="failureImage">@drawable/grzx_tx</item>
+        <item name="failureImage">@drawable/picture_avatar</item>
         <item name="failureImageScaleType">fitCenter</item>
-        <item name="retryImage">@drawable/grzx_tx</item>
+        <item name="retryImage">@drawable/picture_avatar</item>
         <item name="retryImageScaleType">fitCenter</item>
     </style>
 

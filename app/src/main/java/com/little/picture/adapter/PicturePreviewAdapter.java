@@ -1,4 +1,4 @@
-package com.little.picture;
+package com.little.picture.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.little.picture.R;
 import com.little.picture.listener.IOnItemClickListener;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.fresco.FrescoUtils;
@@ -13,13 +14,13 @@ import com.little.picture.util.fresco.InstrumentedDraweeView;
 
 import java.util.List;
 
-public class ChooseImagesPreviewAdapter extends PagerAdapter {
+public class PicturePreviewAdapter extends PagerAdapter {
 
     private List<String> list;
     private Context context;
-    private IOnItemClickListener iOnItemClickListener;
+    private IOnItemClickListener onItemClickListener;
 
-    public ChooseImagesPreviewAdapter(Context context, List<String> list){
+    public PicturePreviewAdapter(Context context, List<String> list){
         this.context = context;
         this.list = list;
     }
@@ -37,14 +38,14 @@ public class ChooseImagesPreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup view, final int position) {
         View convertView = null;
-        convertView = LayoutInflater.from(context).inflate(R.layout.base_adapter_choose_images_preview, null);
-        InstrumentedDraweeView imageView = (InstrumentedDraweeView)convertView.findViewById(R.id.base_fresco_fitcenter_imageview);
-        FrescoUtils.displayImage(imageView, ImageUtil.completeImagePath(list.get(position)), 720, 1280);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        convertView = LayoutInflater.from(context).inflate(R.layout.picture_adapter_preview, null);
+        InstrumentedDraweeView draweeView = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_fit_center_draweeView);
+        FrescoUtils.displayImage(draweeView, ImageUtil.completeImagePath(list.get(position)), 720, 1280);
+        draweeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (iOnItemClickListener != null) {
-                    iOnItemClickListener.onItemClick(position);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(position);
                 }
             }
         });
@@ -70,11 +71,11 @@ public class ChooseImagesPreviewAdapter extends PagerAdapter {
         return POSITION_NONE;
     }
 
-    public IOnItemClickListener getiOnItemClickListener() {
-        return iOnItemClickListener;
+    public IOnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
     }
 
-    public void setiOnItemClickListener(IOnItemClickListener iOnItemClickListener) {
-        this.iOnItemClickListener = iOnItemClickListener;
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

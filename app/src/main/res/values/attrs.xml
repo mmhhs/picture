@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PageIndicatorView">
+        <attr name="selectedColor" format="color" />
+        <attr name="unselectedColor" format="color" />
+        <attr name="space" format="dimension" />
+        <attr name="alphas" format="integer" />
+        <attr name="radius" format="dimension" />
+    </declare-styleable>
+</resources>

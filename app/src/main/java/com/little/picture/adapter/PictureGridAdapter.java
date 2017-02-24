@@ -1,4 +1,4 @@
-package com.little.picture;
+package com.little.picture.adapter;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.little.picture.PicturePickActivity;
+import com.little.picture.R;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
 import com.little.picture.util.ImageUtil;
@@ -20,23 +22,25 @@ import com.little.picture.util.fresco.InstrumentedDraweeView;
 import java.util.List;
 
 
-public class ChooseImagesGridAdapter extends BaseAdapter{
+public class PictureGridAdapter extends BaseAdapter{
     public Context context;
-    private List<String> list;
-    private List<String> chooseList;
+    private List<String> list;//当前显示图片列表
+    private List<String> chooseList;//已选择的图片列表
     private int itemWidth = 0;
-    private IOnCheckListener iOnCheckListener;
-    private IOnItemClickListener iOnItemClickListener;
-    private int maxSize;
-    private int folderShowIndex;
+    private IOnCheckListener onCheckListener;
+    private IOnItemClickListener onItemClickListener;
+    private int maxSize;//最大选择图片数
+    private int folderShowIndex;//文件夹索引
+    private int funcType;//功能类型
 
-    public ChooseImagesGridAdapter(Context context, List<String> list, List<String> chooseList,int screenWidth,int maxSize,int folderShowIndex) {
+    public PictureGridAdapter(Context context, List<String> list, List<String> chooseList, int screenWidth, int maxSize, int folderShowIndex, int funcType) {
         this.context = context;
         this.list = list;
         this.chooseList = chooseList;
-        itemWidth = (screenWidth- 2* ImageUtil.dip2px(context, 1))/3;
+        this.itemWidth = (screenWidth- 2* ImageUtil.dip2px(context, 1))/3;
         this.maxSize = maxSize;
         this.folderShowIndex = folderShowIndex;
+        this.funcType = funcType;
     }
 
     @Override
@@ -59,21 +63,25 @@ public class ChooseImagesGridAdapter extends BaseAdapter{
         ViewHolder viewHolder = null;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    R.layout.base_adapter_choose_images_grid, null);
+                    R.layout.picture_adapter_grid, null);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         final String path = list.get(position);
-        viewHolder.containLayout.getLayoutParams().width = itemWidth;
-        viewHolder.containLayout.getLayoutParams().height = itemWidth;
+        viewHolder.containerLayout.getLayoutParams().width = itemWidth;
+        viewHolder.containerLayout.getLayoutParams().height = itemWidth;
         if (position==0&&folderShowIndex==0){
-            viewHolder.contentImage.setImageResource(R.drawable.base_take);
+            //全部图片文件夹时显示拍照
+            viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
             viewHolder.checkBox.setVisibility(View.GONE);
         }else {
             FrescoUtils.displayImage(viewHolder.contentImage, ImageUtil.completeImagePath(path), itemWidth, itemWidth);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
+        }
+        if (funcType == PicturePickActivity.PICK_AVATAR){
+            viewHolder.checkBox.setVisibility(View.GONE);
         }
         if (isSelected(path)){
             viewHolder.selectorImage.setVisibility(View.VISIBLE);
@@ -93,11 +101,11 @@ public class ChooseImagesGridAdapter extends BaseAdapter{
             }
         });
         final int p = position;
-        viewHolder.containLayout.setOnClickListener(new View.OnClickListener() {
+        viewHolder.containerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (iOnItemClickListener!=null){
-                    iOnItemClickListener.onItemClick(p);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(p);
                 }
             }
         });
@@ -108,13 +116,13 @@ public class ChooseImagesGridAdapter extends BaseAdapter{
         public InstrumentedDraweeView contentImage;
         public ImageView selectorImage;
         public CheckBox checkBox;
-        public RelativeLayout containLayout;
+        public RelativeLayout containerLayout;
 
         public ViewHolder(View convertView) {
-            contentImage = (InstrumentedDraweeView)convertView.findViewById(R.id.base_fresco_fitcenter_imageview);
-            selectorImage = (ImageView)convertView.findViewById(R.id.base_adapter_choose_images_grid_selector);
-            checkBox = (CheckBox)convertView.findViewById(R.id.base_adapter_choose_images_grid_checkBox);
-            containLayout = (RelativeLayout)convertView.findViewById(R.id.base_adapter_choose_images_grid_layout);
+            contentImage = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_center_crop_draweeView);
+            selectorImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_selector);
+            checkBox = (CheckBox)convertView.findViewById(R.id.picture_adapter_grid_checkBox);
+            containerLayout = (RelativeLayout)convertView.findViewById(R.id.picture_adapter_grid_layout);
         }
     }
 
@@ -134,7 +142,7 @@ public class ChooseImagesGridAdapter extends BaseAdapter{
                 if (chooseList.size()<maxSize){
                     chooseList.add(path);
                 }else {
-                    ToastUtil.addToast(context, "" + context.getString(R.string.choose_images_max) + maxSize);
+                    ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                 }
             }
         }else {
@@ -143,24 +151,24 @@ public class ChooseImagesGridAdapter extends BaseAdapter{
             }
         }
         notifyDataSetChanged();
-        if (iOnCheckListener!=null){
-            iOnCheckListener.onCheck(chooseList);
+        if (onCheckListener !=null){
+            onCheckListener.onCheck(chooseList);
         }
     }
 
-    public IOnCheckListener getiOnCheckListener() {
-        return iOnCheckListener;
+    public IOnCheckListener getOnCheckListener() {
+        return onCheckListener;
     }
 
-    public void setiOnCheckListener(IOnCheckListener iOnCheckListener) {
-        this.iOnCheckListener = iOnCheckListener;
+    public void setOnCheckListener(IOnCheckListener onCheckListener) {
+        this.onCheckListener = onCheckListener;
     }
 
-    public IOnItemClickListener getiOnItemClickListener() {
-        return iOnItemClickListener;
+    public IOnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
     }
 
-    public void setiOnItemClickListener(IOnItemClickListener iOnItemClickListener) {
-        this.iOnItemClickListener = iOnItemClickListener;
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

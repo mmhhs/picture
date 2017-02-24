@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="true"
-        android:drawable="@drawable/base_choose_images_checked" />
+        android:drawable="@drawable/picture_checked" />
     <item
         android:state_checked="false"
-        android:drawable="@drawable/base_choose_images_uncheck" />
+        android:drawable="@drawable/picture_uncheck" />
 </selector>
