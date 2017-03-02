@@ -73,7 +73,7 @@ public class ChoiceBorderView extends View {
     protected void onDraw(Canvas canvas) {
         Paint paintRect = new Paint(); //初始化画笔
         //画边框的画笔
-        paintRect.setColor(getResources().getColor(R.color.bordercolor)); //颜色
+        paintRect.setColor(getResources().getColor(R.color.picture_border_color)); //颜色
         paintRect.setStrokeWidth(RECT_BORDER_WITH); //宽度
         paintRect.setAntiAlias(true); //抗锯齿
         paintRect.setStyle(Paint.Style.STROKE); //设置空心

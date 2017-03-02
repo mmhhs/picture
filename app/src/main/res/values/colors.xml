@@ -16,5 +16,5 @@
     <color name="picture_text">#cfcfcf</color>
     <color name="picture_line">#14191a</color>
     <color name="picture_line_color">#e6e6e6</color>
-    <color name="bordercolor">#e6e6e6</color>
+    <color name="picture_border_color">#e6e6e6</color>
 </resources>
