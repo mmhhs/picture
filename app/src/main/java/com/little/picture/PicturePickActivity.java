@@ -23,7 +23,6 @@ import com.little.picture.util.ImageChooseUtil;
 import com.little.picture.util.ImagePreviewUtil;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.ToastUtil;
-import com.little.picture.util.fresco.FrescoUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class PicturePickActivity extends Activity {
     }
 
     public void init() {
-        FrescoUtils.init(this);
+//        FrescoUtils.init(this);
         gridView = (GridView)findViewById(R.id.picture_ui_home_gridview);
         doneText = (TextView)findViewById(R.id.picture_ui_title_done);
         backLayout = (LinearLayout)findViewById(R.id.picture_ui_title_back_layout);
