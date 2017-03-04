@@ -359,10 +359,12 @@ public class ImageUtil {
     public static int caculateInSampleSize(int width,int height,int scaleWidth,int scaleHeight){
         int be = 1;//be=1表示不缩放
         try {
-            if (width > height && height > scaleWidth) {//如果宽度大的话根据宽度固定大小缩放
+            if (width > height && width > scaleWidth) {//如果宽度大的话根据宽度固定大小缩放
                 be = (int) (width / scaleWidth);
-            } else if (width < height && height > scaleHeight) {//如果高度高的话根据宽度固定大小缩放
+            } else if (width < height && height > scaleHeight) {//如果高度高的话根据高度固定大小缩放
                 be = (int) (height / scaleHeight);
+            }else {
+                be = (int) (width / scaleWidth);
             }
             if(be<=1){
                 be = 1;
