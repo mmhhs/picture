@@ -343,6 +343,9 @@ public class ImageChooseUtil implements Serializable{
 		try {
 			final String result = MediaStore.Images.Media.insertImage(context.getContentResolver(),
 					file.getAbsolutePath(), fileName, null);
+			if (StringUtil.isEmpty(result)){
+				return;
+			}
 			// 最后通知图库更新
 //			context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
 			msc = new MediaScannerConnection(context, new MediaScannerConnection.MediaScannerConnectionClient() {
@@ -358,7 +361,7 @@ public class ImageChooseUtil implements Serializable{
 				}
 			});
 			msc.connect();
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
