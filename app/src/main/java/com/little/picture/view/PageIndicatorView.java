@@ -105,6 +105,7 @@ public class PageIndicatorView extends View {
 		Paint paint = new Paint();
 		paint.setStyle(Paint.Style.FILL);
 		paint.setAlpha(alpha);
+		paint.setAntiAlias(true);
 
 		Rect r = new Rect();
 		getDrawingRect(r);
