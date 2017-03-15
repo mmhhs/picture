@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.little.picture.R;
-import com.little.picture.listener.IOnItemClickListener;
+import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.fresco.FrescoUtils;
-import com.little.picture.util.fresco.InstrumentedDraweeView;
+import com.little.picture.util.fresco.ZoomDraweeView;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public class PicturePreviewAdapter extends PagerAdapter {
 
     private List<String> list;
     private Context context;
-    private IOnItemClickListener onItemClickListener;
+    private IOnGestureListener onGestureListener;
 
     public PicturePreviewAdapter(Context context, List<String> list){
         this.context = context;
@@ -39,13 +39,27 @@ public class PicturePreviewAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup view, final int position) {
         View convertView = null;
         convertView = LayoutInflater.from(context).inflate(R.layout.picture_adapter_preview, null);
-        InstrumentedDraweeView draweeView = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_fit_center_draweeView);
+        ZoomDraweeView draweeView = (ZoomDraweeView)convertView.findViewById(R.id.picture_fresco_zoom_draweeView);
         FrescoUtils.displayImage(draweeView, ImageUtil.completeImagePath(list.get(position)), 720, 1280);
-        draweeView.setOnClickListener(new View.OnClickListener() {
+        draweeView.setOnGestureListener(new IOnGestureListener() {
             @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onItemClick(position);
+            public void onClick() {
+                if (onGestureListener != null) {
+                    onGestureListener.onClick();
+                }
+            }
+
+            @Override
+            public void onDoubleClick() {
+                if (onGestureListener != null) {
+                    onGestureListener.onDoubleClick();
+                }
+            }
+
+            @Override
+            public void onLongPress() {
+                if (onGestureListener != null) {
+                    onGestureListener.onLongPress();
                 }
             }
         });
@@ -71,11 +85,11 @@ public class PicturePreviewAdapter extends PagerAdapter {
         return POSITION_NONE;
     }
 
-    public IOnItemClickListener getOnItemClickListener() {
-        return onItemClickListener;
+    public IOnGestureListener getOnGestureListener() {
+        return onGestureListener;
     }
 
-    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
+    public void setOnGestureListener(IOnGestureListener onGestureListener) {
+        this.onGestureListener = onGestureListener;
     }
 }

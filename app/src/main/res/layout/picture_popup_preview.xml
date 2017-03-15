@@ -19,7 +19,8 @@
         <com.little.picture.view.ClipImageLayout
             android:id="@+id/picture_popup_preview_clipImageLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
         <include
             android:layout_width="match_parent"
             android:layout_height="@dimen/picture_navi_bar_height_top"

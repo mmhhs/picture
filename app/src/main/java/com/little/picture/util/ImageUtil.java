@@ -294,7 +294,7 @@ public class ImageUtil {
             if(!sdCardExist()||imagePath.equals("")){
                 return "";
             }
-            fileSavePath = imagePathFolder +time+".jpg";
+            fileSavePath = imagePathFolder +time+"temp.jpg";
             File folder = new File(imagePathFolder);
             if(!folder.exists()){
                 folder.mkdirs();

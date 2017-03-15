@@ -246,7 +246,16 @@ public class PicturePickActivity extends Activity {
 
     public void onDone(){
         if (chooseImageList.size()>0){
-            imagePreviewUtil.sendPicturePickBroadcast(chooseImageList);
+            if (!imagePreviewUtil.isOriginal()){
+                ArrayList<String> imageList = new ArrayList<String>();
+                for (String path : chooseImageList){
+                    String imagePath = ImageUtil.saveScaleImage(path,ImageChooseUtil.getImagePathFolder(),ImageChooseUtil.SCALE_WIDTH,ImageChooseUtil.SCALE_HEIGHT,100);
+                    imageList.add(imagePath);
+                }
+                imagePreviewUtil.sendPicturePickBroadcast(imageList);
+            }else {
+                imagePreviewUtil.sendPicturePickBroadcast(chooseImageList);
+            }
             finish();
         }
     }

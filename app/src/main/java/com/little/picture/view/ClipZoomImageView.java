@@ -361,18 +361,19 @@ public class ClipZoomImageView extends ImageView implements
 			int dw = d.getIntrinsicWidth();
 			int dh = d.getIntrinsicHeight();
 			float scale = 1.0f;
+			//图片宽小于线框宽 图片高大于线框高
 			if (dw < getWidth() - mHorizontalPadding * 2
 					&& dh > getHeight() - mVerticalPadding * 2)
 			{
 				scale = (getWidth() * 1.0f - mHorizontalPadding * 2) / dw;
 			}
-
+			//图片宽大于线框宽 图片高小于线框高
 			if (dh < getHeight() - mVerticalPadding * 2
 					&& dw > getWidth() - mHorizontalPadding * 2)
 			{
 				scale = (getHeight() * 1.0f - mVerticalPadding * 2) / dh;
 			}
-
+			//图片宽小于线框宽 图片高小于线框高
 			if (dw < getWidth() - mHorizontalPadding * 2
 					&& dh < getHeight() - mVerticalPadding * 2)
 			{
@@ -381,7 +382,7 @@ public class ClipZoomImageView extends ImageView implements
 				float scaleH = (getHeight() * 1.0f - mVerticalPadding * 2) / dh;
 				scale = Math.max(scaleW, scaleH);
 			}
-
+			//小就放大
 			initScale = scale;
 			SCALE_MID = initScale * 2;
 			SCALE_MAX = initScale * 4;

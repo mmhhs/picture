@@ -6,7 +6,7 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/picture_fresco_fit_center" />
+        layout="@layout/picture_fresco_zoom" />
 
 
 </LinearLayout>

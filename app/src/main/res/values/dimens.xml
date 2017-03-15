@@ -1,7 +1,7 @@
 <resources>
 
     <dimen name="picture_navi_bar_height_top">54dp</dimen>
-    <dimen name="picture_navi_bar_height_bottom">44dp</dimen>
+    <dimen name="picture_navi_bar_height_bottom">50dp</dimen>
     <dimen name="picture_navi_text">12sp</dimen>
 
     <dimen name="picture_vertical_padding">10dp</dimen>

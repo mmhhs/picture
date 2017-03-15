@@ -14,4 +14,5 @@
     <string name="picture_confirm">确定</string>
     <string name="picture_cancel">取消</string>
     <string name="picture_clip">裁剪</string>
+    <string name="picture_original">原图</string>
 </resources>

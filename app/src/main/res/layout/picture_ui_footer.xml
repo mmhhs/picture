@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:id="@+id/picture_ui_footer_layout"
-    android:background="@color/picture_transparent2"
+    android:background="@color/picture_title_bg"
     >
 
     <TextView
@@ -21,11 +21,23 @@
         android:background="@drawable/picture_menu_bg"
         android:id="@+id/picture_ui_footer_folder" />
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/picture_original"
+        android:visibility="gone"
+        android:layout_marginLeft="15dp"
+        android:paddingLeft="10dp"
+        android:button="@drawable/picture_select"
+        style="@style/picture_text_16"
+        android:id="@+id/picture_ui_footer_original" />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
 
     </LinearLayout>
 
@@ -35,7 +47,7 @@
         android:text="@string/picture_choose"
         android:visibility="gone"
         android:layout_marginRight="15dp"
-        android:paddingLeft="20dp"
+        android:paddingLeft="10dp"
         android:button="@drawable/picture_check"
         style="@style/picture_text_16"
         android:id="@+id/picture_ui_footer_choose" />

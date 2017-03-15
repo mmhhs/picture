@@ -32,8 +32,8 @@ public class ImageChooseUtil implements Serializable{
 	public static final int CHOOSE_PICTURE = 117;//图库选取
 	public static final int PHOTO_PICKED_WITH_CROP = 118;//裁剪
 
-	public static int SCALE_WIDTH = 360;//缩放至的宽度
-	public static int SCALE_HEIGHT = 640;//缩放至的高度
+    public static int SCALE_WIDTH = 360;//缩放至的宽度
+    public static int SCALE_HEIGHT = 640;//缩放至的高度
 	public static int quality = 100;//图像质量
 	private static String imagePathFolder = "";//存储图片的文件夹
 	private static Uri imageUri;
@@ -71,7 +71,7 @@ public class ImageChooseUtil implements Serializable{
 			dir.mkdirs();
 		}
 	}
-
+	
 	/**
 	 * 获取拍照的照片原图路径
 	 * @return
@@ -92,9 +92,9 @@ public class ImageChooseUtil implements Serializable{
 		}finally{
 			return result;
 		}
-
+		
 	}
-
+	
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
@@ -116,14 +116,14 @@ public class ImageChooseUtil implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
-
+	
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
 			Intent intent = new Intent();
-			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE); 
 			intent.putExtra("return-data", true); // 有返回值
 			imageUrl = imagePathFolder +""+System.currentTimeMillis()+".jpg";
 			imageUri = Uri.fromFile(new File(imageUrl));
@@ -140,8 +140,8 @@ public class ImageChooseUtil implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-
+		
+		
 	}
 
 	/** 从相册获取图片 **/
@@ -159,9 +159,9 @@ public class ImageChooseUtil implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		
 	}
-
+	
 	private static Intent doPickPhotoFromGallery() {
 		Intent intent = new Intent();
 //		int apiLevel = PublicTools.getSystemVersion();
@@ -171,18 +171,18 @@ public class ImageChooseUtil implements Serializable{
 //			intent.setAction(Intent.ACTION_PICK);
 //		}
 		intent.setAction(Intent.ACTION_PICK);
-		// 使用Intent.ACTION_GET_CONTENT这个Action  ACTION_PICK
+		 // 使用Intent.ACTION_GET_CONTENT这个Action  ACTION_PICK
 		intent.setType("image/*"); // 获取任意图片类型
 		intent.putExtra("return-data", true); // 有返回值
-
+		
 		return intent;
 
 	}
-
+	
 	/**
-	 * 裁剪图片
-	 * @param data
-	 */
+     * 裁剪图片
+     * @param data
+     */
 	public void doCropPhoto(Uri data){
 		try {
 			Intent intent = getCropImageIntent(data);
@@ -196,58 +196,58 @@ public class ImageChooseUtil implements Serializable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	private static Intent getCropImageIntent(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
-		intent.setDataAndType(uri, "image/*");
-		intent.putExtra("crop", "true");//可裁剪
-		intent.putExtra("aspectX", 1);
-		intent.putExtra("aspectY", 1);
-		intent.putExtra("outputX", 150);
-		intent.putExtra("outputY", 150);
-		intent.putExtra("scale", true);
+        
+    }
+   
+    private static Intent getCropImageIntent(Uri uri) {
+    	 	Intent intent = new Intent("com.android.camera.action.CROP");
+		   intent.setDataAndType(uri, "image/*");
+		   intent.putExtra("crop", "true");//可裁剪
+		   intent.putExtra("aspectX", 1);
+		   intent.putExtra("aspectY", 1);
+		   intent.putExtra("outputX", 150);
+		   intent.putExtra("outputY", 150);  
+		   intent.putExtra("scale", true);		   
 //		   intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);//保存到相册
-		intent.putExtra("return-data", true);//若为false则表示不返回数据
-		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-		intent.putExtra("noFaceDetection", true);
-		return intent;
-	}
+		   intent.putExtra("return-data", true);//若为false则表示不返回数据
+		   intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		   intent.putExtra("noFaceDetection", true); 
+		   return intent;
+    }
+    
+    /**
+     * 获取相册图片的Uri
+     * @param data
+     * @return
+     */
+    public Uri getGalleryUri(Intent data){
+    	Uri originalUri = null;
+    	try {
 
-	/**
-	 * 获取相册图片的Uri
-	 * @param data
-	 * @return
-	 */
-	public Uri getGalleryUri(Intent data){
-		Uri originalUri = null;
-		try {
-
-			originalUri = data.getData();
+    		originalUri = data.getData();
 //    		if(PublicTools.getSystemVersion()>=19){
 //    			File file = new File(getPath(context, originalUri));
 //    			originalUri = Uri.fromFile(file);
 //    		}
-
+    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
 			return originalUri;
 		}
-
-
-	}
-
-	/**
-	 * 获取相册图片的原始资源地址
-	 * @param data
-	 * @return
-	 */
+    			
+		
+    }
+    
+    /**
+     * 获取相册图片的原始资源地址
+     * @param data
+     * @return
+     */
 	public String getGalleryUrl(Intent data){
-		String result = "";
-		try {
-			ContentResolver resolver = null;
+    	String result = "";
+    	try {    		
+        	ContentResolver resolver = null;
 			if (activity !=null){
 				resolver = activity.getContentResolver();
 			}else {
@@ -255,65 +255,65 @@ public class ImageChooseUtil implements Serializable{
 					resolver = fragment.getActivity().getContentResolver();
 				}
 			}
-			if(data==null){
-				return "";
-			}
-			// 照片的原始资源
-			Uri originalUri = data.getData();
-			if(originalUri!=null)
-			{
+    		if(data==null){
+    			return "";
+    		}
+    		// 照片的原始资源
+    		Uri originalUri = data.getData();	
+    		if(originalUri!=null)
+    		{
 //    			if(PublicTools.getSystemVersion()>=19){
 //    				result = getPath(context, originalUri);
 //    			}else{
-				String[] proj = {MediaStore.Images.Media.DATA};
-				Cursor cursor = resolver.query(originalUri, proj, null, null, null);
-				int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-				if (cursor.moveToFirst()) {
-					result = cursor.getString(column_index);
-				}
-				cursor.close();
+    				String[] proj = {MediaStore.Images.Media.DATA};
+	       			 Cursor cursor = resolver.query(originalUri, proj, null, null, null);
+	       			 int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+	       			 if (cursor.moveToFirst()) {
+	       				 result = cursor.getString(column_index);
+	       			 }
+	       			 cursor.close();
 //    			}
-
-			}
-
+    			 
+    		}
+    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
 			return result;
 		}
-
-	}
-
-
-
-	/**
-	 * 获取拍照的照片的Uri
-	 * @return
-	 */
-	public Uri getTakeUri(){
-
+    	
+    }
+	
+	
+    
+    /**
+     * 获取拍照的照片的Uri
+     * @return
+     */
+    public Uri getTakeUri(){
+    	
 		return imageUri;
-	}
-
-	/**
-	 * 获取裁剪后的bitmap
-	 * @param data
-	 * @return
-	 */
-	public Bitmap getCropBitmap(Intent data){
-		Bitmap bitmap = null;
-		try {
+    }
+    
+    /**
+     * 获取裁剪后的bitmap
+     * @param data
+     * @return
+     */
+    public Bitmap getCropBitmap(Intent data){
+    	Bitmap bitmap = null;
+    	try {
 			bitmap = data.getParcelableExtra("data");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
 			return bitmap;
 		}
+    	
+    }
+    
 
-	}
-
-
-
+	
 	/**
 	 * 获取按比例压缩后的照片路径
 	 * @param imageUrl
@@ -322,7 +322,7 @@ public class ImageChooseUtil implements Serializable{
 	public String getPictureScaleUrl(String imageUrl) {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,imagePathFolder,SCALE_WIDTH,SCALE_HEIGHT,quality);
+    		result = ImageUtil.saveScaleImage(imageUrl,imagePathFolder,SCALE_WIDTH,SCALE_HEIGHT,quality);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -397,36 +397,36 @@ public class ImageChooseUtil implements Serializable{
 
 
 	/**
-	 * 加载本地图片
-	 * @param url
-	 * @return
-	 */
+	* 加载本地图片
+	* @param url
+	* @return
+	*/
 	public static Bitmap getLoacalBitmap(String url) {
-		try {
-			FileInputStream fis = new FileInputStream(url);
-			return BitmapFactory.decodeStream(fis);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
+	     try {
+	          FileInputStream fis = new FileInputStream(url);
+	          return BitmapFactory.decodeStream(fis);
+	     } catch (FileNotFoundException e) {
+	          e.printStackTrace();
+	          return null;
+	     }
 	}
-
+	
 	/**
 	 * 截取图片的中间的200X200的区域
 	 * @param bm
-	 *
+	 * 
 	 * @return
 	 */
 	public static  Bitmap cropCenter(Bitmap bm,int width,int height)
 	{
 		int dstWidth = width;
-		int dstHeight = height;
-		int startWidth = (bm.getWidth() - dstWidth)/2;
-		int startHeight = ((bm.getHeight() - dstHeight) / 2);
-		Rect src = new Rect(startWidth, startHeight, startWidth + dstWidth, startHeight + dstHeight);
-		return dividePart(bm, src);
+        int dstHeight = height;
+        int startWidth = (bm.getWidth() - dstWidth)/2;
+        int startHeight = ((bm.getHeight() - dstHeight) / 2);
+        Rect src = new Rect(startWidth, startHeight, startWidth + dstWidth, startHeight + dstHeight);
+        return dividePart(bm, src);
 	}
-
+	
 	/**
 	 * 剪切图片
 	 * @param bmp 被剪切的图片
@@ -443,68 +443,68 @@ public class ImageChooseUtil implements Serializable{
 		canvas.drawBitmap(bmp, src, des, null);
 		return croppedImage;
 	}
-
+	
 	//4.4以上处理图库选择图片
 	public static String getPath(final Context context, final Uri uri) {
 
-		final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+	    final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-		// DocumentProvider
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
-			// ExternalStorageProvider
-			if (isExternalStorageDocument(uri)) {
-				final String docId = DocumentsContract.getDocumentId(uri);
-				final String[] split = docId.split(":");
-				final String type = split[0];
+	    // DocumentProvider
+	    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && DocumentsContract.isDocumentUri(context, uri)) {
+	        // ExternalStorageProvider
+	        if (isExternalStorageDocument(uri)) {
+	            final String docId = DocumentsContract.getDocumentId(uri);
+	            final String[] split = docId.split(":");
+	            final String type = split[0];
 
-				if ("primary".equalsIgnoreCase(type)) {
-					return Environment.getExternalStorageDirectory() + "/" + split[1];
-				}
+	            if ("primary".equalsIgnoreCase(type)) {
+	                return Environment.getExternalStorageDirectory() + "/" + split[1];
+	            }
 
-			}
-			// DownloadsProvider
-			else if (isDownloadsDocument(uri)) {
+	        }
+	        // DownloadsProvider
+	        else if (isDownloadsDocument(uri)) {
 
-				final String id = DocumentsContract.getDocumentId(uri);
-				final Uri contentUri = ContentUris.withAppendedId(
-						Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+	            final String id = DocumentsContract.getDocumentId(uri);
+	            final Uri contentUri = ContentUris.withAppendedId(
+	                    Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-				return getDataColumn(context, contentUri, null, null);
-			}
-			// MediaProvider
-			else if (isMediaDocument(uri)) {
-				final String docId = DocumentsContract.getDocumentId(uri);
-				final String[] split = docId.split(":");
-				final String type = split[0];
+	            return getDataColumn(context, contentUri, null, null);
+	        }
+	        // MediaProvider
+	        else if (isMediaDocument(uri)) {
+	            final String docId = DocumentsContract.getDocumentId(uri);
+	            final String[] split = docId.split(":");
+	            final String type = split[0];
 
-				Uri contentUri = null;
-				if ("image".equals(type)) {
-					contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-				} else if ("video".equals(type)) {
-					contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-				} else if ("audio".equals(type)) {
-					contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-				}
+	            Uri contentUri = null;
+	            if ("image".equals(type)) {
+	                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+	            } else if ("video".equals(type)) {
+	                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+	            } else if ("audio".equals(type)) {
+	                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+	            }
 
-				final String selection = "_id=?";
-				final String[] selectionArgs = new String[] {
-						split[1]
-				};
+	            final String selection = "_id=?";
+	            final String[] selectionArgs = new String[] {
+	                    split[1]
+	            };
 
-				return getDataColumn(context, contentUri, selection, selectionArgs);
-			}
-		}
-		else if ("content".equalsIgnoreCase(uri.getScheme())) {
-			if (isGooglePhotosUri(uri))
-				return uri.getLastPathSegment();
-			return getDataColumn(context, uri, null, null);
-		}
-		// File
-		else if ("file".equalsIgnoreCase(uri.getScheme())) {
-			return uri.getPath();
-		}
+	            return getDataColumn(context, contentUri, selection, selectionArgs);
+	        }
+	    }
+	    else if ("content".equalsIgnoreCase(uri.getScheme())) {
+	        if (isGooglePhotosUri(uri))
+	            return uri.getLastPathSegment();
+	        return getDataColumn(context, uri, null, null);
+	    }
+	    // File
+	    else if ("file".equalsIgnoreCase(uri.getScheme())) {
+	        return uri.getPath();
+	    }
 
-		return "";
+	    return "";
 	}
 
 	/**
@@ -518,26 +518,26 @@ public class ImageChooseUtil implements Serializable{
 	 * @return The value of the _data column, which is typically a file path.
 	 */
 	public static String getDataColumn(Context context, Uri uri, String selection,
-									   String[] selectionArgs) {
+	        String[] selectionArgs) {
 
-		Cursor cursor = null;
-		final String column = "_data";
-		final String[] projection = {
-				column
-		};
+	    Cursor cursor = null;
+	    final String column = "_data";
+	    final String[] projection = {
+	            column
+	    };
 
-		try {
-			cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
-					null);
-			if (cursor != null && cursor.moveToFirst()) {
-				final int index = cursor.getColumnIndexOrThrow(column);
-				return cursor.getString(index);
-			}
-		} finally {
-			if (cursor != null)
-				cursor.close();
-		}
-		return null;
+	    try {
+	        cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs,
+	                null);
+	        if (cursor != null && cursor.moveToFirst()) {
+	            final int index = cursor.getColumnIndexOrThrow(column);
+	            return cursor.getString(index);
+	        }
+	    } finally {
+	        if (cursor != null)
+	            cursor.close();
+	    }
+	    return null;
 	}
 
 
@@ -546,7 +546,7 @@ public class ImageChooseUtil implements Serializable{
 	 * @return Whether the Uri authority is ExternalStorageProvider.
 	 */
 	public static boolean isExternalStorageDocument(Uri uri) {
-		return "com.android.externalstorage.documents".equals(uri.getAuthority());
+	    return "com.android.externalstorage.documents".equals(uri.getAuthority());
 	}
 
 	/**
@@ -554,7 +554,7 @@ public class ImageChooseUtil implements Serializable{
 	 * @return Whether the Uri authority is DownloadsProvider.
 	 */
 	public static boolean isDownloadsDocument(Uri uri) {
-		return "com.android.providers.downloads.documents".equals(uri.getAuthority());
+	    return "com.android.providers.downloads.documents".equals(uri.getAuthority());
 	}
 
 	/**
@@ -562,7 +562,7 @@ public class ImageChooseUtil implements Serializable{
 	 * @return Whether the Uri authority is MediaProvider.
 	 */
 	public static boolean isMediaDocument(Uri uri) {
-		return "com.android.providers.media.documents".equals(uri.getAuthority());
+	    return "com.android.providers.media.documents".equals(uri.getAuthority());
 	}
 
 	/**
@@ -570,7 +570,7 @@ public class ImageChooseUtil implements Serializable{
 	 * @return Whether the Uri authority is Google Photos.
 	 */
 	public static boolean isGooglePhotosUri(Uri uri) {
-		return "com.google.android.apps.photos.content".equals(uri.getAuthority());
+	    return "com.google.android.apps.photos.content".equals(uri.getAuthority());
 	}
 
 	public static int getScaleWidth() {
