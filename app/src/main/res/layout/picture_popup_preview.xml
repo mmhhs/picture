@@ -36,10 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            app:radius="5dp"
-            app:space="10dp"
-            app:selectedColor="@color/picture_white"
-            app:unselectedColor="@color/picture_light_grey"
+            app:indicatorRadius="3dp"
+            app:indicatorSpace="10dp"
+            app:indicatorSelectLength="0dp"
+            app:indicatorDefaultColor="@color/picture_white"
+            app:indicatorSelectColor="@color/picture_light_grey"
             />
         <com.little.picture.view.ChoiceBorderView
             android:id="@+id/picture_popup_preview_choiceBorderView"

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 指示器 -->
     <declare-styleable name="PageIndicatorView">
-        <attr name="selectedColor" format="color" />
-        <attr name="unselectedColor" format="color" />
-        <attr name="space" format="dimension" />
-        <attr name="alphas" format="integer" />
-        <attr name="radius" format="dimension" />
+        <attr name="indicatorRadius" format="dimension|integer" />
+        <attr name="indicatorSelectLength" format="dimension|integer" />
+        <attr name="indicatorDefaultColor" format="color" />
+        <attr name="indicatorSelectColor" format="color" />
+        <attr name="indicatorSpace" format="dimension|integer" />
+        <attr name="indicatorGravity" format="integer" />
     </declare-styleable>
 </resources>

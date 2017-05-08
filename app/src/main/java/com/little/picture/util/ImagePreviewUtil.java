@@ -142,8 +142,8 @@ public class ImagePreviewUtil {
             imageIndex = position;
             viewPager.setCurrentItem(position);
         }
-        pageIndicatorView.setTotalPage(imageList.size());
-        pageIndicatorView.setCurrentPage(imageIndex);
+        pageIndicatorView.setPageTotal(imageList.size());
+        pageIndicatorView.setPageSelect(imageIndex);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -154,7 +154,7 @@ public class ImagePreviewUtil {
             public void onPageSelected(int position) {
                 indexText.setText("" + (position + 1) + "/" + imageList.size());
                 imageIndex = position;
-                pageIndicatorView.setCurrentPage(imageIndex);
+                pageIndicatorView.setPageSelect(imageIndex);
             }
 
             @Override
