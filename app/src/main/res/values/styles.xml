@@ -38,37 +38,5 @@
         <item name="android:listSelector">@android:color/transparent</item>
     </style>
 
-    <!-- fresco -->
-    <style name="picture_fresco_centerCrop">
-        <item name="fadeDuration">30</item>
-        <item name="actualImageScaleType">centerCrop</item>
-        <item name="placeholderImage">@color/picture_grey</item>
-        <item name="placeholderImageScaleType">fitXY</item>
-        <item name="failureImage">@color/picture_grey</item>
-        <item name="failureImageScaleType">fitXY</item>
-        <item name="retryImage">@color/picture_grey</item>
-        <item name="retryImageScaleType">fitXY</item>
-    </style>
-    <style name="picture_fresco_fitCenter">
-        <item name="fadeDuration">30</item>
-        <item name="actualImageScaleType">fitCenter</item>
-        <item name="placeholderImage">@color/picture_grey</item>
-        <item name="placeholderImageScaleType">fitXY</item>
-        <item name="failureImage">@color/picture_grey</item>
-        <item name="failureImageScaleType">fitXY</item>
-        <item name="retryImage">@color/picture_grey</item>
-        <item name="retryImageScaleType">fitXY</item>
-    </style>
-    <style name="picture_fresco_oval">
-        <item name="fadeDuration">30</item>
-        <item name="actualImageScaleType">fitCenter</item>
-        <item name="roundAsCircle">true</item>
-        <item name="placeholderImage">@drawable/picture_avatar</item>
-        <item name="placeholderImageScaleType">fitCenter</item>
-        <item name="failureImage">@drawable/picture_avatar</item>
-        <item name="failureImageScaleType">fitCenter</item>
-        <item name="retryImage">@drawable/picture_avatar</item>
-        <item name="retryImageScaleType">fitCenter</item>
-    </style>
 
 </resources>

@@ -12,12 +12,11 @@ import android.widget.RelativeLayout;
 
 import com.little.picture.PicturePickActivity;
 import com.little.picture.R;
+import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.ToastUtil;
-import com.little.picture.util.fresco.FrescoUtils;
-import com.little.picture.util.fresco.InstrumentedDraweeView;
 
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class PictureGridAdapter extends BaseAdapter{
             viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
             viewHolder.checkBox.setVisibility(View.GONE);
         }else {
-            FrescoUtils.displayImage(viewHolder.contentImage, ImageUtil.completeImagePath(path), itemWidth, itemWidth);
+            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage, itemWidth, itemWidth);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
         }
         if (funcType == PicturePickActivity.PICK_AVATAR){
@@ -113,13 +112,13 @@ public class PictureGridAdapter extends BaseAdapter{
     }
 
     public final static class ViewHolder {
-        public InstrumentedDraweeView contentImage;
+        public ImageView contentImage;
         public ImageView selectorImage;
         public CheckBox checkBox;
         public RelativeLayout containerLayout;
 
         public ViewHolder(View convertView) {
-            contentImage = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_center_crop_draweeView);
+            contentImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_imageView);
             selectorImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_selector);
             checkBox = (CheckBox)convertView.findViewById(R.id.picture_adapter_grid_checkBox);
             containerLayout = (RelativeLayout)convertView.findViewById(R.id.picture_adapter_grid_layout);

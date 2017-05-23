@@ -8,11 +8,11 @@
         android:layout_height="80dp"
         android:id="@+id/picture_adapter_grid_layout">
 
-        <include
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            layout="@layout/picture_fresco_center_crop" />
-
+            android:scaleType="centerCrop"
+            android:id="@+id/picture_adapter_grid_imageView"/>
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

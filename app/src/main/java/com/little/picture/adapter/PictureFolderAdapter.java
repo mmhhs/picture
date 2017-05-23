@@ -11,10 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.little.picture.R;
+import com.little.picture.glide.GlideUtil;
 import com.little.picture.model.ImageEntity;
 import com.little.picture.util.ImageUtil;
-import com.little.picture.util.fresco.FrescoUtils;
-import com.little.picture.util.fresco.InstrumentedDraweeView;
 
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class PictureFolderAdapter extends BaseAdapter{
         ImageEntity imageEntity = list.get(position);
         viewHolder.nameText.setText(imageEntity.getFolderName());
         viewHolder.countText.setText(imageEntity.getImageCounts()+context.getString(R.string.picture_unit));
-        FrescoUtils.displayImage(viewHolder.topImage, ImageUtil.completeImagePath(imageEntity.getTopImagePath()), ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageEntity.getTopImagePath()),viewHolder.topImage, ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
         if (imageEntity.getSelected()){
             viewHolder.selectImage.setVisibility(View.VISIBLE);
         }else {
@@ -67,14 +66,14 @@ public class PictureFolderAdapter extends BaseAdapter{
     }
 
     public final static class ViewHolder {
-        public InstrumentedDraweeView topImage;
+        public ImageView topImage;
         public ImageView selectImage;
         public TextView nameText;
         public TextView countText;
         public LinearLayout containLayout;
 
         public ViewHolder(View convertView) {
-            topImage = (InstrumentedDraweeView)convertView.findViewById(R.id.picture_fresco_center_crop_draweeView);
+            topImage = (ImageView)convertView.findViewById(R.id.picture_adapter_folder_imageView);
             selectImage = (ImageView)convertView.findViewById(R.id.picture_adapter_folder_select);
             nameText = (TextView)convertView.findViewById(R.id.picture_adapter_folder_name);
             countText = (TextView)convertView.findViewById(R.id.picture_adapter_folder_count);

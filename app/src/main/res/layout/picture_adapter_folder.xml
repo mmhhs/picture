@@ -10,11 +10,12 @@
         android:background="@drawable/picture_folder_bg"
         android:gravity="center_vertical"
         android:id="@+id/picture_adapter_folder_layout">
-        <include
+        <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="15dp"
-            layout="@layout/picture_fresco_center_crop" />
+            android:scaleType="centerCrop"
+            android:id="@+id/picture_adapter_folder_imageView"/>
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
