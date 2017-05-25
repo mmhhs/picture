@@ -74,12 +74,12 @@ public class PicturePickActivity extends Activity {
 
     public void init() {
 //        FrescoUtils.init(this);
-        gridView = (GridView)findViewById(R.id.picture_ui_home_gridview);
-        doneText = (TextView)findViewById(R.id.picture_ui_title_done);
-        backLayout = (LinearLayout)findViewById(R.id.picture_ui_title_back_layout);
-        folderText = (TextView)findViewById(R.id.picture_ui_footer_folder);
-        previewText = (TextView)findViewById(R.id.picture_ui_footer_preview);
-        footerLayout = (LinearLayout)findViewById(R.id.picture_ui_footer_layout);
+        gridView = (GridView) findViewById(R.id.picture_ui_home_gridview);
+        doneText = (TextView) findViewById(R.id.picture_ui_title_done);
+        backLayout = (LinearLayout) findViewById(R.id.picture_ui_title_back_layout);
+        folderText = (TextView) findViewById(R.id.picture_ui_footer_folder);
+        previewText = (TextView) findViewById(R.id.picture_ui_footer_preview);
+        footerLayout = (LinearLayout) findViewById(R.id.picture_ui_footer_layout);
         doneText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,35 +116,35 @@ public class PicturePickActivity extends Activity {
         statusBarHeight = ImageUtil.getStatusBarHeight(this);
         try {
             funcType = getIntent().getExtras().getInt(PICTURE_PICK_TYPE, PICK_IMAGE);
-            maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE,9);
-        }catch (Exception e){
+            maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE, 9);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (funcType==PICK_IMAGE){
+        if (funcType == PICK_IMAGE) {
             previewText.setVisibility(View.VISIBLE);
-        }else if (funcType==PICK_AVATAR){
+        } else if (funcType == PICK_AVATAR) {
             previewText.setVisibility(View.GONE);
         }
 
         imageChooseUtil = new ImageChooseUtil(this);
 
-        imagePreviewUtil = new ImagePreviewUtil(this,gridView);
+        imagePreviewUtil = new ImagePreviewUtil(this, gridView);
         imagePreviewUtil.setActivity(this);
         imagePreviewUtil.setMaxSize(maxSize);
         imagePreviewUtil.setStatusBarHeight(statusBarHeight);
 
-        handler =new Handler(){
+        handler = new Handler() {
             @Override
             //当有消息发送出来的时候就执行Handler的这个方法
-            public void handleMessage(Message msg){
+            public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 boolean res = msg.getData().getBoolean("result");
-                if (res){
+                if (res) {
                     folderImageEntityList = subGroupOfImage(mGroupMap);
                     setFolderShow(0);
-                }else {
-                    ToastUtil.addToast(PicturePickActivity.this,getString(R.string.picture_fail));
+                } else {
+                    ToastUtil.addToast(PicturePickActivity.this, getString(R.string.picture_fail));
                 }
             }
         };
@@ -153,23 +153,21 @@ public class PicturePickActivity extends Activity {
     }
 
 
-
-    private void queryData(){
-        new Thread(){
+    private void queryData() {
+        new Thread() {
             @Override
-            public void run(){
+            public void run() {
                 //在新线程里执行长耗时方法
                 boolean res = queryLocalImages();
                 //执行完毕后给handler发送一个空消息
                 Message message = new Message();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean("result",res);
+                bundle.putBoolean("result", res);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
         }.start();
     }
-
 
 
     /**
@@ -179,8 +177,8 @@ public class PicturePickActivity extends Activity {
      * @param mGroupMap
      * @return
      */
-    private List<ImageEntity> subGroupOfImage(HashMap<String, List<String>> mGroupMap){
-        if(mGroupMap.size() == 0){
+    private List<ImageEntity> subGroupOfImage(HashMap<String, List<String>> mGroupMap) {
+        if (mGroupMap.size() == 0) {
             return null;
         }
         List<ImageEntity> list = new ArrayList<ImageEntity>();
@@ -195,13 +193,16 @@ public class PicturePickActivity extends Activity {
             mImageEntity.setSelected(false);
             mImageEntity.setFolderName(key);
             mImageEntity.setImageCounts(value.size());
-            mImageEntity.setTopImagePath(value.get(0));//获取该组的第一张图片
+            if (value.size() > 0)
+                mImageEntity.setTopImagePath(value.get(0));//获取该组的第一张图片
             mImageEntity.setImagePathList(value);
-            if (!key.equals(keyAll)){
+            if (!key.equals(keyAll)) {
                 list.add(mImageEntity);
-            }else {
+            } else {
                 mImageEntity.setSelected(true);
-                list.add(0,mImageEntity);
+                if (value.size() > 1)
+                    mImageEntity.setTopImagePath(value.get(1));
+                list.add(0, mImageEntity);
             }
         }
         return list;
@@ -209,10 +210,11 @@ public class PicturePickActivity extends Activity {
 
     /**
      * 查询SD卡中的图片
+     *
      * @return
      */
-    private Boolean queryLocalImages(){
-        if(!ImageUtil.sdCardExist()){
+    private Boolean queryLocalImages() {
+        if (!ImageUtil.sdCardExist()) {
             ToastUtil.addToast(this, getString(R.string.picture_sd));
             return false;
         }
@@ -222,7 +224,7 @@ public class PicturePickActivity extends Activity {
         Cursor mCursor = mContentResolver.query(mImageUri, null,
                 MediaStore.Images.Media.MIME_TYPE + "=? or "
                         + MediaStore.Images.Media.MIME_TYPE + "=?",
-                new String[] { "image/jpeg" }, MediaStore.Images.Media.DATE_MODIFIED+ " desc");
+                new String[]{"image/jpeg"}, MediaStore.Images.Media.DATE_MODIFIED + " desc");
 //                new String[] { "image/jpeg", "image/png" }, MediaStore.Images.Media.DATE_MODIFIED+ " desc");不支持PNG
         allImageList.add("takePhoto");//为拍摄照片按钮预留位置
         while (mCursor.moveToNext()) {
@@ -244,26 +246,26 @@ public class PicturePickActivity extends Activity {
         return true;
     }
 
-    public void onDone(){
-        if (chooseImageList.size()>0){
-            if (!imagePreviewUtil.isOriginal()){
+    public void onDone() {
+        if (chooseImageList.size() > 0) {
+            if (!imagePreviewUtil.isOriginal()) {
                 ArrayList<String> imageList = new ArrayList<String>();
-                for (String path : chooseImageList){
-                    String imagePath = ImageUtil.saveScaleImage(path,ImageChooseUtil.getImagePathFolder(),ImageChooseUtil.SCALE_WIDTH,ImageChooseUtil.SCALE_HEIGHT,100);
+                for (String path : chooseImageList) {
+                    String imagePath = ImageUtil.saveScaleImage(path, ImageChooseUtil.getImagePathFolder(), ImageChooseUtil.SCALE_WIDTH, ImageChooseUtil.SCALE_HEIGHT, 100);
                     imageList.add(imagePath);
                 }
                 imagePreviewUtil.sendPicturePickBroadcast(imageList);
-            }else {
+            } else {
                 imagePreviewUtil.sendPicturePickBroadcast(chooseImageList);
             }
             finish();
         }
     }
 
-    public void onPreview(){
-        if (chooseImageList.size()>0){
+    public void onPreview() {
+        if (chooseImageList.size() > 0) {
             List<String> preList = new ArrayList<String>();
-            for (String pre:chooseImageList){
+            for (String pre : chooseImageList) {
                 preList.add(pre);
             }
             imagePreviewUtil.setChooseImageList(chooseImageList);
@@ -276,16 +278,17 @@ public class PicturePickActivity extends Activity {
 
     /**
      * 切换显示文件夹图片
+     *
      * @param position
      */
-    private void setFolderShow(int position){
+    private void setFolderShow(int position) {
         folderShowIndex = position;
-        for (ImageEntity imageEntity : folderImageEntityList){
+        for (ImageEntity imageEntity : folderImageEntityList) {
             imageEntity.setSelected(false);
         }
         folderImageEntityList.get(position).setSelected(true);
         folderText.setText(folderImageEntityList.get(position).getFolderName());
-        pictureGridAdapter = new PictureGridAdapter(PicturePickActivity.this, folderImageEntityList.get(position).getImagePathList(),chooseImageList,screenWidth,maxSize,folderShowIndex,funcType);
+        pictureGridAdapter = new PictureGridAdapter(PicturePickActivity.this, folderImageEntityList.get(position).getImagePathList(), chooseImageList, screenWidth, maxSize, folderShowIndex, funcType);
         pictureGridAdapter.setOnCheckListener(onCheckListener);
         pictureGridAdapter.setOnItemClickListener(onItemClickListener);
         gridView.setAdapter(pictureGridAdapter);
@@ -296,13 +299,13 @@ public class PicturePickActivity extends Activity {
     private IOnCheckListener onCheckListener = new IOnCheckListener() {
         @Override
         public void onCheck(List<String> chooseList) {
-            if (chooseList!=null&&chooseList.size()>0){
-                doneText.setText(""+getString(R.string.picture_done)+"("+chooseList.size()+"/"+maxSize+")");
-                previewText.setText(""+getString(R.string.picture_preview)+"("+chooseList.size()+")");
+            if (chooseList != null && chooseList.size() > 0) {
+                doneText.setText("" + getString(R.string.picture_done) + "(" + chooseList.size() + "/" + maxSize + ")");
+                previewText.setText("" + getString(R.string.picture_preview) + "(" + chooseList.size() + ")");
                 doneText.setEnabled(true);
-            }else {
-                doneText.setText(""+getString(R.string.picture_done));
-                previewText.setText(""+getString(R.string.picture_preview));
+            } else {
+                doneText.setText("" + getString(R.string.picture_done));
+                previewText.setText("" + getString(R.string.picture_preview));
                 doneText.setEnabled(false);
             }
         }
@@ -311,28 +314,34 @@ public class PicturePickActivity extends Activity {
     private IOnItemClickListener onItemClickListener = new IOnItemClickListener() {
         @Override
         public void onItemClick(int position) {
-            try{
-                if (position==0&&folderShowIndex==0){
+            try {
+                if (position == 0 && folderShowIndex == 0) {
                     imageChooseUtil.doTakePhoto();
-                }else {
-                    if (funcType== PICK_IMAGE){
-                        if (folderImageEntityList.get(folderShowIndex).getImagePathList().size()>0){
+                } else {
+                    if (funcType == PICK_IMAGE) {
+                        if (folderImageEntityList.get(folderShowIndex).getImagePathList().size() > 0) {
                             imagePreviewUtil.setChooseImageList(chooseImageList);
-                            imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_FOLDER, folderImageEntityList.get(folderShowIndex).getImagePathList(), position);
+                            imagePreviewUtil.setFolderShowIndex(folderShowIndex);
                             imagePreviewUtil.setOnItemClickListener(onItemClickListener);
                             imagePreviewUtil.setOnCheckListener(onCheckListener);
                             imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
+                            if (folderShowIndex == 0) {
+                                imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_FOLDER, folderImageEntityList.get(folderShowIndex).getImagePathList(), position - 1);
+
+                            } else {
+                                imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_FOLDER, folderImageEntityList.get(folderShowIndex).getImagePathList(), position);
+                            }
                         }
-                    }else if (funcType== PICK_AVATAR){
+                    } else if (funcType == PICK_AVATAR) {
                         imagePreviewUtil.setChooseImageList(chooseImageList);
-                        imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, folderImageEntityList.get(folderShowIndex).getImagePathList(), position);
                         imagePreviewUtil.setOnItemClickListener(onItemClickListener);
                         imagePreviewUtil.setOnCheckListener(onCheckListener);
                         imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
+                        imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, folderImageEntityList.get(folderShowIndex).getImagePathList(), position);
                     }
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -349,13 +358,13 @@ public class PicturePickActivity extends Activity {
                     String path = imageChooseUtil.getTakePhotoScaleUrl();//获取拍照压缩路径
                     List<String> pathList = new ArrayList<String>();
                     pathList.add(path);
-                    if (funcType== PICK_IMAGE){
+                    if (funcType == PICK_IMAGE) {
                         imagePreviewUtil.setChooseImageList(chooseImageList);
                         imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_TAKE, pathList, 0);
                         imagePreviewUtil.setOnItemClickListener(onItemClickListener);
                         imagePreviewUtil.setOnCheckListener(onCheckListener);
                         imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
-                    }else if (funcType== PICK_AVATAR){
+                    } else if (funcType == PICK_AVATAR) {
                         imagePreviewUtil.setChooseImageList(chooseImageList);
                         imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, pathList, 0);
                         imagePreviewUtil.setOnItemClickListener(onItemClickListener);

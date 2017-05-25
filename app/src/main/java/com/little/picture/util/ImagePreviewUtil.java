@@ -67,6 +67,7 @@ public class ImagePreviewUtil {
     private IOnCheckListener onCheckListener;
     private Activity activity;
     private boolean isOriginal = false;//是否使用原图
+    private int folderShowIndex = -1;//当前文件夹索引
 
     /**
      * 构造器
@@ -263,6 +264,9 @@ public class ImagePreviewUtil {
         final ClipImageLayout clipImageLayout = (ClipImageLayout) view.findViewById(R.id.picture_popup_preview_clipImageLayout);
 
         clipImageLayout.setImageUri(previewList.get(position));
+        if (folderShowIndex == 0){
+            previewList.remove(0);
+        }
         picturePreviewAdapter = new PicturePreviewAdapter(context,previewList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
@@ -412,6 +416,10 @@ public class ImagePreviewUtil {
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                if (folderShowIndex == 0){
+                    previewList.add(0, "takePhoto");
+                    folderShowIndex = -1;
+                }
                 if (pictureGridAdapter !=null){
                     pictureGridAdapter.notifyDataSetChanged();
                 }
@@ -672,5 +680,9 @@ public class ImagePreviewUtil {
 
     public void setIsOriginal(boolean isOriginal) {
         this.isOriginal = isOriginal;
+    }
+
+    public void setFolderShowIndex(int folderShowIndex) {
+        this.folderShowIndex = folderShowIndex;
     }
 }
