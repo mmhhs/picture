@@ -21,7 +21,7 @@ import com.little.picture.listener.IOnGestureListener;
 /**
  * 缩放
  */
-public class ZoomDraweeView extends ImageView {
+public class ZoomImageView extends ImageView {
     private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
 
@@ -35,17 +35,17 @@ public class ZoomDraweeView extends ImageView {
     private float targetScale;
     private float multiTotal = 1;//累积放大倍数
 
-    public ZoomDraweeView(Context context) {
+    public ZoomImageView(Context context) {
         super(context);
         init();
     }
 
-    public ZoomDraweeView(Context context, AttributeSet attrs) {
+    public ZoomImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ZoomDraweeView(Context context, AttributeSet attrs, int defStyle) {
+    public ZoomImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }

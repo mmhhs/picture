@@ -10,7 +10,7 @@ import com.little.picture.R;
 import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.util.ImageUtil;
-import com.little.picture.view.ZoomDraweeView;
+import com.little.picture.view.ZoomImageView;
 
 import java.util.List;
 
@@ -39,7 +39,7 @@ public class PicturePreviewAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup view, final int position) {
         View convertView = null;
         convertView = LayoutInflater.from(context).inflate(R.layout.picture_adapter_preview, null);
-        ZoomDraweeView imageView = (ZoomDraweeView)convertView.findViewById(R.id.picture_adapter_preview_imageView);
+        ZoomImageView imageView = (ZoomImageView)convertView.findViewById(R.id.picture_adapter_preview_imageView);
         GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(list.get(position)),imageView,GlideUtil.FIT_CENTER,R.drawable.picture_placeholder,R.drawable.picture_placeholder, 360, 640);
         imageView.setOnGestureListener(new IOnGestureListener() {
             @Override
