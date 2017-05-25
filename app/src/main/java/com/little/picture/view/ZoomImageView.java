@@ -34,6 +34,7 @@ public class ZoomImageView extends ImageView {
     private boolean isAutoScale;
     private float targetScale;
     private float multiTotal = 1;//累积放大倍数
+    private float scale = 1.1f;
 
     public ZoomImageView(Context context) {
         super(context);
@@ -236,7 +237,7 @@ public class ZoomImageView extends ImageView {
                 if (mMidY == 0f) {
                     mMidY = getHeight() / 2f;
                 }
-                float scale = 1.1f;
+
                 mCurrentMatrix.postScale(scale, scale, mMidX, mMidY);
                 multiTotal = scale * multiTotal;
                 mCurrentScale = multiTotal;
