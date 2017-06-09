@@ -20,7 +20,7 @@ public class GlideConfigModule implements GlideModule {
         builder.setMemoryCache(new LruResourceCache(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
         //全部的内存缓存用来作为图片缓存
         builder.setBitmapPool(new LruBitmapPool(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
-        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);//和Picasso配置一样
+        builder.setDecodeFormat(DecodeFormat.PREFER_RGB_565);//和Picasso配置一样
     }
 
     @Override
