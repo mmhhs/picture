@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.view.View;
 
+import com.fos.fosmvp.common.utils.StringUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -382,7 +384,7 @@ public class ImageUtil {
      * @return
      */
     public static String completeImagePath(String imagePath){
-        if (StringUtil.isEmpty(imagePath)){
+        if (StringUtils.isEmpty(imagePath)){
             return "";
         }else {
             if (imagePath.startsWith("http")){
@@ -400,7 +402,7 @@ public class ImageUtil {
      * @return
      */
     public static String completeImagePath(String imagePath,String prefix){
-        if (StringUtil.isEmpty(imagePath)){
+        if (StringUtils.isEmpty(imagePath)){
             return "";
         }else {
             if (imagePath.startsWith("http")){

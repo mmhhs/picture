@@ -29,7 +29,7 @@ import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnDeleteListener;
 import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.listener.IOnItemClickListener;
-import com.little.picture.model.ImageEntity;
+import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.view.ClipImageLayout;
 import com.little.picture.view.PageIndicatorView;
 
@@ -58,7 +58,7 @@ public class ImagePreviewUtil {
     private int statusBarHeight;//状态栏高度
 
     private IOnItemClickListener onItemClickListener;
-    private List<ImageEntity> folderImageEntityList;
+    private List<ImageFolderEntity> folderImageFolderEntityList;
 
     private String previewPath = "";
     private ArrayList<String> chooseImageList;
@@ -525,8 +525,8 @@ public class ImagePreviewUtil {
     /**
      * 显示文件夹选择弹窗
      */
-    public void showFolderWindow(List<ImageEntity> folderImageEntityList){
-        this.folderImageEntityList = folderImageEntityList;
+    public void showFolderWindow(List<ImageFolderEntity> folderImageFolderEntityList){
+        this.folderImageFolderEntityList = folderImageFolderEntityList;
         PopupWindow folderPopupWindow = getFolderWindow(context,0);
         folderPopupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
     }
@@ -535,7 +535,7 @@ public class ImagePreviewUtil {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_folder,null, false);
         ListView listView = (ListView) view.findViewById(R.id.picture_popup_folder_listView);
         LinearLayout containerLayout = (LinearLayout) view.findViewById(R.id.picture_popup_folder_layout);
-        PictureFolderAdapter pictureFolderAdapter = new PictureFolderAdapter(context, folderImageEntityList);
+        PictureFolderAdapter pictureFolderAdapter = new PictureFolderAdapter(context, folderImageFolderEntityList);
         listView.setAdapter(pictureFolderAdapter);
         final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         popupWindow.setFocusable(true);
@@ -618,12 +618,12 @@ public class ImagePreviewUtil {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public List<ImageEntity> getFolderImageEntityList() {
-        return folderImageEntityList;
+    public List<ImageFolderEntity> getFolderImageFolderEntityList() {
+        return folderImageFolderEntityList;
     }
 
-    public void setFolderImageEntityList(List<ImageEntity> folderImageEntityList) {
-        this.folderImageEntityList = folderImageEntityList;
+    public void setFolderImageFolderEntityList(List<ImageFolderEntity> folderImageFolderEntityList) {
+        this.folderImageFolderEntityList = folderImageFolderEntityList;
     }
 
     public String getPreviewPath() {

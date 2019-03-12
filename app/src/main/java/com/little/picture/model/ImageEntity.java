@@ -1,68 +1,51 @@
 package com.little.picture.model;
 
 import java.io.Serializable;
-import java.util.List;
 
+/**
+ * Created by xxjsb on 2019/3/12.
+ */
 
 public class ImageEntity implements Serializable{
-	/**
-	 * 文件夹的第一张图片路径
-	 */
-	private String topImagePath;
-	/**
-	 * 文件夹名
-	 */
-	private String folderName;
-	/**
-	 * 文件夹中的图片数
-	 */
-	private int imageCounts;
-	/**
-	 * 是否选中
-	 */
-	private Boolean selected = false;
-	/**
-	 * 文件夹中图片路径集合
-	 */
-	private List<String> imagePathList;
+    private static final long serialVersionUID = 510488828187140949L;
 
-	public String getTopImagePath() {
-		return topImagePath;
-	}
+    private String originalPath = "";
+    private String scalePath = "";
+    private int width = 0;
+    private int height = 0;
 
-	public void setTopImagePath(String topImagePath) {
-		this.topImagePath = topImagePath;
-	}
+    public ImageEntity() {
+    }
 
-	public String getFolderName() {
-		return folderName;
-	}
+    public String getOriginalPath() {
+        return originalPath;
+    }
 
-	public void setFolderName(String folderName) {
-		this.folderName = folderName;
-	}
+    public void setOriginalPath(String originalPath) {
+        this.originalPath = originalPath;
+    }
 
-	public int getImageCounts() {
-		return imageCounts;
-	}
+    public String getScalePath() {
+        return scalePath;
+    }
 
-	public void setImageCounts(int imageCounts) {
-		this.imageCounts = imageCounts;
-	}
+    public void setScalePath(String scalePath) {
+        this.scalePath = scalePath;
+    }
 
-	public Boolean getSelected() {
-		return selected;
-	}
+    public int getWidth() {
+        return width;
+    }
 
-	public void setSelected(Boolean selected) {
-		this.selected = selected;
-	}
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
-	public List<String> getImagePathList() {
-		return imagePathList;
-	}
+    public int getHeight() {
+        return height;
+    }
 
-	public void setImagePathList(List<String> imagePathList) {
-		this.imagePathList = imagePathList;
-	}
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }

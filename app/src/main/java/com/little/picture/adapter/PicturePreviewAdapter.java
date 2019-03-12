@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnGestureListener;
@@ -40,7 +41,7 @@ public class PicturePreviewAdapter extends PagerAdapter {
         View convertView = null;
         convertView = LayoutInflater.from(context).inflate(R.layout.picture_adapter_preview, null);
         ZoomImageView imageView = (ZoomImageView)convertView.findViewById(R.id.picture_adapter_preview_imageView);
-        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(list.get(position)),imageView,GlideUtil.FIT_CENTER,R.drawable.picture_placeholder,R.drawable.picture_placeholder, 360, 640);
+        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(list.get(position)),imageView,GlideUtil.FIT_CENTER, PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT);
         imageView.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {

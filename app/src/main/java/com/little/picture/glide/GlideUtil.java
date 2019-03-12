@@ -8,9 +8,12 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.fos.fosmvp.common.utils.LogUtils;
 import com.little.picture.R;
-import com.little.picture.util.LogUtil;
 
+/**
+ * 图片加载
+ */
 public class GlideUtil {
     public static final int CENTER_CROP = 1;
     public static final int FIT_CENTER = 2;
@@ -26,6 +29,12 @@ public class GlideUtil {
     public GlideUtil() {
     }
 
+    /**
+     * 加载图片
+     * @param context
+     * @param url
+     * @param mImageView
+     */
     public void display(Context context,String url,ImageView mImageView){
         Glide.with(context)
                 .load(url)
@@ -33,11 +42,17 @@ public class GlideUtil {
                 .priority(Priority.LOW)
                 .placeholder(R.drawable.picture_placeholder)
                 .error(R.drawable.picture_placeholder)
-                .centerCrop()
-                .override(100, 100)
                 .into(mImageView);
     }
 
+    /**
+     * 加载图片 指定宽高
+     * @param context
+     * @param url
+     * @param mImageView
+     * @param width
+     * @param height
+     */
     public void display(Context context,String url,ImageView mImageView,int width,int height){
         Glide.with(context)
                 .load(url)
@@ -45,20 +60,26 @@ public class GlideUtil {
                 .priority(Priority.LOW)
                 .placeholder(R.drawable.picture_placeholder)
                 .error(R.drawable.picture_placeholder)
-                .centerCrop()
                 .override(width,height)
                 .into(mImageView);
     }
 
-    public void display(Context context,String url,ImageView mImageView,int scaleType,int placeholderResourceId,int errorResourceId){
+    /**
+     * 加载图片 指定缩放类型
+     * @param context
+     * @param url
+     * @param mImageView
+     * @param scaleType
+     */
+    public void display(Context context,String url,ImageView mImageView,int scaleType){
         switch (scaleType){
             case CENTER_CROP:
                 Glide.with(context)
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(placeholderResourceId)
-                        .error(errorResourceId)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
                         .centerCrop()
                         .into(mImageView);
                 break;
@@ -67,8 +88,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(placeholderResourceId)
-                        .error(errorResourceId)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
                         .fitCenter()
                         .into(mImageView);
                 break;
@@ -76,15 +97,24 @@ public class GlideUtil {
 
     }
 
-    public void display(Context context,String url,ImageView mImageView,int scaleType,int placeholderResourceId,int errorResourceId,int width,int height){
+    /**
+     * 加载图片 指定缩放类型 指定宽高
+     * @param context
+     * @param url
+     * @param mImageView
+     * @param scaleType
+     * @param width
+     * @param height
+     */
+    public void display(Context context,String url,ImageView mImageView,int scaleType,int width,int height){
         switch (scaleType){
             case CENTER_CROP:
                 Glide.with(context)
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(placeholderResourceId)
-                        .error(errorResourceId)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
                         .centerCrop()
                         .override(width, height)
                         .into(mImageView);
@@ -94,8 +124,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(placeholderResourceId)
-                        .error(errorResourceId)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
                         .fitCenter()
                         .override(width, height)
                         .into(mImageView);
@@ -103,16 +133,103 @@ public class GlideUtil {
         }
 
     }
+
+    /**
+     * 加载圆角图片 指定缩放类型
+     * @param context
+     * @param url
+     * @param mImageView
+     * @param scaleType
+     * @param radius 圆角大小
+     */
+    public void displayFillet(Context context,String url,ImageView mImageView,int scaleType,int radius){
+        switch (scaleType){
+            case CENTER_CROP:
+                Glide.with(context)
+                        .load(url)
+                        .listener(mRequestListener)
+                        .priority(Priority.LOW)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
+                        .centerCrop()
+                        .transform(new GlideRoundTransform(context,radius))
+                        .into(mImageView);
+                break;
+            case FIT_CENTER:
+                Glide.with(context)
+                        .load(url)
+                        .listener(mRequestListener)
+                        .priority(Priority.LOW)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
+                        .fitCenter()
+                        .transform(new GlideRoundTransform(context,radius))
+                        .into(mImageView);
+                break;
+        }
+
+    }
+
+    /**
+     * 加载圆形图像
+     * @param context
+     * @param url
+     * @param mImageView
+     */
+    public void displayCircle(Context context,String url,ImageView mImageView){
+        Glide.with(context)
+                .load(url)
+                .listener(mRequestListener)
+                .priority(Priority.LOW)
+                .placeholder(R.drawable.picture_placeholder)
+                .error(R.drawable.picture_placeholder)
+                .centerCrop()
+                .transform(new GlideCircleTransform(context))
+                .into(mImageView);
+    }
+
+
+    /**
+     * 加载资源图片 指定缩放类型
+     * @param context
+     * @param mImageView
+     * @param scaleType
+     * @param resId 资源id
+     */
+    public void displayById(Context context,int resId,ImageView mImageView,int scaleType){
+        switch (scaleType){
+            case CENTER_CROP:
+                Glide.with(context)
+                        .load(resId)
+                        .priority(Priority.LOW)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
+                        .centerCrop()
+                        .into(mImageView);
+                break;
+            case FIT_CENTER:
+                Glide.with(context)
+                        .load(resId)
+                        .priority(Priority.LOW)
+                        .placeholder(R.drawable.picture_placeholder)
+                        .error(R.drawable.picture_placeholder)
+                        .fitCenter()
+                        .into(mImageView);
+                break;
+        }
+
+    }
+
 
     private RequestListener<String, GlideDrawable> mRequestListener = new RequestListener<String, GlideDrawable>() {
         @Override
         public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
             //显示错误信息
-            LogUtil.e("onException: " + e.getMessage());
+            LogUtils.e("onException: " + e.getMessage());
             //打印请求URL
-            LogUtil.e("onException: " + model);
+            LogUtils.e("onException: " + model);
             //打印请求是否还在进行
-            LogUtil.e("onException: " + target.getRequest().isRunning());
+            LogUtils.e("onException: " + target.getRequest().isRunning());
             return false;
         }
 

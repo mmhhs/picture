@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.little.picture.R;
 import com.little.picture.glide.GlideUtil;
-import com.little.picture.model.ImageEntity;
+import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.util.ImageUtil;
 
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
 
 public class PictureFolderAdapter extends BaseAdapter{
     public Context context;
-    private List<ImageEntity> list;
+    private List<ImageFolderEntity> list;
 
-    public PictureFolderAdapter(Context context, List<ImageEntity> list) {
+    public PictureFolderAdapter(Context context, List<ImageFolderEntity> list) {
         this.context = context;
         this.list = list;
     }
@@ -53,11 +53,11 @@ public class PictureFolderAdapter extends BaseAdapter{
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        ImageEntity imageEntity = list.get(position);
-        viewHolder.nameText.setText(imageEntity.getFolderName());
-        viewHolder.countText.setText(imageEntity.getImageCounts()+context.getString(R.string.picture_unit));
-        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageEntity.getTopImagePath()),viewHolder.topImage, ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
-        if (imageEntity.getSelected()){
+        ImageFolderEntity imageFolderEntity = list.get(position);
+        viewHolder.nameText.setText(imageFolderEntity.getFolderName());
+        viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit));
+        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageFolderEntity.getTopImagePath()),viewHolder.topImage, GlideUtil.CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        if (imageFolderEntity.getSelected()){
             viewHolder.selectImage.setVisibility(View.VISIBLE);
         }else {
             viewHolder.selectImage.setVisibility(View.GONE);

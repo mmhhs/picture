@@ -1,7 +1,6 @@
 package com.little.picture.util;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -17,10 +16,16 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+
+import com.fos.fosmvp.common.utils.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -32,8 +37,8 @@ public class ImageChooseUtil implements Serializable{
 	public static final int CHOOSE_PICTURE = 117;//图库选取
 	public static final int PHOTO_PICKED_WITH_CROP = 118;//裁剪
 
-	public static int SCALE_WIDTH = 360;//缩放至的宽度
-	public static int SCALE_HEIGHT = 640;//缩放至的高度
+	public static int SCALE_WIDTH = 1000;//缩放至的宽度
+	public static int SCALE_HEIGHT = 1280;//缩放至的高度
 	public static int quality = 100;//图像质量
 	private static String imagePathFolder = "";//存储图片的文件夹
 	private static Uri imageUri;
@@ -42,6 +47,7 @@ public class ImageChooseUtil implements Serializable{
 	private Fragment fragment;
 	private Context context;
 	private MediaScannerConnection msc;
+	private String authority = "com.foton.almighty.fileprovider";
 
 	/**
 	 * 在Activity中使用
@@ -98,14 +104,17 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
-			Intent intent = new Intent();
-			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE); //  MediaStore.ACTION_IMAGE_CAPTURE
-			intent.putExtra("return-data", true); // 有返回值
-			imageUrl = imagePathFolder+"image.jpg";
-			imageUri = Uri.fromFile(new File(imageUrl));
-			// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-			// 直接使用，没有缩小
+			imageUrl = imagePathFolder + "image.jpg";
+			File file = new File(imageUrl);
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+				imageUri = FileProvider.getUriForFile(context, authority, file);
+				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+			}else {
+				imageUri = Uri.fromFile(file);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+			}
 			if (activity !=null){
 				activity.startActivityForResult(intent, PHOTO_WITH_CAMERA); // 用户点击了从相机获取
 			}else {
@@ -118,18 +127,64 @@ public class ImageChooseUtil implements Serializable{
 		}
 
 	}
+	/**
+	 * 保存图片为JPEG
+	 *
+	 * @param bitmap
+	 * @param path
+	 */
+	public static Boolean saveJPGE_After(Bitmap bitmap, int arg,String path) {
+		boolean result = false;
+		try {
+			File photoFile = new File(path);
+			if(!photoFile.exists()){
+				try {
+					photoFile.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				FileOutputStream out = new FileOutputStream(photoFile);
+				if (bitmap.compress(Bitmap.CompressFormat.JPEG, arg, out)) {
+					out.flush();
+					out.close();
+				}
+			} catch (FileNotFoundException e) {
+				photoFile.delete();
+				e.printStackTrace();
+				result =  false;
+			} catch (IOException e) {
+				photoFile.delete();
+				e.printStackTrace();
+				result =  false;
+			}catch (Exception e){
+				e.printStackTrace();
+				result =   false;
+			}
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			return result;
+		}
 
+	}
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
-			Intent intent = new Intent();
-			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-			intent.putExtra("return-data", true); // 有返回值
 			imageUrl = imagePathFolder +""+System.currentTimeMillis()+".jpg";
-			imageUri = Uri.fromFile(new File(imageUrl));
-			// 指定照片保存路径（SD卡），image.jpg为一个临时文件，每次拍照后这个图片都会被替换
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-			// 直接使用，没有缩小
+			File file = new File(imageUrl);
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+				imageUri = FileProvider.getUriForFile(context, authority, file);
+				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+			}else {
+				imageUri = Uri.fromFile(file);
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+
+			}
 			if (activity !=null){
 				activity.startActivityForResult(intent, PHOTO_WITH_CAMERA); // 用户点击了从相机获取
 			}else {
@@ -201,6 +256,9 @@ public class ImageChooseUtil implements Serializable{
 
 	private static Intent getCropImageIntent(Uri uri) {
 		Intent intent = new Intent("com.android.camera.action.CROP");
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		}
 		intent.setDataAndType(uri, "image/*");
 		intent.putExtra("crop", "true");//可裁剪
 		intent.putExtra("aspectX", 1);
@@ -343,7 +401,7 @@ public class ImageChooseUtil implements Serializable{
 		try {
 			final String result = MediaStore.Images.Media.insertImage(context.getContentResolver(),
 					file.getAbsolutePath(), fileName, null);
-			if (StringUtil.isEmpty(result)){
+			if (StringUtils.isEmpty(result)){
 				return;
 			}
 			// 最后通知图库更新
@@ -603,5 +661,13 @@ public class ImageChooseUtil implements Serializable{
 
 	public static void setImagePathFolder(String imagePathFolder) {
 		ImageChooseUtil.imagePathFolder = imagePathFolder;
+	}
+
+	public String getAuthority() {
+		return authority;
+	}
+
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 }

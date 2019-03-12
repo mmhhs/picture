@@ -76,7 +76,7 @@ public class PictureGridAdapter extends BaseAdapter{
             viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
             viewHolder.checkBox.setVisibility(View.GONE);
         }else {
-            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage, itemWidth, itemWidth);
+            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage,GlideUtil.CENTER_CROP, itemWidth, itemWidth);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
         }
         if (funcType == PicturePickActivity.PICK_AVATAR){
