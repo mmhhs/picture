@@ -5,12 +5,42 @@ package com.little.picture;
  */
 
 public class PictureStartManager {
+    private static PictureStartManager instance;
     public static int SCALE_WIDTH = 1080;//缩放至的宽度
     public static int SCALE_HEIGHT = 1920;//缩放至的高度
-    public static int quality = 100;//图像质量
-    public static String authority = "com.foton.almighty.fileprovider";//7.0以上调取相机相册需要
-    public static String imagePathFolder = "";//存储图片的文件夹
+    public static int QUALITY = 100;//图像质量
+    public static String AUTHORITY = "com.foton.almighty.fileprovider";//7.0以上调取相机相册需要
+    public static String IMAGEFOLDER = "";//存储图片的文件夹
 
+    public PictureStartManager() {
+    }
+
+    public static PictureStartManager getInstance() {
+        if (instance == null) {
+            synchronized (PictureStartManager.class) {
+                if (instance == null) {
+                    instance = new PictureStartManager();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * 配置图片选择控件参数
+     * @param scaleWidth 缩放至的宽度
+     * @param scaleHeight 缩放至的高度
+     * @param quality 压缩图像质量
+     * @param authority 7.0以上调取相机相册需要权限
+     * @param imageFolder 存储图片的文件夹
+     */
+    public void init(int scaleWidth, int scaleHeight, int quality, String authority, String imageFolder) {
+        this.SCALE_WIDTH = scaleWidth;
+        this.SCALE_HEIGHT = scaleHeight;
+        this.QUALITY = quality;
+        this.AUTHORITY = authority;
+        this.IMAGEFOLDER = imageFolder;
+    }
 
     public static int getScaleWidth() {
         return SCALE_WIDTH;
@@ -28,27 +58,27 @@ public class PictureStartManager {
         SCALE_HEIGHT = scaleHeight;
     }
 
-    public static int getQuality() {
-        return quality;
+    public static int getQUALITY() {
+        return QUALITY;
     }
 
-    public static void setQuality(int quality) {
-        PictureStartManager.quality = quality;
+    public static void setQUALITY(int QUALITY) {
+        PictureStartManager.QUALITY = QUALITY;
     }
 
-    public static String getAuthority() {
-        return authority;
+    public static String getAUTHORITY() {
+        return AUTHORITY;
     }
 
-    public static void setAuthority(String authority) {
-        PictureStartManager.authority = authority;
+    public static void setAUTHORITY(String AUTHORITY) {
+        PictureStartManager.AUTHORITY = AUTHORITY;
     }
 
-    public static String getImagePathFolder() {
-        return imagePathFolder;
+    public static String getIMAGEFOLDER() {
+        return IMAGEFOLDER;
     }
 
-    public static void setImagePathFolder(String imagePathFolder) {
-        PictureStartManager.imagePathFolder = imagePathFolder;
+    public static void setIMAGEFOLDER(String IMAGEFOLDER) {
+        PictureStartManager.IMAGEFOLDER = IMAGEFOLDER;
     }
 }

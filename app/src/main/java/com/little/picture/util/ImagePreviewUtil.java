@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
@@ -20,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.little.picture.PicturePickActivity;
 import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.adapter.PictureFolderAdapter;
@@ -31,8 +29,11 @@ import com.little.picture.listener.IOnDeleteListener;
 import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.listener.IOnItemClickListener;
 import com.little.picture.model.ImageFolderEntity;
+import com.little.picture.model.ImageListEntity;
 import com.little.picture.view.ClipImageLayout;
 import com.little.picture.view.PageIndicatorView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +73,12 @@ public class ImagePreviewUtil {
     private PicturePreviewAdapter picturePreviewAdapter;
 
     private int maxSize = 9;//最多能选择的图片数
+    private String fromTag = "";//来源标志
 
-    private Activity activity;
+    private Activity activity;//PicturePickActivity
     private boolean isOriginal = false;//是否使用原图
     private int folderShowIndex = -1;//当前文件夹索引
+
 
     /**
      * 构造器
@@ -88,7 +91,7 @@ public class ImagePreviewUtil {
     }
 
     /**
-     * 显示大图预览
+     * 显示大图预览 -外部调用
      * @param index 默认显示第几张
      * @return
      */
@@ -441,7 +444,7 @@ public class ImagePreviewUtil {
                     popupWindow.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = PictureStartManager.getImagePathFolder()+"clip.jpg";
+                        String clipImagePath = PictureStartManager.getIMAGEFOLDER()+"clip.jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
                         ArrayList<String> clipList = new ArrayList<String>();
                         clipList.add(clipImagePath);
@@ -454,7 +457,7 @@ public class ImagePreviewUtil {
                         if (!isOriginal){
                             ArrayList<String> imageList = new ArrayList<String>();
                             for (String path : chooseImageList){
-                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImagePathFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
+                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getIMAGEFOLDER(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
                                 imageList.add(imagePath);
                             }
                             sendPicturePickBroadcast(imageList);
@@ -524,10 +527,10 @@ public class ImagePreviewUtil {
      * @param imageList 选中的图片列表
      */
     public void sendPicturePickBroadcast(ArrayList<String> imageList){
-        Intent intent = new Intent();
-        intent.setAction(PicturePickActivity.PICTURE_PICK_IMAGE);
-        intent.putStringArrayListExtra(PicturePickActivity.PICTURE_PICK_IMAGE, imageList);
-        context.sendBroadcast(intent);
+        ImageListEntity imageListEntity = new ImageListEntity();
+        imageListEntity.setChooseImageList(imageList);
+        imageListEntity.setFromTag(fromTag);
+        EventBus.getDefault().post(imageListEntity);
     }
 
     /**
@@ -692,5 +695,13 @@ public class ImagePreviewUtil {
 
     public void setFolderShowIndex(int folderShowIndex) {
         this.folderShowIndex = folderShowIndex;
+    }
+
+    public String getFromTag() {
+        return fromTag;
+    }
+
+    public void setFromTag(String fromTag) {
+        this.fromTag = fromTag;
     }
 }

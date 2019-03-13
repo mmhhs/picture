@@ -38,16 +38,18 @@ public class PicturePickActivity extends Activity {
      * 可选取最大数量、返回选中的图片集合
      */
     public static final String PICTURE_PICK_IMAGE = "PICTURE_PICK_IMAGE";//选取数量，返回值传值
-    public static final String PICTURE_PICK_TYPE = "PICTURE_PICK_TYPE";//功能类型
+    public static final String PICTURE_PICK_TYPE = "PICTURE_PICK_TYPE";//功能类型，0：头像选取；1：多照片选取
+    public static final String PICTURE_FROM_TAG = "PICTURE_FROM_TAG";//来源标志
     public static final int PICK_AVATAR = 0;//头像选取
     public static final int PICK_IMAGE = 1;//多照片选取
 
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
+    private String fromTag= "";//来源标志
 
-    private HashMap<String, List<String>> mGroupMap = new HashMap<String, List<String>>();//本地图片分组集合
-    private List<String> allImageList = new ArrayList<String>();//所有图片路径集合
-    private ArrayList<String> chooseImageList = new ArrayList<String>();//选中图片路径集合
-    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList<ImageFolderEntity>();//图片文件夹集合
+    private HashMap<String, List<String>> mGroupMap = new HashMap();//本地图片分组集合
+    private List<String> allImageList = new ArrayList();//所有图片路径集合
+    private ArrayList<String> chooseImageList = new ArrayList();//选中图片路径集合
+    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList();//图片文件夹集合
 
     public GridView gridView;
     public TextView doneText;
@@ -72,8 +74,22 @@ public class PicturePickActivity extends Activity {
         init();
     }
 
+    /**
+     * 打开选择照片
+     * @param activity
+     * @param funcType 功能类型，0：头像选取；1：多照片选取
+     * @param maxSize 选取数量 1-9
+     * @param fromTag 来源标志 用于区分哪个界面调用
+     */
+    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag){
+        Intent intent = new Intent(activity,PicturePickActivity.class);
+        intent.putExtra(PICTURE_PICK_TYPE,funcType);
+        intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
+        intent.putExtra(PICTURE_FROM_TAG,fromTag);
+        activity.startActivity(intent);
+    }
+
     public void init() {
-//        FrescoUtils.init(this);
         gridView = (GridView) findViewById(R.id.picture_ui_home_gridview);
         doneText = (TextView) findViewById(R.id.picture_ui_title_done);
         backLayout = (LinearLayout) findViewById(R.id.picture_ui_title_back_layout);
@@ -116,6 +132,7 @@ public class PicturePickActivity extends Activity {
         statusBarHeight = ImageUtil.getStatusBarHeight(this);
         try {
             funcType = getIntent().getExtras().getInt(PICTURE_PICK_TYPE, PICK_IMAGE);
+            fromTag = getIntent().getExtras().getString(PICTURE_FROM_TAG);
             maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE, 9);
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,6 +150,7 @@ public class PicturePickActivity extends Activity {
         imagePreviewUtil.setActivity(this);
         imagePreviewUtil.setMaxSize(maxSize);
         imagePreviewUtil.setStatusBarHeight(statusBarHeight);
+        imagePreviewUtil.setFromTag(fromTag);
 
         handler = new Handler() {
             @Override
@@ -178,12 +196,14 @@ public class PicturePickActivity extends Activity {
      * @return
      */
     private List<ImageFolderEntity> subGroupOfImage(HashMap<String, List<String>> mGroupMap) {
-        if (mGroupMap.size() == 0) {
-            return null;
-        }
+
         List<ImageFolderEntity> list = new ArrayList<ImageFolderEntity>();
         String keyAll = getString(R.string.picture_all);
         mGroupMap.put(keyAll, allImageList);
+
+        if (mGroupMap.size() == 0) {
+            return list;
+        }
         Iterator<Map.Entry<String, List<String>>> it = mGroupMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<String, List<String>> entry = it.next();
@@ -218,6 +238,7 @@ public class PicturePickActivity extends Activity {
             ToastUtil.addToast(this, getString(R.string.picture_sd));
             return false;
         }
+
         Uri mImageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         ContentResolver mContentResolver = PicturePickActivity.this.getContentResolver();
         //只查询jpeg的图片
@@ -226,32 +247,40 @@ public class PicturePickActivity extends Activity {
                         + MediaStore.Images.Media.MIME_TYPE + "=?",
                 new String[]{"image/jpeg"}, MediaStore.Images.Media.DATE_MODIFIED + " desc");
 //                new String[] { "image/jpeg", "image/png" }, MediaStore.Images.Media.DATE_MODIFIED+ " desc");不支持PNG
+
         allImageList.add("takePhoto");//为拍摄照片按钮预留位置
-        while (mCursor.moveToNext()) {
-            //获取图片的路径
-            String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            allImageList.add(path);
-            //获取该图片的父路径名
-            String parentName = new File(path).getParentFile().getName();
-            //根据父路径名将图片放入到mGroupMap中
-            if (!mGroupMap.containsKey(parentName)) {
-                List<String> childList = new ArrayList<String>();
-                childList.add(path);
-                mGroupMap.put(parentName, childList);
-            } else {
-                mGroupMap.get(parentName).add(path);
+
+        if (mCursor!=null){
+            while (mCursor.moveToNext()) {
+                //获取图片的路径
+                String path = mCursor.getString(mCursor.getColumnIndex(MediaStore.Images.Media.DATA));
+                allImageList.add(path);
+                //获取该图片的父路径名
+                String parentName = new File(path).getParentFile().getName();
+                //根据父路径名将图片放入到mGroupMap中
+                if (!mGroupMap.containsKey(parentName)) {
+                    List<String> childList = new ArrayList();
+                    childList.add(path);
+                    mGroupMap.put(parentName, childList);
+                } else {
+                    mGroupMap.get(parentName).add(path);
+                }
             }
+            mCursor.close();
         }
-        mCursor.close();
+
         return true;
     }
 
+    /**
+     * 完成
+     */
     public void onDone() {
         if (chooseImageList.size() > 0) {
             if (!imagePreviewUtil.isOriginal()) {
                 ArrayList<String> imageList = new ArrayList<String>();
                 for (String path : chooseImageList) {
-                    String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImagePathFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, 100);
+                    String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getIMAGEFOLDER(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, 100);
                     imageList.add(imagePath);
                 }
                 imagePreviewUtil.sendPicturePickBroadcast(imageList);
@@ -262,6 +291,9 @@ public class PicturePickActivity extends Activity {
         }
     }
 
+    /**
+     * 预览大图
+     */
     public void onPreview() {
         if (chooseImageList.size() > 0) {
             List<String> preList = new ArrayList<String>();

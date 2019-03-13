@@ -52,10 +52,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Activity activity){
 		this.activity = activity;
 		context = activity;
-		if (StringUtils.isEmpty(PictureStartManager.imagePathFolder)){
-			PictureStartManager.imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
+		if (StringUtils.isEmpty(PictureStartManager.IMAGEFOLDER)){
+			PictureStartManager.IMAGEFOLDER = context.getExternalFilesDir("")+"/cache/image/";
 		}
-		File dir = new File(PictureStartManager.imagePathFolder);
+		File dir = new File(PictureStartManager.IMAGEFOLDER);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -69,10 +69,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Fragment fragment){
 		this.fragment = fragment;
 		context = fragment.getActivity();
-		if (StringUtils.isEmpty(PictureStartManager.imagePathFolder)){
-			PictureStartManager.imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
+		if (StringUtils.isEmpty(PictureStartManager.IMAGEFOLDER)){
+			PictureStartManager.IMAGEFOLDER = context.getExternalFilesDir("")+"/cache/image/";
 		}
-		File dir = new File(PictureStartManager.imagePathFolder);
+		File dir = new File(PictureStartManager.IMAGEFOLDER);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -92,7 +92,7 @@ public class ImageChooseUtil implements Serializable{
 	public  String getTakePhotoScaleUrl() {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.imagePathFolder,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.quality);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGEFOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -104,11 +104,11 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
-			imageUrl = PictureStartManager.imagePathFolder + "image.jpg";
+			imageUrl = PictureStartManager.IMAGEFOLDER + "image.jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-				imageUri = FileProvider.getUriForFile(context, PictureStartManager.authority, file);
+				imageUri = FileProvider.getUriForFile(context, PictureStartManager.AUTHORITY, file);
 				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
 			}else {
@@ -173,11 +173,11 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
-			imageUrl = PictureStartManager.imagePathFolder +""+System.currentTimeMillis()+".jpg";
+			imageUrl = PictureStartManager.IMAGEFOLDER +""+System.currentTimeMillis()+".jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-				imageUri = FileProvider.getUriForFile(context, PictureStartManager.authority, file);
+				imageUri = FileProvider.getUriForFile(context, PictureStartManager.AUTHORITY, file);
 				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
 			}else {
@@ -380,7 +380,7 @@ public class ImageChooseUtil implements Serializable{
 	public String getPictureScaleUrl(String imageUrl) {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.imagePathFolder,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.quality);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGEFOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -601,7 +601,7 @@ public class ImageChooseUtil implements Serializable{
 
 	/**
 	 * @param uri The Uri to check.
-	 * @return Whether the Uri authority is ExternalStorageProvider.
+	 * @return Whether the Uri AUTHORITY is ExternalStorageProvider.
 	 */
 	public static boolean isExternalStorageDocument(Uri uri) {
 		return "com.android.externalstorage.documents".equals(uri.getAuthority());
@@ -609,7 +609,7 @@ public class ImageChooseUtil implements Serializable{
 
 	/**
 	 * @param uri The Uri to check.
-	 * @return Whether the Uri authority is DownloadsProvider.
+	 * @return Whether the Uri AUTHORITY is DownloadsProvider.
 	 */
 	public static boolean isDownloadsDocument(Uri uri) {
 		return "com.android.providers.downloads.documents".equals(uri.getAuthority());
@@ -617,7 +617,7 @@ public class ImageChooseUtil implements Serializable{
 
 	/**
 	 * @param uri The Uri to check.
-	 * @return Whether the Uri authority is MediaProvider.
+	 * @return Whether the Uri AUTHORITY is MediaProvider.
 	 */
 	public static boolean isMediaDocument(Uri uri) {
 		return "com.android.providers.media.documents".equals(uri.getAuthority());
@@ -625,7 +625,7 @@ public class ImageChooseUtil implements Serializable{
 
 	/**
 	 * @param uri The Uri to check.
-	 * @return Whether the Uri authority is Google Photos.
+	 * @return Whether the Uri AUTHORITY is Google Photos.
 	 */
 	public static boolean isGooglePhotosUri(Uri uri) {
 		return "com.google.android.apps.photos.content".equals(uri.getAuthority());
