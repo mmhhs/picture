@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
@@ -17,6 +18,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+    }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -26,4 +33,13 @@ dependencies {
     compile 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
+}
+
+publish {
+    userOrg = 'mmhhs'//bintray.com用户名
+    groupId = 'com.little'//jcenter上的路径
+    artifactId = 'picture'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'choose picture'
+    website = 'https://github.com/mmhhs/picture'
 }

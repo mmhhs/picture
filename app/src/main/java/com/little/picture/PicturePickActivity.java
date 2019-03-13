@@ -46,10 +46,10 @@ public class PicturePickActivity extends Activity {
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
 
-    private HashMap<String, List<String>> mGroupMap = new HashMap();//本地图片分组集合
-    private List<String> allImageList = new ArrayList();//所有图片路径集合
-    private ArrayList<String> chooseImageList = new ArrayList();//选中图片路径集合
-    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList();//图片文件夹集合
+    private HashMap<String, List<String>> mGroupMap = new HashMap<String, List<String>>();//本地图片分组集合
+    private List<String> allImageList = new ArrayList<String>();//所有图片路径集合
+    private ArrayList<String> chooseImageList = new ArrayList<String>();//选中图片路径集合
+    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList<ImageFolderEntity>();//图片文件夹集合
 
     public GridView gridView;
     public TextView doneText;
