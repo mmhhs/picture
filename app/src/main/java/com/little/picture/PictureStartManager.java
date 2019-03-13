@@ -12,5 +12,43 @@ public class PictureStartManager {
     public static String imagePathFolder = "";//存储图片的文件夹
 
 
+    public static int getScaleWidth() {
+        return SCALE_WIDTH;
+    }
 
+    public static void setScaleWidth(int scaleWidth) {
+        SCALE_WIDTH = scaleWidth;
+    }
+
+    public static int getScaleHeight() {
+        return SCALE_HEIGHT;
+    }
+
+    public static void setScaleHeight(int scaleHeight) {
+        SCALE_HEIGHT = scaleHeight;
+    }
+
+    public static int getQuality() {
+        return quality;
+    }
+
+    public static void setQuality(int quality) {
+        PictureStartManager.quality = quality;
+    }
+
+    public static String getAuthority() {
+        return authority;
+    }
+
+    public static void setAuthority(String authority) {
+        PictureStartManager.authority = authority;
+    }
+
+    public static String getImagePathFolder() {
+        return imagePathFolder;
+    }
+
+    public static void setImagePathFolder(String imagePathFolder) {
+        PictureStartManager.imagePathFolder = imagePathFolder;
+    }
 }

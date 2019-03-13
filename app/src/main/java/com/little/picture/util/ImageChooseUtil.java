@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 
 import com.fos.fosmvp.common.utils.StringUtils;
+import com.little.picture.PictureStartManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,17 +38,12 @@ public class ImageChooseUtil implements Serializable{
 	public static final int CHOOSE_PICTURE = 117;//图库选取
 	public static final int PHOTO_PICKED_WITH_CROP = 118;//裁剪
 
-	public static int SCALE_WIDTH = 1000;//缩放至的宽度
-	public static int SCALE_HEIGHT = 1280;//缩放至的高度
-	public static int quality = 100;//图像质量
-	private static String imagePathFolder = "";//存储图片的文件夹
 	private static Uri imageUri;
 	private  String imageUrl = "";//拍照存储原始路径
 	private Activity activity;
 	private Fragment fragment;
 	private Context context;
 	private MediaScannerConnection msc;
-	private String authority = "com.foton.almighty.fileprovider";
 
 	/**
 	 * 在Activity中使用
@@ -56,8 +52,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Activity activity){
 		this.activity = activity;
 		context = activity;
-		imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
-		File dir = new File(imagePathFolder);
+		if (StringUtils.isEmpty(PictureStartManager.imagePathFolder)){
+			PictureStartManager.imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
+		}
+		File dir = new File(PictureStartManager.imagePathFolder);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -71,8 +69,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Fragment fragment){
 		this.fragment = fragment;
 		context = fragment.getActivity();
-		imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
-		File dir = new File(imagePathFolder);
+		if (StringUtils.isEmpty(PictureStartManager.imagePathFolder)){
+			PictureStartManager.imagePathFolder = context.getExternalFilesDir("")+"/cache/image/";
+		}
+		File dir = new File(PictureStartManager.imagePathFolder);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -92,7 +92,7 @@ public class ImageChooseUtil implements Serializable{
 	public  String getTakePhotoScaleUrl() {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,imagePathFolder,SCALE_WIDTH,SCALE_HEIGHT,quality);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.imagePathFolder,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.quality);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -104,11 +104,11 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
-			imageUrl = imagePathFolder + "image.jpg";
+			imageUrl = PictureStartManager.imagePathFolder + "image.jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-				imageUri = FileProvider.getUriForFile(context, authority, file);
+				imageUri = FileProvider.getUriForFile(context, PictureStartManager.authority, file);
 				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
 			}else {
@@ -173,11 +173,11 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
-			imageUrl = imagePathFolder +""+System.currentTimeMillis()+".jpg";
+			imageUrl = PictureStartManager.imagePathFolder +""+System.currentTimeMillis()+".jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-				imageUri = FileProvider.getUriForFile(context, authority, file);
+				imageUri = FileProvider.getUriForFile(context, PictureStartManager.authority, file);
 				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 				intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
 			}else {
@@ -380,7 +380,7 @@ public class ImageChooseUtil implements Serializable{
 	public String getPictureScaleUrl(String imageUrl) {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,imagePathFolder,SCALE_WIDTH,SCALE_HEIGHT,quality);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.imagePathFolder,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.quality);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -631,43 +631,4 @@ public class ImageChooseUtil implements Serializable{
 		return "com.google.android.apps.photos.content".equals(uri.getAuthority());
 	}
 
-	public static int getScaleWidth() {
-		return SCALE_WIDTH;
-	}
-
-	public static void setScaleWidth(int scaleWidth) {
-		SCALE_WIDTH = scaleWidth;
-	}
-
-	public static int getScaleHeight() {
-		return SCALE_HEIGHT;
-	}
-
-	public static void setScaleHeight(int scaleHeight) {
-		SCALE_HEIGHT = scaleHeight;
-	}
-
-	public static int getQuality() {
-		return quality;
-	}
-
-	public static void setQuality(int quality) {
-		ImageChooseUtil.quality = quality;
-	}
-
-	public static String getImagePathFolder() {
-		return imagePathFolder;
-	}
-
-	public static void setImagePathFolder(String imagePathFolder) {
-		ImageChooseUtil.imagePathFolder = imagePathFolder;
-	}
-
-	public String getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(String authority) {
-		this.authority = authority;
-	}
 }

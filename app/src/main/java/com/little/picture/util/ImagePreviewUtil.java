@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.little.picture.PicturePickActivity;
+import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.adapter.PictureFolderAdapter;
 import com.little.picture.adapter.PictureGridAdapter;
@@ -53,18 +54,25 @@ public class ImagePreviewUtil {
     private boolean showPreviewTitle = true;//是否显示标题
     private boolean showDelete = true;//是否显示删除按钮
     private boolean showDotIndex = false;//是否显示圆点索引
-    private PicturePreviewAdapter picturePreviewAdapter;
-    private IOnDeleteListener onDeleteListener;//删除监听
+
     private int statusBarHeight;//状态栏高度
 
+
+
+    private IOnCheckListener onCheckListener;
     private IOnItemClickListener onItemClickListener;
-    private List<ImageFolderEntity> folderImageFolderEntityList;
+    private IOnDeleteListener onDeleteListener;//删除监听
 
     private String previewPath = "";
-    private ArrayList<String> chooseImageList;
+
+    private List<ImageFolderEntity> folderImageFolderEntityList;
+    private ArrayList<String> chooseImageList;//选中的图片
+
     private PictureGridAdapter pictureGridAdapter;
+    private PicturePreviewAdapter picturePreviewAdapter;
+
     private int maxSize = 9;//最多能选择的图片数
-    private IOnCheckListener onCheckListener;
+
     private Activity activity;
     private boolean isOriginal = false;//是否使用原图
     private int folderShowIndex = -1;//当前文件夹索引
@@ -433,7 +441,7 @@ public class ImagePreviewUtil {
                     popupWindow.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = ImageChooseUtil.getImagePathFolder()+"clip.jpg";
+                        String clipImagePath = PictureStartManager.getImagePathFolder()+"clip.jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
                         ArrayList<String> clipList = new ArrayList<String>();
                         clipList.add(clipImagePath);
@@ -446,7 +454,7 @@ public class ImagePreviewUtil {
                         if (!isOriginal){
                             ArrayList<String> imageList = new ArrayList<String>();
                             for (String path : chooseImageList){
-                                String imagePath = ImageUtil.saveScaleImage(path,ImageChooseUtil.getImagePathFolder(),ImageChooseUtil.SCALE_WIDTH,ImageChooseUtil.SCALE_HEIGHT,100);
+                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImagePathFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
                                 imageList.add(imagePath);
                             }
                             sendPicturePickBroadcast(imageList);
