@@ -8,9 +8,11 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.os.Environment;
 import android.view.View;
 
+import com.fos.fosmvp.common.utils.LogUtils;
 import com.fos.fosmvp.common.utils.StringUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -301,6 +303,11 @@ public class ImageUtil {
             if(!folder.exists()){
                 folder.mkdirs();
             }
+
+            int angle = getPictureDegree(imagePath);
+
+            LogUtils.e("angle= "+angle);
+
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options); // 此时返回bm为空
@@ -308,11 +315,15 @@ public class ImageUtil {
             int width = options.outWidth;
             int height = options.outHeight;
             options.inJustDecodeBounds = false;
+
             // 计算缩放比
             int be = caculateInSampleSize(width,height,scaleWidth,scaleHeight);
             options.inSampleSize =be;
             try{
                 bitmap = BitmapFactory.decodeFile(imagePath, options);
+                if (angle>0){
+                    bitmap = rotaingImageView(angle,bitmap);
+                }
             }catch(Exception e){
                 e.printStackTrace();
                 return "";
@@ -348,6 +359,45 @@ public class ImageUtil {
         }
 
 
+    }
+
+    //获取图片的旋转角度
+    public static int getPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
+    }
+
+    /**
+     * 旋转图片
+     *
+     * @param angle
+     * @param bitmap
+     * @return Bitmap
+     */
+    public static Bitmap rotaingImageView(int angle, Bitmap bitmap) {
+        //旋转图片 动作
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        // 创建新的图片
+        Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        return resizedBitmap;
     }
 
     /**

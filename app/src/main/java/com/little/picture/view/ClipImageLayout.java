@@ -7,6 +7,9 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.RelativeLayout;
 
+import com.little.picture.PictureStartManager;
+import com.little.picture.util.ImageUtil;
+
 import java.io.File;
 
 
@@ -51,7 +54,9 @@ public class ClipImageLayout extends RelativeLayout
 	}
 
 	public void setImageUri(String imagePath){
-		mZoomImageView.setImageUri(Uri.fromFile(new File(imagePath)));
+		String path = ImageUtil.saveScaleImage(imagePath, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, 100);
+
+		mZoomImageView.setImageUri(Uri.fromFile(new File(path)));
 	}
 
 	/**

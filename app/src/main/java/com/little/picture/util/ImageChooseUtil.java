@@ -52,10 +52,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Activity activity){
 		this.activity = activity;
 		context = activity;
-		if (StringUtils.isEmpty(PictureStartManager.IMAGEFOLDER)){
-			PictureStartManager.IMAGEFOLDER = context.getExternalFilesDir("")+"/cache/image/";
+		if (StringUtils.isEmpty(PictureStartManager.IMAGE_FOLDER)){
+			PictureStartManager.IMAGE_FOLDER = context.getExternalFilesDir("")+"/cache/image/";
 		}
-		File dir = new File(PictureStartManager.IMAGEFOLDER);
+		File dir = new File(PictureStartManager.IMAGE_FOLDER);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -69,10 +69,10 @@ public class ImageChooseUtil implements Serializable{
 	public ImageChooseUtil(Fragment fragment){
 		this.fragment = fragment;
 		context = fragment.getActivity();
-		if (StringUtils.isEmpty(PictureStartManager.IMAGEFOLDER)){
-			PictureStartManager.IMAGEFOLDER = context.getExternalFilesDir("")+"/cache/image/";
+		if (StringUtils.isEmpty(PictureStartManager.IMAGE_FOLDER)){
+			PictureStartManager.IMAGE_FOLDER = context.getExternalFilesDir("")+"/cache/image/";
 		}
-		File dir = new File(PictureStartManager.IMAGEFOLDER);
+		File dir = new File(PictureStartManager.IMAGE_FOLDER);
 		if(!dir.exists()){
 			dir.mkdirs();
 		}
@@ -92,7 +92,7 @@ public class ImageChooseUtil implements Serializable{
 	public  String getTakePhotoScaleUrl() {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGEFOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGE_FOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -104,7 +104,7 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
-			imageUrl = PictureStartManager.IMAGEFOLDER + "image.jpg";
+			imageUrl = PictureStartManager.IMAGE_FOLDER +System.currentTimeMillis()+ "image.jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
@@ -173,7 +173,7 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
-			imageUrl = PictureStartManager.IMAGEFOLDER +""+System.currentTimeMillis()+".jpg";
+			imageUrl = PictureStartManager.IMAGE_FOLDER +""+System.currentTimeMillis()+".jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
@@ -380,7 +380,7 @@ public class ImageChooseUtil implements Serializable{
 	public String getPictureScaleUrl(String imageUrl) {
 		String result = "";
 		try {
-			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGEFOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
+			result = ImageUtil.saveScaleImage(imageUrl,PictureStartManager.IMAGE_FOLDER,PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{

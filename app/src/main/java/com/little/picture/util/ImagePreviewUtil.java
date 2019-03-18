@@ -444,7 +444,7 @@ public class ImagePreviewUtil {
                     popupWindow.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = PictureStartManager.getIMAGEFOLDER()+"clip.jpg";
+                        String clipImagePath = PictureStartManager.getImageFolder()+"clip.jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
                         ArrayList<String> clipList = new ArrayList<String>();
                         clipList.add(clipImagePath);
@@ -457,7 +457,7 @@ public class ImagePreviewUtil {
                         if (!isOriginal){
                             ArrayList<String> imageList = new ArrayList<String>();
                             for (String path : chooseImageList){
-                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getIMAGEFOLDER(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
+                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
                                 imageList.add(imagePath);
                             }
                             sendPicturePickBroadcast(imageList);

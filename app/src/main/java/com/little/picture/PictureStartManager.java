@@ -10,7 +10,7 @@ public class PictureStartManager {
     public static int SCALE_HEIGHT = 1920;//缩放至的高度
     public static int QUALITY = 100;//图像质量
     public static String AUTHORITY = "com.foton.almighty.fileprovider";//7.0以上调取相机相册需要
-    public static String IMAGEFOLDER = "";//存储图片的文件夹
+    public static String IMAGE_FOLDER = "";//存储图片的文件夹
 
     public PictureStartManager() {
     }
@@ -39,7 +39,7 @@ public class PictureStartManager {
         this.SCALE_HEIGHT = scaleHeight;
         this.QUALITY = quality;
         this.AUTHORITY = authority;
-        this.IMAGEFOLDER = imageFolder;
+        this.IMAGE_FOLDER = imageFolder;
     }
 
     public static int getScaleWidth() {
@@ -74,11 +74,11 @@ public class PictureStartManager {
         PictureStartManager.AUTHORITY = AUTHORITY;
     }
 
-    public static String getIMAGEFOLDER() {
-        return IMAGEFOLDER;
+    public static String getImageFolder() {
+        return IMAGE_FOLDER;
     }
 
-    public static void setIMAGEFOLDER(String IMAGEFOLDER) {
-        PictureStartManager.IMAGEFOLDER = IMAGEFOLDER;
+    public static void setImageFolder(String imageFolder) {
+        PictureStartManager.IMAGE_FOLDER = imageFolder;
     }
 }
