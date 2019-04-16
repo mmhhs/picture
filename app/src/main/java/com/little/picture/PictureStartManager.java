@@ -11,6 +11,7 @@ public class PictureStartManager {
     public static int QUALITY = 100;//图像质量
     public static String AUTHORITY = "com.foton.almighty.fileprovider";//7.0以上调取相机相册需要
     public static String IMAGE_FOLDER = "";//存储图片的文件夹
+    public static int picturePlaceholderId = 0;//图片加载占位图
 
     public PictureStartManager() {
     }
@@ -80,5 +81,13 @@ public class PictureStartManager {
 
     public static void setImageFolder(String imageFolder) {
         PictureStartManager.IMAGE_FOLDER = imageFolder;
+    }
+
+    public static int getPicturePlaceholderId() {
+        return picturePlaceholderId;
+    }
+
+    public static void setPicturePlaceholderId(int picturePlaceholderId) {
+        PictureStartManager.picturePlaceholderId = picturePlaceholderId;
     }
 }

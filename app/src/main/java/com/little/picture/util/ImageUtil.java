@@ -9,7 +9,10 @@ import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 
 import com.fos.fosmvp.common.utils.LogUtils;
@@ -21,6 +24,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+
+import static com.little.picture.util.ImageChooseUtil.getFilePathByContentResolver;
 
 /**
  * 图片工具类
@@ -359,6 +364,39 @@ public class ImageUtil {
         }
 
 
+    }
+
+    private static MediaScannerConnection msc;
+
+    public static boolean save2DCIM(final Context context, File file, String fileName) {
+        // 其次把文件插入到系统图库
+        try {
+            final String result = MediaStore.Images.Media.insertImage(context.getContentResolver(),
+                    file.getAbsolutePath(), fileName, null);
+            if (StringUtils.isEmpty(result)) {
+                return false;
+            }
+            // 最后通知图库更新
+//			context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.getAbsolutePath())));
+            msc = new MediaScannerConnection(context, new MediaScannerConnection.MediaScannerConnectionClient() {
+
+                public void onMediaScannerConnected() {
+                    if (msc != null)
+                        msc.scanFile(getFilePathByContentResolver(context, Uri.parse(result)), "image/jpeg");
+                }
+
+                public void onScanCompleted(String path, Uri uri) {
+                    if (msc != null){
+                        msc.disconnect();
+                    }
+                }
+            });
+            msc.connect();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     //获取图片的旋转角度

@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.fos.fosmvp.common.utils.LogUtils;
+import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 
 /**
@@ -18,6 +19,7 @@ public class GlideUtil {
     public static final int CENTER_CROP = 1;
     public static final int FIT_CENTER = 2;
     private static GlideUtil glideUtil;
+    private static int picturePlaceholderId;
 
     public static synchronized GlideUtil getInstance(){
         if (glideUtil==null){
@@ -27,6 +29,10 @@ public class GlideUtil {
     }
 
     public GlideUtil() {
+        picturePlaceholderId = PictureStartManager.picturePlaceholderId;
+        if (picturePlaceholderId<=0){
+            picturePlaceholderId = R.drawable.picture_placeholder;
+        }
     }
 
     /**
@@ -40,8 +46,8 @@ public class GlideUtil {
                 .load(url)
                 .listener(mRequestListener)
                 .priority(Priority.LOW)
-                .placeholder(R.drawable.picture_placeholder)
-                .error(R.drawable.picture_placeholder)
+                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                 .into(mImageView);
     }
 
@@ -58,8 +64,8 @@ public class GlideUtil {
                 .load(url)
                 .listener(mRequestListener)
                 .priority(Priority.LOW)
-                .placeholder(R.drawable.picture_placeholder)
-                .error(R.drawable.picture_placeholder)
+                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                 .override(width,height)
                 .into(mImageView);
     }
@@ -78,8 +84,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .centerCrop()
                         .into(mImageView);
                 break;
@@ -88,8 +94,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .fitCenter()
                         .into(mImageView);
                 break;
@@ -113,8 +119,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .centerCrop()
                         .override(width, height)
                         .into(mImageView);
@@ -124,8 +130,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .fitCenter()
                         .override(width, height)
                         .into(mImageView);
@@ -149,8 +155,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .centerCrop()
                         .transform(new GlideRoundTransform(context,radius))
                         .into(mImageView);
@@ -160,8 +166,8 @@ public class GlideUtil {
                         .load(url)
                         .listener(mRequestListener)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .fitCenter()
                         .transform(new GlideRoundTransform(context,radius))
                         .into(mImageView);
@@ -181,8 +187,8 @@ public class GlideUtil {
                 .load(url)
                 .listener(mRequestListener)
                 .priority(Priority.LOW)
-                .placeholder(R.drawable.picture_placeholder)
-                .error(R.drawable.picture_placeholder)
+                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                 .centerCrop()
                 .transform(new GlideCircleTransform(context))
                 .into(mImageView);
@@ -202,8 +208,8 @@ public class GlideUtil {
                 Glide.with(context)
                         .load(resId)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .centerCrop()
                         .into(mImageView);
                 break;
@@ -211,12 +217,47 @@ public class GlideUtil {
                 Glide.with(context)
                         .load(resId)
                         .priority(Priority.LOW)
-                        .placeholder(R.drawable.picture_placeholder)
-                        .error(R.drawable.picture_placeholder)
+                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                         .fitCenter()
                         .into(mImageView);
                 break;
         }
+
+    }
+
+    /**
+     * 加载资源图片 圆形
+     * @param context
+     * @param mImageView
+     * @param resId 资源id
+     */
+    public void displayCircleById(Context context,int resId,ImageView mImageView){
+        Glide.with(context)
+                .load(resId)
+                .priority(Priority.LOW)
+                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .centerCrop()
+                .transform(new GlideCircleTransform(context))
+                .into(mImageView);
+    }
+
+    /**
+     * 加载资源图片 圆形
+     * @param context
+     * @param mImageView
+     * @param resId 资源id
+     */
+    public void displayFilletById(Context context,int resId,ImageView mImageView,int radius){
+        Glide.with(context)
+                .load(resId)
+                .priority(Priority.LOW)
+                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                .centerCrop()
+                .transform(new GlideRoundTransform(context,radius))
+                .into(mImageView);
 
     }
 
