@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class ImageEntity implements Serializable{
     private static final long serialVersionUID = 510488828187140949L;
 
+    private String imagePath = "";
     private String originalPath = "";
     private String scalePath = "";
     private int width = 0;
@@ -47,5 +48,13 @@ public class ImageEntity implements Serializable{
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

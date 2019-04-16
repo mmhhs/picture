@@ -31,7 +31,7 @@ public class GlideUtil {
     public GlideUtil() {
         picturePlaceholderId = PictureStartManager.picturePlaceholderId;
         if (picturePlaceholderId<=0){
-            picturePlaceholderId = R.drawable.picture_placeholder;
+            picturePlaceholderId = R.mipmap.picture_placeholder;
         }
     }
 
@@ -187,8 +187,8 @@ public class GlideUtil {
                 .load(url)
                 .listener(mRequestListener)
                 .priority(Priority.LOW)
-                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+//                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+//                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                 .centerCrop()
                 .transform(new GlideCircleTransform(context))
                 .into(mImageView);
@@ -236,8 +236,8 @@ public class GlideUtil {
         Glide.with(context)
                 .load(resId)
                 .priority(Priority.LOW)
-                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+//                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+//                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                 .centerCrop()
                 .transform(new GlideCircleTransform(context))
                 .into(mImageView);
