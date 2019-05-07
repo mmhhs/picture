@@ -42,13 +42,18 @@ public class GlideUtil {
      * @param mImageView
      */
     public void display(Context context,String url,ImageView mImageView){
-        Glide.with(context)
-                .load(url)
-                .listener(mRequestListener)
-                .priority(Priority.LOW)
-                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .into(mImageView);
+        try {
+            Glide.with(context)
+                    .load(""+url)
+                    .listener(mRequestListener)
+                    .priority(Priority.LOW)
+                    .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .into(mImageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -60,14 +65,19 @@ public class GlideUtil {
      * @param height
      */
     public void display(Context context,String url,ImageView mImageView,int width,int height){
-        Glide.with(context)
-                .load(url)
-                .listener(mRequestListener)
-                .priority(Priority.LOW)
-                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .override(width,height)
-                .into(mImageView);
+        try {
+            Glide.with(context)
+                    .load(""+url)
+                    .listener(mRequestListener)
+                    .priority(Priority.LOW)
+                    .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .override(width,height)
+                    .into(mImageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -78,29 +88,32 @@ public class GlideUtil {
      * @param scaleType
      */
     public void display(Context context,String url,ImageView mImageView,int scaleType){
-        switch (scaleType){
-            case CENTER_CROP:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .centerCrop()
-                        .into(mImageView);
-                break;
-            case FIT_CENTER:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .fitCenter()
-                        .into(mImageView);
-                break;
+        try {
+            switch (scaleType){
+                case CENTER_CROP:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .centerCrop()
+                            .into(mImageView);
+                    break;
+                case FIT_CENTER:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .fitCenter()
+                            .into(mImageView);
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 
     /**
@@ -113,30 +126,35 @@ public class GlideUtil {
      * @param height
      */
     public void display(Context context,String url,ImageView mImageView,int scaleType,int width,int height){
-        switch (scaleType){
-            case CENTER_CROP:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .centerCrop()
-                        .override(width, height)
-                        .into(mImageView);
-                break;
-            case FIT_CENTER:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .fitCenter()
-                        .override(width, height)
-                        .into(mImageView);
-                break;
+        try {
+            switch (scaleType){
+                case CENTER_CROP:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .centerCrop()
+                            .override(width, height)
+                            .into(mImageView);
+                    break;
+                case FIT_CENTER:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .fitCenter()
+                            .override(width, height)
+                            .into(mImageView);
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 
@@ -149,30 +167,35 @@ public class GlideUtil {
      * @param radius 圆角大小
      */
     public void displayFillet(Context context,String url,ImageView mImageView,int scaleType,int radius){
-        switch (scaleType){
-            case CENTER_CROP:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .centerCrop()
-                        .transform(new GlideRoundTransform(context,radius))
-                        .into(mImageView);
-                break;
-            case FIT_CENTER:
-                Glide.with(context)
-                        .load(url)
-                        .listener(mRequestListener)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .fitCenter()
-                        .transform(new GlideRoundTransform(context,radius))
-                        .into(mImageView);
-                break;
+        try {
+            switch (scaleType){
+                case CENTER_CROP:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .centerCrop()
+                            .transform(new GlideRoundTransform(context,radius))
+                            .into(mImageView);
+                    break;
+                case FIT_CENTER:
+                    Glide.with(context)
+                            .load(""+url)
+                            .listener(mRequestListener)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .fitCenter()
+                            .transform(new GlideRoundTransform(context,radius))
+                            .into(mImageView);
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 
@@ -183,15 +206,20 @@ public class GlideUtil {
      * @param mImageView
      */
     public void displayCircle(Context context,String url,ImageView mImageView){
-        Glide.with(context)
-                .load(url)
-                .listener(mRequestListener)
-                .priority(Priority.LOW)
+        try {
+            Glide.with(context)
+                    .load(""+url)
+                    .listener(mRequestListener)
+                    .priority(Priority.LOW)
 //                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
 //                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .centerCrop()
-                .transform(new GlideCircleTransform(context))
-                .into(mImageView);
+                    .centerCrop()
+                    .transform(new GlideCircleTransform(context))
+                    .into(mImageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -203,26 +231,31 @@ public class GlideUtil {
      * @param resId 资源id
      */
     public void displayById(Context context,int resId,ImageView mImageView,int scaleType){
-        switch (scaleType){
-            case CENTER_CROP:
-                Glide.with(context)
-                        .load(resId)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .centerCrop()
-                        .into(mImageView);
-                break;
-            case FIT_CENTER:
-                Glide.with(context)
-                        .load(resId)
-                        .priority(Priority.LOW)
-                        .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                        .fitCenter()
-                        .into(mImageView);
-                break;
+        try {
+            switch (scaleType){
+                case CENTER_CROP:
+                    Glide.with(context)
+                            .load(resId)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .centerCrop()
+                            .into(mImageView);
+                    break;
+                case FIT_CENTER:
+                    Glide.with(context)
+                            .load(resId)
+                            .priority(Priority.LOW)
+                            .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                            .fitCenter()
+                            .into(mImageView);
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
     }
 
@@ -233,14 +266,19 @@ public class GlideUtil {
      * @param resId 资源id
      */
     public void displayCircleById(Context context,int resId,ImageView mImageView){
-        Glide.with(context)
-                .load(resId)
-                .priority(Priority.LOW)
+        try {
+            Glide.with(context)
+                    .load(resId)
+                    .priority(Priority.LOW)
 //                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
 //                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .centerCrop()
-                .transform(new GlideCircleTransform(context))
-                .into(mImageView);
+                    .centerCrop()
+                    .transform(new GlideCircleTransform(context))
+                    .into(mImageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -250,14 +288,19 @@ public class GlideUtil {
      * @param resId 资源id
      */
     public void displayFilletById(Context context,int resId,ImageView mImageView,int radius){
-        Glide.with(context)
-                .load(resId)
-                .priority(Priority.LOW)
-                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
-                .centerCrop()
-                .transform(new GlideRoundTransform(context,radius))
-                .into(mImageView);
+        try {
+            Glide.with(context)
+                    .load(resId)
+                    .priority(Priority.LOW)
+                    .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
+                    .centerCrop()
+                    .transform(new GlideRoundTransform(context,radius))
+                    .into(mImageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 
