@@ -311,14 +311,14 @@ public class ImagePreviewUtil {
                 previewText.setVisibility(View.GONE);
                 folderText.setVisibility(View.GONE);
                 chooseCheckBox.setVisibility(View.VISIBLE);
-                originalCheckBox.setVisibility(View.VISIBLE);
+//                originalCheckBox.setVisibility(View.VISIBLE);
                 setPreviewDoneText(doneText);
                 break;
             case PREVIEW_CHOOSE:
                 previewText.setVisibility(View.GONE);
                 folderText.setVisibility(View.GONE);
                 chooseCheckBox.setVisibility(View.VISIBLE);
-                originalCheckBox.setVisibility(View.VISIBLE);
+//                originalCheckBox.setVisibility(View.VISIBLE);
                 setPreviewDoneText(doneText);
                 break;
             case PREVIEW_TAKE:
