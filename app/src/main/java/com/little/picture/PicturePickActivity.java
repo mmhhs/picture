@@ -280,8 +280,13 @@ public class PicturePickActivity extends Activity {
             if (!imagePreviewUtil.isOriginal()) {
                 ArrayList<String> imageList = new ArrayList<String>();
                 for (String path : chooseImageList) {
-                    String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
-                    imageList.add(imagePath);
+                    if (funcType == PICK_AVATAR){
+                        String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH/3, PictureStartManager.SCALE_HEIGHT/3, PictureStartManager.QUALITY);
+                        imageList.add(imagePath);
+                    }else {
+                        String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
+                        imageList.add(imagePath);
+                    }
                 }
                 imagePreviewUtil.sendPicturePickBroadcast(imageList);
             } else {
