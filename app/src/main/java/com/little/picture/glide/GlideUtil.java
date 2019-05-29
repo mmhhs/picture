@@ -1,10 +1,12 @@
 package com.little.picture.glide;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -43,10 +45,12 @@ public class GlideUtil {
      */
     public void display(Context context,String url,ImageView mImageView){
         try {
+            //先加载原图的十分之一作为缩略图，再加载原图
+//            Glide.with( context ).load( url ).thumbnail(0.1f).into( mImageView ) ;
             Glide.with(context)
-                    .load(""+url)
+                    .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(mRequestListener)
-                    .priority(Priority.LOW)
+                    .priority(Priority.NORMAL)
                     .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .into(mImageView);
@@ -67,9 +71,9 @@ public class GlideUtil {
     public void display(Context context,String url,ImageView mImageView,int width,int height){
         try {
             Glide.with(context)
-                    .load(""+url)
+                    .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(mRequestListener)
-                    .priority(Priority.LOW)
+                    .priority(Priority.NORMAL)
                     .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .override(width,height)
@@ -92,9 +96,9 @@ public class GlideUtil {
             switch (scaleType){
                 case CENTER_CROP:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .centerCrop()
@@ -102,9 +106,9 @@ public class GlideUtil {
                     break;
                 case FIT_CENTER:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .fitCenter()
@@ -130,9 +134,9 @@ public class GlideUtil {
             switch (scaleType){
                 case CENTER_CROP:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .centerCrop()
@@ -141,9 +145,9 @@ public class GlideUtil {
                     break;
                 case FIT_CENTER:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .fitCenter()
@@ -171,9 +175,9 @@ public class GlideUtil {
             switch (scaleType){
                 case CENTER_CROP:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .centerCrop()
@@ -182,9 +186,9 @@ public class GlideUtil {
                     break;
                 case FIT_CENTER:
                     Glide.with(context)
-                            .load(""+url)
+                            .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                             .listener(mRequestListener)
-                            .priority(Priority.LOW)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .fitCenter()
@@ -208,9 +212,9 @@ public class GlideUtil {
     public void displayCircle(Context context,String url,ImageView mImageView){
         try {
             Glide.with(context)
-                    .load(""+url)
+                    .load(""+url).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .listener(mRequestListener)
-                    .priority(Priority.LOW)
+                    .priority(Priority.NORMAL)
 //                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
 //                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .centerCrop()
@@ -235,8 +239,8 @@ public class GlideUtil {
             switch (scaleType){
                 case CENTER_CROP:
                     Glide.with(context)
-                            .load(resId)
-                            .priority(Priority.LOW)
+                            .load(resId).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .centerCrop()
@@ -244,8 +248,8 @@ public class GlideUtil {
                     break;
                 case FIT_CENTER:
                     Glide.with(context)
-                            .load(resId)
-                            .priority(Priority.LOW)
+                            .load(resId).diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .priority(Priority.NORMAL)
                             .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                             .fitCenter()
@@ -268,8 +272,8 @@ public class GlideUtil {
     public void displayCircleById(Context context,int resId,ImageView mImageView){
         try {
             Glide.with(context)
-                    .load(resId)
-                    .priority(Priority.LOW)
+                    .load(resId).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.NORMAL)
 //                .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
 //                .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .centerCrop()
@@ -290,8 +294,8 @@ public class GlideUtil {
     public void displayFilletById(Context context,int resId,ImageView mImageView,int radius){
         try {
             Glide.with(context)
-                    .load(resId)
-                    .priority(Priority.LOW)
+                    .load(resId).diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .priority(Priority.NORMAL)
                     .placeholder(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(context.getResources(), picturePlaceholderId))
                     .centerCrop()
@@ -322,5 +326,29 @@ public class GlideUtil {
             return false;
         }
     };
+
+    /**
+     * 清除内存缓存.
+     */
+    public static void clearMemoryCache(Context context){
+        // This method must be called on the main thread.
+        Glide.get(context).clearMemory();
+    }
+
+    /**
+     * 清除磁盘缓存.
+     */
+    public static void clearDiskCache(final Context context){
+
+        new AsyncTask<Void,Void,Void>(){
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                // This method must be called on a background thread.
+                Glide.get(context).clearDiskCache();
+                return null;
+            }
+        };
+    }
 
 }
