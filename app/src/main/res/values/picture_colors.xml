@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="picture_white">#ffffff</color>
+    <color name="picture_white">#cccccc</color>
     <color name="picture_press_on">#00000000</color>
     <color name="picture_press_off">#40000000</color>
     <color name="picture_grey">#eeeeee</color>
     <color name="picture_transparent">#70000000</color>
     <color name="picture_transparent2">#ee000000</color>
     <color name="picture_deep_grey">#484848</color>
-    <color name="picture_light_grey">#b8b8b8</color>
+    <color name="picture_light_grey">#aaaaaa</color>
     <color name="picture_black">#000000</color>
     <color name="picture_bg">#181818</color>
     <color name="picture_title_bg">#22292c</color>

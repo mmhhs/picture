@@ -104,7 +104,7 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取相片 **/
 	public  void doTakePhoto() {
 		try {
-			imageUrl = PictureStartManager.IMAGE_FOLDER +System.currentTimeMillis()+ "image.jpg";
+			imageUrl = PictureStartManager.IMAGE_FOLDER +System.currentTimeMillis()+"take"+ System.currentTimeMillis()+".jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
@@ -173,7 +173,7 @@ public class ImageChooseUtil implements Serializable{
 	/** 拍照获取多张相片 **/
 	public  void doTakePhotos() {
 		try {
-			imageUrl = PictureStartManager.IMAGE_FOLDER +""+System.currentTimeMillis()+".jpg";
+			imageUrl = PictureStartManager.IMAGE_FOLDER +"takes"+System.currentTimeMillis()+".jpg";
 			File file = new File(imageUrl);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){

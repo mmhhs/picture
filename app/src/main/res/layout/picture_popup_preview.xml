@@ -38,7 +38,7 @@
             android:layout_alignParentBottom="true"
             app:indicatorRadius="3dp"
             app:indicatorSpace="10dp"
-            app:indicatorSelectLength="0dp"
+            app:indicatorSelectLength="5dp"
             app:indicatorDefaultColor="@color/picture_white"
             app:indicatorSelectColor="@color/picture_light_grey"
             />

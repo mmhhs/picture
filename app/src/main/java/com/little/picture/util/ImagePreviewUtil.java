@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -113,17 +112,21 @@ public class ImagePreviewUtil {
         final TextView doneText = (TextView) view.findViewById(R.id.picture_ui_title_done);
         final LinearLayout deleteLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_delete_layout);
         final TextView indexText = (TextView) view.findViewById(R.id.picture_ui_title_index);
+
+        final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+
         picturePreviewAdapter = new PicturePreviewAdapter(context, imageList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {
-                if (showPreviewTitle) {
-                    titleLayout.setVisibility(View.GONE);
-                    showPreviewTitle = false;
-                } else {
-                    titleLayout.setVisibility(View.VISIBLE);
-                    showPreviewTitle = true;
-                }
+//                if (showPreviewTitle) {
+//                    titleLayout.setVisibility(View.GONE);
+//                    showPreviewTitle = false;
+//                } else {
+//                    titleLayout.setVisibility(View.VISIBLE);
+//                    showPreviewTitle = true;
+//                }
+                popupWindow.dismiss();
             }
 
             @Override
@@ -142,11 +145,13 @@ public class ImagePreviewUtil {
         }else {
             deleteLayout.setVisibility(View.GONE);
         }
-        if (showDotIndex){
-            pageIndicatorView.setVisibility(View.VISIBLE);
-        }else {
-            pageIndicatorView.setVisibility(View.GONE);
-        }
+//        if (showDotIndex){
+//            pageIndicatorView.setVisibility(View.VISIBLE);
+//        }else {
+//            pageIndicatorView.setVisibility(View.GONE);
+//        }
+        pageIndicatorView.setVisibility(View.VISIBLE);
+        titleLayout.setVisibility(View.GONE);
         footerLayout.setVisibility(View.GONE);
         doneText.setVisibility(View.GONE);
         if (imageList.size()>position){
@@ -174,21 +179,21 @@ public class ImagePreviewUtil {
 
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int[] xy = {1,1};
-                    containerLayout.getLocationOnScreen(xy);
-                    if (xy[1]<statusBarHeight){
-                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }, 100);
-        final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    int[] xy = {1,1};
+//                    containerLayout.getLocationOnScreen(xy);
+//                    if (xy[1]<statusBarHeight){
+//                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, 100);
+
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable()); //使按返回键能够消失
@@ -406,20 +411,20 @@ public class ImagePreviewUtil {
                 }
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    int[] xy = {1,1};
-                    containerLayout.getLocationOnScreen(xy);
-                    if (xy[1]<statusBarHeight){
-                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        }, 100);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    int[] xy = {1,1};
+//                    containerLayout.getLocationOnScreen(xy);
+//                    if (xy[1]<statusBarHeight){
+//                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
+//                    }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, 100);
         final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
@@ -444,7 +449,7 @@ public class ImagePreviewUtil {
                     popupWindow.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = PictureStartManager.getImageFolder()+"clip.jpg";
+                        String clipImagePath = PictureStartManager.getImageFolder()+"clip"+System.currentTimeMillis()+".jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
                         ArrayList<String> clipList = new ArrayList<String>();
                         clipList.add(clipImagePath);
