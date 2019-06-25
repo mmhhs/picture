@@ -119,13 +119,6 @@ public class ImagePreviewUtil {
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {
-//                if (showPreviewTitle) {
-//                    titleLayout.setVisibility(View.GONE);
-//                    showPreviewTitle = false;
-//                } else {
-//                    titleLayout.setVisibility(View.VISIBLE);
-//                    showPreviewTitle = true;
-//                }
                 popupWindow.dismiss();
             }
 
@@ -140,27 +133,31 @@ public class ImagePreviewUtil {
             }
         });
         viewPager.setAdapter(picturePreviewAdapter);
+
         if (showDelete){
             deleteLayout.setVisibility(View.VISIBLE);
         }else {
             deleteLayout.setVisibility(View.GONE);
         }
-//        if (showDotIndex){
-//            pageIndicatorView.setVisibility(View.VISIBLE);
-//        }else {
-//            pageIndicatorView.setVisibility(View.GONE);
-//        }
-        pageIndicatorView.setVisibility(View.VISIBLE);
-        titleLayout.setVisibility(View.GONE);
+        if (showPreviewTitle){
+            titleLayout.setVisibility(View.VISIBLE);
+        }else {
+            titleLayout.setVisibility(View.GONE);
+        }
+
         footerLayout.setVisibility(View.GONE);
         doneText.setVisibility(View.GONE);
+
         if (imageList.size()>position){
             indexText.setText(""+(position+1)+"/"+ imageList.size());
             imageIndex = position;
             viewPager.setCurrentItem(position);
         }
+
+        pageIndicatorView.setVisibility(View.VISIBLE);
         pageIndicatorView.setPageTotal(imageList.size());
         pageIndicatorView.setPageSelect(imageIndex);
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -179,20 +176,6 @@ public class ImagePreviewUtil {
 
             }
         });
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    int[] xy = {1,1};
-//                    containerLayout.getLocationOnScreen(xy);
-//                    if (xy[1]<statusBarHeight){
-//                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 100);
 
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
@@ -203,6 +186,7 @@ public class ImagePreviewUtil {
                 showPreviewTitle = true;
             }
         });
+
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

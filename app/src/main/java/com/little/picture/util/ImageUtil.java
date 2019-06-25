@@ -362,8 +362,44 @@ public class ImageUtil {
         }finally{
             return result;
         }
+    }
 
+    /**
+     * 图片转bitmap
+     * @param imagePath
+     * @param scaleWidth
+     * @param scaleHeight
+     * @return
+     */
+    public static Bitmap imageToBitmapByUrl(String imagePath,int scaleWidth,int scaleHeight) {
+        Bitmap bitmap = null;
+        try {
+            int angle = getPictureDegree(imagePath);
 
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            bitmap = BitmapFactory.decodeFile(imagePath, options); // 此时返回bm为空
+            // 获取这个图片的宽和高
+            int width = options.outWidth;
+            int height = options.outHeight;
+            options.inJustDecodeBounds = false;
+
+            // 计算缩放比
+            int be = caculateInSampleSize(width,height,scaleWidth,scaleHeight);
+            options.inSampleSize =be;
+            try{
+                bitmap = BitmapFactory.decodeFile(imagePath, options);
+                if (angle>0){
+                    bitmap = rotaingImageView(angle,bitmap);
+                }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            return bitmap;
+        }
     }
 
     private static MediaScannerConnection msc;
