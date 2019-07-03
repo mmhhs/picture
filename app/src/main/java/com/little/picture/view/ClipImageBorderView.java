@@ -41,7 +41,7 @@ public class ClipImageBorderView extends View
 	/**
 	 * 宽高比 宽/高
 	 */
-	private int whRate = 1;
+	private float whRate = 1;
 
 	public ClipImageBorderView(Context context)
 	{
@@ -70,7 +70,7 @@ public class ClipImageBorderView extends View
 		super.onDraw(canvas);
 		// 计算矩形区域的宽度
 		mWidth = getWidth() - 2 * mHorizontalPadding;
-		mHeight = mWidth/whRate;
+		mHeight =(int)(mWidth/whRate);
 		// 计算距离屏幕垂直边界 的边距
 		mVerticalPadding = (getHeight() - mHeight) / 2;
 		mPaint.setColor(Color.parseColor("#aa000000"));
@@ -105,7 +105,7 @@ public class ClipImageBorderView extends View
 	 * 设置宽高比
 	 * @param whRate
 	 */
-	public void setWhRate(int whRate) {
+	public void setWhRate(float whRate) {
 		this.whRate = whRate;
 	}
 }

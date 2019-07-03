@@ -56,7 +56,7 @@ public class ImagePreviewUtil {
     private boolean showDotIndex = false;//是否显示圆点索引
 
     private int statusBarHeight;//状态栏高度
-    private int rate = 1;//裁剪图片宽高比
+    private float rate = 1;//裁剪图片宽高比
 
 
 
@@ -571,11 +571,11 @@ public class ImagePreviewUtil {
     }
 
 
-    public int getRate() {
+    public float getRate() {
         return rate;
     }
 
-    public void setRate(int rate) {
+    public void setRate(float rate) {
         this.rate = rate;
     }
 

@@ -69,7 +69,7 @@ public class PicturePickActivity extends Activity {
     private ImageChooseUtil imageChooseUtil;//选取图片工具
     private Handler handler;
     private ImagePreviewUtil imagePreviewUtil;//图片预览弹窗
-    private int rate = 1;//裁剪图片宽高比
+    private float rate = 1;//裁剪图片宽高比
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class PicturePickActivity extends Activity {
         activity.startActivity(intent);
     }
 
-    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag,int rate){
+    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag,float rate){
         Intent intent = new Intent(activity,PicturePickActivity.class);
         intent.putExtra(PICTURE_PICK_TYPE,funcType);
         intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
@@ -153,7 +153,7 @@ public class PicturePickActivity extends Activity {
             funcType = getIntent().getExtras().getInt(PICTURE_PICK_TYPE, PICK_IMAGE);
             fromTag = getIntent().getExtras().getString(PICTURE_FROM_TAG);
             maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE, 9);
-            rate = getIntent().getExtras().getInt("rate", 1);
+            rate = getIntent().getExtras().getFloat("rate", 1);
         } catch (Exception e) {
             e.printStackTrace();
         }

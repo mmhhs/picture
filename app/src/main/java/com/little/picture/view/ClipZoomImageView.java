@@ -344,7 +344,7 @@ public class ClipZoomImageView extends ImageView implements
 	 */
 	private int mVerticalPadding;
 
-	private int rate = 1;//宽高比
+	private float rate = 1;//宽高比
 
 	@Override
 	public void onGlobalLayout()
@@ -355,7 +355,7 @@ public class ClipZoomImageView extends ImageView implements
 			if (d == null)
 				return;
 			// 垂直方向的边距
-			mVerticalPadding = (getHeight() - (getWidth() - 2 * mHorizontalPadding)/rate) / 2;
+			mVerticalPadding = (int)((getHeight() - (getWidth() - 2 * mHorizontalPadding)/rate) / 2);
 
 			int width = getWidth();
 			int height = getHeight();
@@ -474,7 +474,7 @@ public class ClipZoomImageView extends ImageView implements
 		this.mHorizontalPadding = mHorizontalPadding;
 	}
 
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 
