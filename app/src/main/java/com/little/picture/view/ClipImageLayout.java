@@ -79,4 +79,9 @@ public class ClipImageLayout extends RelativeLayout
 		return mZoomImageView.clip();
 	}
 
+	public void setRate(int rate){
+		mZoomImageView.setRate(rate);
+		mClipImageView.setWhRate(rate);
+	}
+
 }

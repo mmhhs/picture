@@ -10,11 +10,11 @@
         <item name="android:clipToPadding">true</item>
     </style>
     <style name="picture_text_16">
-        <item name="android:textColor">@color/picture_text</item>
+        <item name="android:textColor">@color/picture_deep_grey</item>
         <item name="android:textSize">16sp</item>
     </style>
     <style name="picture_text_14">
-        <item name="android:textColor">@color/picture_text</item>
+        <item name="android:textColor">@color/picture_deep_grey</item>
         <item name="android:textSize">14sp</item>
     </style>
     <style name="picture_text_black_16">
@@ -26,7 +26,7 @@
         <item name="android:textSize">14sp</item>
     </style>
     <style name="picture_text_white_18">
-        <item name="android:textColor">@color/picture_white</item>
+        <item name="android:textColor">@color/picture_deep_grey</item>
         <item name="android:textSize">18sp</item>
     </style>
 

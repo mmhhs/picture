@@ -25,6 +25,10 @@ public class ClipImageBorderView extends View
 	 */
 	private int mWidth;
 	/**
+	 * 绘制的矩形的宽度
+	 */
+	private int mHeight;
+	/**
 	 * 边框的颜色，默认为白色
 	 */
 	private int mBorderColor = Color.parseColor("#FFFFFF");
@@ -34,6 +38,10 @@ public class ClipImageBorderView extends View
 	private int mBorderWidth = 1;
 
 	private Paint mPaint;
+	/**
+	 * 宽高比 宽/高
+	 */
+	private int whRate = 1;
 
 	public ClipImageBorderView(Context context)
 	{
@@ -62,8 +70,9 @@ public class ClipImageBorderView extends View
 		super.onDraw(canvas);
 		// 计算矩形区域的宽度
 		mWidth = getWidth() - 2 * mHorizontalPadding;
+		mHeight = mWidth/whRate;
 		// 计算距离屏幕垂直边界 的边距
-		mVerticalPadding = (getHeight() - mWidth) / 2;
+		mVerticalPadding = (getHeight() - mHeight) / 2;
 		mPaint.setColor(Color.parseColor("#aa000000"));
 		mPaint.setStyle(Style.FILL);
 		// 绘制左边1
@@ -92,4 +101,11 @@ public class ClipImageBorderView extends View
 		
 	}
 
+	/**
+	 * 设置宽高比
+	 * @param whRate
+	 */
+	public void setWhRate(int whRate) {
+		this.whRate = whRate;
+	}
 }

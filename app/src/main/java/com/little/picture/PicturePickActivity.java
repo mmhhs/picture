@@ -44,6 +44,7 @@ public class PicturePickActivity extends Activity {
     public static final String PICTURE_FROM_TAG = "PICTURE_FROM_TAG";//来源标志
     public static final int PICK_AVATAR = 0;//头像选取
     public static final int PICK_IMAGE = 1;//多照片选取
+    public static final int PICK_CROP_IMAGE = 2;//照片选取裁剪
 
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
@@ -68,6 +69,7 @@ public class PicturePickActivity extends Activity {
     private ImageChooseUtil imageChooseUtil;//选取图片工具
     private Handler handler;
     private ImagePreviewUtil imagePreviewUtil;//图片预览弹窗
+    private int rate = 1;//裁剪图片宽高比
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,15 @@ public class PicturePickActivity extends Activity {
         intent.putExtra(PICTURE_PICK_TYPE,funcType);
         intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
         intent.putExtra(PICTURE_FROM_TAG,fromTag);
+        activity.startActivity(intent);
+    }
+
+    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag,int rate){
+        Intent intent = new Intent(activity,PicturePickActivity.class);
+        intent.putExtra(PICTURE_PICK_TYPE,funcType);
+        intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
+        intent.putExtra(PICTURE_FROM_TAG,fromTag);
+        intent.putExtra("rate",rate);
         activity.startActivity(intent);
     }
 
@@ -142,6 +153,7 @@ public class PicturePickActivity extends Activity {
             funcType = getIntent().getExtras().getInt(PICTURE_PICK_TYPE, PICK_IMAGE);
             fromTag = getIntent().getExtras().getString(PICTURE_FROM_TAG);
             maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE, 9);
+            rate = getIntent().getExtras().getInt("rate", 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -149,6 +161,8 @@ public class PicturePickActivity extends Activity {
         if (funcType == PICK_IMAGE) {
             previewText.setVisibility(View.VISIBLE);
         } else if (funcType == PICK_AVATAR) {
+            previewText.setVisibility(View.GONE);
+        }else if (funcType == PICK_CROP_IMAGE){
             previewText.setVisibility(View.GONE);
         }
 
@@ -288,13 +302,8 @@ public class PicturePickActivity extends Activity {
             if (!imagePreviewUtil.isOriginal()) {
                 ArrayList<String> imageList = new ArrayList<String>();
                 for (String path : chooseImageList) {
-                    if (funcType == PICK_AVATAR){
-                        String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH/3, PictureStartManager.SCALE_HEIGHT/3, PictureStartManager.QUALITY);
-                        imageList.add(imagePath);
-                    }else {
-                        String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
-                        imageList.add(imagePath);
-                    }
+                    String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
+                    imageList.add(imagePath);
                 }
                 imagePreviewUtil.sendPicturePickBroadcast(imageList);
             } else {
@@ -383,6 +392,13 @@ public class PicturePickActivity extends Activity {
                         imagePreviewUtil.setOnCheckListener(onCheckListener);
                         imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
                         imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, folderImageFolderEntityList.get(folderShowIndex).getImagePathList(), position);
+                    } else if (funcType == PICK_CROP_IMAGE) {
+                        imagePreviewUtil.setRate(rate);
+                        imagePreviewUtil.setChooseImageList(chooseImageList);
+                        imagePreviewUtil.setOnItemClickListener(onItemClickListener);
+                        imagePreviewUtil.setOnCheckListener(onCheckListener);
+                        imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
+                        imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, folderImageFolderEntityList.get(folderShowIndex).getImagePathList(), position);
                     }
 
                 }
@@ -410,6 +426,13 @@ public class PicturePickActivity extends Activity {
                         imagePreviewUtil.setOnCheckListener(onCheckListener);
                         imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
                     } else if (funcType == PICK_AVATAR) {
+                        imagePreviewUtil.setChooseImageList(chooseImageList);
+                        imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, pathList, 0);
+                        imagePreviewUtil.setOnItemClickListener(onItemClickListener);
+                        imagePreviewUtil.setOnCheckListener(onCheckListener);
+                        imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
+                    }else if (funcType == PICK_CROP_IMAGE) {
+                        imagePreviewUtil.setRate(rate);
                         imagePreviewUtil.setChooseImageList(chooseImageList);
                         imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, pathList, 0);
                         imagePreviewUtil.setOnItemClickListener(onItemClickListener);

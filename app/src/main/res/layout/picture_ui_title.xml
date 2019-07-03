@@ -19,19 +19,15 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/picture_back" />
+            android:src="@mipmap/picture_back" />
     </LinearLayout>
-    <View
-        android:layout_width="0.5dp"
-        android:layout_height="25dp"
-        android:background="@color/picture_line"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/picture_image"
         style="@style/picture_text_white_18"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:id="@+id/picture_ui_title_index" />
 
     <LinearLayout
@@ -54,11 +50,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/picture_delete" />
+            android:src="@mipmap/picture_delete" />
     </LinearLayout>
 
     <TextView
         style="@style/picture_text_14"
+        android:textColor="@color/bg_white"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:gravity="center"

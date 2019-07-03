@@ -344,6 +344,8 @@ public class ClipZoomImageView extends ImageView implements
 	 */
 	private int mVerticalPadding;
 
+	private int rate = 1;//宽高比
+
 	@Override
 	public void onGlobalLayout()
 	{
@@ -353,7 +355,7 @@ public class ClipZoomImageView extends ImageView implements
 			if (d == null)
 				return;
 			// 垂直方向的边距
-			mVerticalPadding = (getHeight() - (getWidth() - 2 * mHorizontalPadding)) / 2;
+			mVerticalPadding = (getHeight() - (getWidth() - 2 * mHorizontalPadding)/rate) / 2;
 
 			int width = getWidth();
 			int height = getHeight();
@@ -409,7 +411,7 @@ public class ClipZoomImageView extends ImageView implements
 		draw(canvas);
 		return Bitmap.createBitmap(bitmap, mHorizontalPadding,
 				mVerticalPadding, getWidth() - 2 * mHorizontalPadding,
-				getWidth() - 2 * mHorizontalPadding);
+				getHeight() - 2 * mVerticalPadding);
 	}
 
 	/**
@@ -470,6 +472,10 @@ public class ClipZoomImageView extends ImageView implements
 	public void setHorizontalPadding(int mHorizontalPadding)
 	{
 		this.mHorizontalPadding = mHorizontalPadding;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
 	}
 
 	public void setImageUri(Uri uri){

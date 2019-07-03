@@ -51,11 +51,12 @@ public class ImagePreviewUtil {
     private List<String> imageList;//图片集合
     private View contentView;//承载视图
     private int  imageIndex = 0;//当前图片索引
-    private boolean showPreviewTitle = true;//是否显示标题
-    private boolean showDelete = true;//是否显示删除按钮
+    private boolean showPreviewTitle = false;//是否显示标题
+    private boolean showDelete = false;//是否显示删除按钮
     private boolean showDotIndex = false;//是否显示圆点索引
 
     private int statusBarHeight;//状态栏高度
+    private int rate = 1;//裁剪图片宽高比
 
 
 
@@ -183,7 +184,7 @@ public class ImagePreviewUtil {
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                showPreviewTitle = true;
+                showPreviewTitle = false;
             }
         });
 
@@ -319,6 +320,7 @@ public class ImagePreviewUtil {
                 viewPager.setVisibility(View.GONE);
                 footerLayout.setVisibility(View.GONE);
                 clipImageLayout.setVisibility(View.VISIBLE);
+                clipImageLayout.setRate(rate);
                 break;
         }
 
@@ -569,6 +571,13 @@ public class ImagePreviewUtil {
     }
 
 
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 
     public boolean isShowPreviewTitle() {
         return showPreviewTitle;
