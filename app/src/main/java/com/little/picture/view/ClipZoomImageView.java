@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -17,10 +18,9 @@ import android.view.ScaleGestureDetector.OnScaleGestureListener;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 
 
-public class ClipZoomImageView extends ImageView implements
+public class ClipZoomImageView extends AppCompatImageView implements
 		OnScaleGestureListener, OnTouchListener,
 		ViewTreeObserver.OnGlobalLayoutListener
 
@@ -103,8 +103,7 @@ public class ClipZoomImageView extends ImageView implements
 
 	/**
 	 * 自动缩放的任务
-	 * 
-	 * @author zhy
+	 *
 	 * 
 	 */
 	private class AutoScaleRunnable implements Runnable
@@ -122,8 +121,7 @@ public class ClipZoomImageView extends ImageView implements
 
 		/**
 		 * 传入目标缩放值，根据目标值与当前值，判断应该放大还是缩小
-		 * 
-		 * @param targetScale
+		 *
 		 */
 		public AutoScaleRunnable(float targetScale, float x, float y)
 		{
@@ -207,8 +205,7 @@ public class ClipZoomImageView extends ImageView implements
 
 	/**
 	 * 根据当前图片的Matrix获得图片的范围
-	 * 
-	 * @return
+	 *
 	 */
 	private RectF getMatrixRectF()
 	{
@@ -311,8 +308,7 @@ public class ClipZoomImageView extends ImageView implements
 
 	/**
 	 * 获得当前的缩放比例
-	 * 
-	 * @return
+	 *
 	 */
 	public final float getScale()
 	{
@@ -400,8 +396,6 @@ public class ClipZoomImageView extends ImageView implements
 
 	/**
 	 * 剪切图片，返回剪切后的bitmap对象
-	 * 
-	 * @return
 	 */
 	public Bitmap clip()
 	{
@@ -459,10 +453,7 @@ public class ClipZoomImageView extends ImageView implements
 
 	/**
 	 * 是否是拖动行为
-	 * 
-	 * @param dx
-	 * @param dy
-	 * @return
+	 *
 	 */
 	private boolean isCanDrag(float dx, float dy)
 	{

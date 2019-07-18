@@ -36,7 +36,7 @@ public class PictureGridAdapter extends BaseAdapter{
         this.context = context;
         this.list = list;
         this.chooseList = chooseList;
-        this.itemWidth = (screenWidth- 2* ImageUtil.dip2px(context, 1))/3;
+        this.itemWidth = (screenWidth- 3* ImageUtil.dip2px(context, 1))/4;
         this.maxSize = maxSize;
         this.folderShowIndex = folderShowIndex;
         this.funcType = funcType;

@@ -103,7 +103,6 @@ public class ClipImageBorderView extends View
 
 	/**
 	 * 设置宽高比
-	 * @param whRate
 	 */
 	public void setWhRate(float whRate) {
 		this.whRate = whRate;

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/picture_navi_bar_height_top"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:id="@+id/picture_ui_title_layout"
     android:background="@color/picture_title_bg"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
     >
 
     <LinearLayout

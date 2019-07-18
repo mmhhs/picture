@@ -303,7 +303,16 @@ public class ImageUtil {
             if(!sdCardExist()||imagePath.equals("")){
                 return "";
             }
-            fileSavePath = imagePathFolder +time+"temp.jpg";
+            if (imagePath.endsWith(".jpg")){
+                fileSavePath = imagePathFolder +time+"temp.jpg";
+            }else if (imagePath.endsWith(".png")){
+                fileSavePath = imagePathFolder +time+"temp.png";
+            }else if (imagePath.endsWith(".gif")){
+                fileSavePath = imagePathFolder +time+"temp.gif";
+            }else {
+                fileSavePath = imagePathFolder +time+"temp.jpg";
+            }
+
             File folder = new File(imagePathFolder);
             if(!folder.exists()){
                 folder.mkdirs();

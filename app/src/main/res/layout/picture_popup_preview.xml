@@ -23,7 +23,7 @@
             android:visibility="gone"/>
         <include
             android:layout_width="match_parent"
-            android:layout_height="@dimen/picture_navi_bar_height_top"
+            android:layout_height="wrap_content"
             layout="@layout/picture_ui_title"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -40,9 +40,9 @@
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             app:indicatorRadius="2dp"
-            app:indicatorSpace="10dp"
-            app:indicatorSelectLength="10dp"
-            app:indicatorDefaultColor="@color/picture_deep_grey"
+            app:indicatorSpace="8dp"
+            app:indicatorSelectLength="8dp"
+            app:indicatorDefaultColor="@color/picture_light_grey"
             app:indicatorSelectColor="@color/picture_light_grey"
             />
         <com.little.picture.view.ChoiceBorderView

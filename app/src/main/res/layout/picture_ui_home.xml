@@ -16,7 +16,7 @@
             android:id="@+id/picture_ui_home_gridview"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:numColumns="3"
+            android:numColumns="4"
             android:horizontalSpacing="1dp"
             android:verticalSpacing="1dp"
             />

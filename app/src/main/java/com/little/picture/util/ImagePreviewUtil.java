@@ -2,14 +2,18 @@ package com.little.picture.util;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
@@ -95,32 +99,33 @@ public class ImagePreviewUtil {
      * @param index 默认显示第几张
      * @return
      */
-    public PopupWindow showImagePreview(int index, List<String> imageList){
+    public void showImagePreview(int index, List<String> imageList){
         this.imageList = imageList;
-        PopupWindow popupWindow = getPreviewWindow(context, index);
-        popupWindow.showAtLocation(contentView, Gravity.CENTER, 0, 0);
-        return popupWindow;
+        getPreviewWindow(context, index);
     }
 
-    public PopupWindow getPreviewWindow(final Context context,int position) {
+    public void getPreviewWindow(final Context context,int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
-        final ViewPager viewPager = (ViewPager) view.findViewById(R.id.picture_popup_preview_viewPager);
-        final PageIndicatorView pageIndicatorView = (PageIndicatorView) view.findViewById(R.id.picture_popup_preview_pageIndicatorView);
-        final LinearLayout titleLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_layout);
-        final LinearLayout footerLayout = (LinearLayout) view.findViewById(R.id.picture_ui_footer_layout);
-        LinearLayout backLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_back_layout);
-        final RelativeLayout containerLayout = (RelativeLayout) view.findViewById(R.id.picture_popup_preview_layout);
-        final TextView doneText = (TextView) view.findViewById(R.id.picture_ui_title_done);
-        final LinearLayout deleteLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_delete_layout);
-        final TextView indexText = (TextView) view.findViewById(R.id.picture_ui_title_index);
+        final ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
+        final PageIndicatorView pageIndicatorView = view.findViewById(R.id.picture_popup_preview_pageIndicatorView);
+        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout);
+        final LinearLayout footerLayout = view.findViewById(R.id.picture_ui_footer_layout);
+        LinearLayout backLayout = view.findViewById(R.id.picture_ui_title_back_layout);
+        final TextView doneText = view.findViewById(R.id.picture_ui_title_done);
+        final LinearLayout deleteLayout = view.findViewById(R.id.picture_ui_title_delete_layout);
+        final TextView indexText = view.findViewById(R.id.picture_ui_title_index);
 
-        final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        dialog.setContentView(view);
+
+        setSameConfig(dialog,backLayout);
+
 
         picturePreviewAdapter = new PicturePreviewAdapter(context, imageList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {
-                popupWindow.dismiss();
+                dialog.dismiss();
             }
 
             @Override
@@ -178,63 +183,13 @@ public class ImagePreviewUtil {
             }
         });
 
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable()); //使按返回键能够消失
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                showPreviewTitle = false;
-            }
-        });
-
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-//                alertDialog.setIcon(R.drawable.icon_dialog);
-//                alertDialog.setTitle("提示");
-                alertDialog.setMessage(context.getString(R.string.picture_delete));
-                alertDialog.setPositiveButton(context.getString(R.string.picture_confirm),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                imageList.remove(imageIndex);
-                                picturePreviewAdapter.notifyDataSetChanged();
-                                if (imageList.size() == 0) {
-                                    popupWindow.dismiss();
-                                } else {
-                                    if ((imageIndex) < imageList.size()) {
-
-                                    } else {
-                                        imageIndex = imageIndex - 1;
-                                    }
-                                    indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
-                                    viewPager.setCurrentItem(imageIndex);
-                                }
-                                if (onDeleteListener != null) {
-                                    onDeleteListener.onDelete(imageIndex);
-                                }
-                            }
-                        });
-                alertDialog.setNegativeButton(context.getString(R.string.picture_cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                alertDialog.show();
+                showDeleteTip(dialog,indexText,viewPager);
 
             }
         });
-        backLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-        return popupWindow;
     }
 
 
@@ -245,24 +200,22 @@ public class ImagePreviewUtil {
      * @param position 显示图片索引
      */
     public void showPicturePreview(int type, List<String> previewList, int position){
-        PopupWindow popupWindow = getPicturePreviewWindow(context, type, previewList, position);
-        popupWindow.showAtLocation(contentView, Gravity.CENTER, 0, 0);
+        getPicturePreviewWindow(context, type, previewList, position);
     }
 
-    public PopupWindow getPicturePreviewWindow(final Context context, final int type, final List<String> previewList, int position) {
+    public void getPicturePreviewWindow(final Context context, final int type, final List<String> previewList, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.picture_popup_preview_viewPager);
-        final LinearLayout titleLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_layout);
-        final LinearLayout footerLayout = (LinearLayout) view.findViewById(R.id.picture_ui_footer_layout);
-        LinearLayout backLayout = (LinearLayout) view.findViewById(R.id.picture_ui_title_back_layout);
-        final RelativeLayout containerLayout = (RelativeLayout) view.findViewById(R.id.picture_popup_preview_layout);
-        final TextView doneText = (TextView) view.findViewById(R.id.picture_ui_title_done);
-        TextView previewText = (TextView) view.findViewById(R.id.picture_ui_footer_preview);
-        TextView folderText = (TextView) view.findViewById(R.id.picture_ui_footer_folder);
-        final TextView indexText = (TextView) view.findViewById(R.id.picture_ui_title_index);
-        final CheckBox chooseCheckBox = (CheckBox) view.findViewById(R.id.picture_ui_footer_choose);
-        final CheckBox originalCheckBox = (CheckBox) view.findViewById(R.id.picture_ui_footer_original);
-        final ClipImageLayout clipImageLayout = (ClipImageLayout) view.findViewById(R.id.picture_popup_preview_clipImageLayout);
+        ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
+        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout);
+        final LinearLayout footerLayout = view.findViewById(R.id.picture_ui_footer_layout);
+        LinearLayout backLayout = view.findViewById(R.id.picture_ui_title_back_layout);
+        final TextView doneText = view.findViewById(R.id.picture_ui_title_done);
+        TextView previewText = view.findViewById(R.id.picture_ui_footer_preview);
+        TextView folderText = view.findViewById(R.id.picture_ui_footer_folder);
+        final TextView indexText = view.findViewById(R.id.picture_ui_title_index);
+        final CheckBox chooseCheckBox = view.findViewById(R.id.picture_ui_footer_choose);
+        final CheckBox originalCheckBox = view.findViewById(R.id.picture_ui_footer_original);
+        final ClipImageLayout clipImageLayout = view.findViewById(R.id.picture_popup_preview_clipImageLayout);
 
         clipImageLayout.setImageUri(previewList.get(position));
         if (folderShowIndex == 0){
@@ -397,27 +350,15 @@ public class ImagePreviewUtil {
                 }
             }
         });
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    int[] xy = {1,1};
-//                    containerLayout.getLocationOnScreen(xy);
-//                    if (xy[1]<statusBarHeight){
-//                        containerLayout.setPadding(0, statusBarHeight - xy[1], 0, 0);
-//                    }
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, 100);
-        final PopupWindow popupWindow = new PopupWindow(view, RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable()); //使按返回键能够消失
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+
+        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        dialog.setContentView(view);
+
+        setSameConfig(dialog,backLayout);
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onDismiss() {
+            public void onDismiss(DialogInterface dialog) {
                 if (folderShowIndex == 0){
                     previewList.add(0, "takePhoto");
                     folderShowIndex = -1;
@@ -428,11 +369,12 @@ public class ImagePreviewUtil {
                 showPreviewTitle = true;
             }
         });
+
         doneText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    popupWindow.dismiss();
+                    dialog.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
                         String clipImagePath = PictureStartManager.getImageFolder()+"clip"+System.currentTimeMillis()+".jpg";
@@ -462,13 +404,79 @@ public class ImagePreviewUtil {
                 }
             }
         });
-        backLayout.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+    private void setSameConfig(final Dialog dialog,View tvCancel){
+        Window window = dialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.gravity = Gravity.CENTER;
+        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(wlp);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+//            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+        dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
+            public void onDismiss(DialogInterface dialog) {
+
             }
         });
-        return popupWindow;
+
+        if (tvCancel!=null){
+            tvCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+        }
+
+    }
+
+    private void showDeleteTip(final Dialog dialog,final TextView indexText,final ViewPager viewPager){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("提示");
+        alertDialog.setMessage(context.getString(R.string.picture_delete));
+        alertDialog.setPositiveButton(context.getString(R.string.picture_confirm),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        imageList.remove(imageIndex);
+                        picturePreviewAdapter.notifyDataSetChanged();
+                        if (imageList.size() == 0) {
+                            dialog.dismiss();
+
+                        } else {
+                            if ((imageIndex) < imageList.size()) {
+
+                            } else {
+                                imageIndex = imageIndex - 1;
+                            }
+                            indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
+                            viewPager.setCurrentItem(imageIndex);
+                        }
+                        if (onDeleteListener != null) {
+                            onDeleteListener.onDelete(imageIndex);
+                        }
+                    }
+                });
+        alertDialog.setNegativeButton(context.getString(R.string.picture_cancel),
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+        alertDialog.show();
     }
 
     private boolean isSelected(String path){

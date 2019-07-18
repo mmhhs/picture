@@ -11,8 +11,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +22,7 @@ import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.util.ImageChooseUtil;
 import com.little.picture.util.ImagePreviewUtil;
 import com.little.picture.util.ImageUtil;
+import com.little.picture.util.StatusBarUtils;
 import com.little.picture.util.ToastUtil;
 
 import java.io.File;
@@ -49,10 +48,10 @@ public class PicturePickActivity extends Activity {
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
 
-    private HashMap<String, List<String>> mGroupMap = new HashMap<String, List<String>>();//本地图片分组集合
+    private HashMap<String, List<String>> mGroupMap = new HashMap<>();//本地图片分组集合
     private List<String> allImageList = new ArrayList<String>();//所有图片路径集合
-    private ArrayList<String> chooseImageList = new ArrayList<String>();//选中图片路径集合
-    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList<ImageFolderEntity>();//图片文件夹集合
+    private ArrayList<String> chooseImageList = new ArrayList<>();//选中图片路径集合
+    private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList<>();//图片文件夹集合
 
     public GridView gridView;
     public TextView doneText;
@@ -74,11 +73,9 @@ public class PicturePickActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.setContentView(R.layout.picture_ui_home);
 
+        StatusBarUtils.setStatusBarTranslucent(this, true);
         init();
 
 
@@ -267,7 +264,7 @@ public class PicturePickActivity extends Activity {
         Cursor mCursor = mContentResolver.query(mImageUri, null,
                 MediaStore.Images.Media.MIME_TYPE + "=? or "
                         + MediaStore.Images.Media.MIME_TYPE + "=?",
-                new String[]{"image/jpeg"}, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                new String[]{"image/jpeg", "image/png"}, MediaStore.Images.Media.DATE_MODIFIED + " desc");
 //                new String[] { "image/jpeg", "image/png" }, MediaStore.Images.Media.DATE_MODIFIED+ " desc");不支持PNG
 
         allImageList.add("takePhoto");//为拍摄照片按钮预留位置

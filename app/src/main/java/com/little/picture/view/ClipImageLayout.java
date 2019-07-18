@@ -61,8 +61,7 @@ public class ClipImageLayout extends RelativeLayout
 
 	/**
 	 * 对外公布设置边距的方法,单位为dp
-	 * 
-	 * @param mHorizontalPadding
+	 *
 	 */
 	public void setHorizontalPadding(int mHorizontalPadding)
 	{
@@ -71,8 +70,7 @@ public class ClipImageLayout extends RelativeLayout
 
 	/**
 	 * 裁切图片
-	 * 
-	 * @return
+	 *
 	 */
 	public Bitmap clip()
 	{

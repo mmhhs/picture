@@ -34,15 +34,7 @@ public class ChoiceBorderView extends View {
         init();
     }
 
-    /**
-     * 初始化布局
-     *
-     * @param changed
-     * @param left
-     * @param top
-     * @param right
-     * @param bottom
-     */
+
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
@@ -63,12 +55,6 @@ public class ChoiceBorderView extends View {
     private int temp1 = (RECT_CORNER_WITH - RECT_BORDER_WITH) / 2; //长方形的粗半距
     private int temp2 = (RECT_CORNER_WITH + RECT_BORDER_WITH) / 2; //四个角的粗半距
 
-    /**
-     * RECT_CORNER_WITH = 6
-     * RECT_BORDER_WITH =3
-     *
-     * @param canvas
-     */
     @Override
     protected void onDraw(Canvas canvas) {
         Paint paintRect = new Paint(); //初始化画笔

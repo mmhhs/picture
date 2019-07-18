@@ -39,9 +39,9 @@ public class GlideUtil {
 
     /**
      * 加载图片
-     * @param context
-     * @param url
-     * @param mImageView
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
      */
     public void display(Context context,String url,ImageView mImageView){
         try {
@@ -62,11 +62,11 @@ public class GlideUtil {
 
     /**
      * 加载图片 指定宽高
-     * @param context
-     * @param url
-     * @param mImageView
-     * @param width
-     * @param height
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
+     * @param width 宽度
+     * @param height 长度
      */
     public void display(Context context,String url,ImageView mImageView,int width,int height){
         try {
@@ -86,10 +86,10 @@ public class GlideUtil {
 
     /**
      * 加载图片 指定缩放类型
-     * @param context
-     * @param url
-     * @param mImageView
-     * @param scaleType
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
+     * @param scaleType 缩放类型
      */
     public void display(Context context,String url,ImageView mImageView,int scaleType){
         try {
@@ -122,12 +122,12 @@ public class GlideUtil {
 
     /**
      * 加载图片 指定缩放类型 指定宽高
-     * @param context
-     * @param url
-     * @param mImageView
-     * @param scaleType
-     * @param width
-     * @param height
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
+     * @param scaleType 缩放类型
+     * @param width 宽度
+     * @param height 长度
      */
     public void display(Context context,String url,ImageView mImageView,int scaleType,int width,int height){
         try {
@@ -164,10 +164,10 @@ public class GlideUtil {
 
     /**
      * 加载圆角图片 指定缩放类型
-     * @param context
-     * @param url
-     * @param mImageView
-     * @param scaleType
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
+     * @param scaleType 缩放类型
      * @param radius 圆角大小
      */
     public void displayFillet(Context context,String url,ImageView mImageView,int scaleType,int radius){
@@ -205,9 +205,9 @@ public class GlideUtil {
 
     /**
      * 加载圆形图像
-     * @param context
-     * @param url
-     * @param mImageView
+     * @param context 上下文
+     * @param url 路径
+     * @param mImageView 控件
      */
     public void displayCircle(Context context,String url,ImageView mImageView){
         try {
@@ -229,9 +229,9 @@ public class GlideUtil {
 
     /**
      * 加载资源图片 指定缩放类型
-     * @param context
-     * @param mImageView
-     * @param scaleType
+     * @param context 上下文
+     * @param mImageView 控件
+     * @param scaleType 缩放类型
      * @param resId 资源id
      */
     public void displayById(Context context,int resId,ImageView mImageView,int scaleType){
@@ -265,8 +265,8 @@ public class GlideUtil {
 
     /**
      * 加载资源图片 圆形
-     * @param context
-     * @param mImageView
+     * @param context 上下文
+     * @param mImageView 控件
      * @param resId 资源id
      */
     public void displayCircleById(Context context,int resId,ImageView mImageView){
@@ -287,8 +287,8 @@ public class GlideUtil {
 
     /**
      * 加载资源图片 圆形
-     * @param context
-     * @param mImageView
+     * @param context 上下文
+     * @param mImageView 控件
      * @param resId 资源id
      */
     public void displayFilletById(Context context,int resId,ImageView mImageView,int radius){
