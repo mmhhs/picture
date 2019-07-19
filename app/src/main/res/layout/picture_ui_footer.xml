@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:id="@+id/picture_ui_footer_layout"
-    android:background="@color/picture_title_bg"
+    android:background="@color/picture_white"
     >
 
     <TextView

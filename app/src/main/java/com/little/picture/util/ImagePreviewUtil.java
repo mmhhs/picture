@@ -41,6 +41,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.little.picture.util.StatusBarUtils.isMeizu;
+import static com.little.picture.util.StatusBarUtils.isXiaomi;
+
 /**
  * 大图预览
  */
@@ -108,7 +111,7 @@ public class ImagePreviewUtil {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
         final ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
         final PageIndicatorView pageIndicatorView = view.findViewById(R.id.picture_popup_preview_pageIndicatorView);
-        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout);
+        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout2);
         final LinearLayout footerLayout = view.findViewById(R.id.picture_ui_footer_layout);
         LinearLayout backLayout = view.findViewById(R.id.picture_ui_title_back_layout);
         final TextView doneText = view.findViewById(R.id.picture_ui_title_done);
@@ -206,7 +209,7 @@ public class ImagePreviewUtil {
     public void getPicturePreviewWindow(final Context context, final int type, final List<String> previewList, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
         ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
-        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout);
+        final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout2);
         final LinearLayout footerLayout = view.findViewById(R.id.picture_ui_footer_layout);
         LinearLayout backLayout = view.findViewById(R.id.picture_ui_title_back_layout);
         final TextView doneText = view.findViewById(R.id.picture_ui_title_done);
@@ -421,6 +424,11 @@ public class ImagePreviewUtil {
 //            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        }
+        if (isXiaomi()) {
+            StatusBarUtils.setXiaomiStatusBar(window, true);
+        } else if (isMeizu()) {
+            StatusBarUtils.setMeizuStatusBar(window, true);
         }
         dialog.show();
 

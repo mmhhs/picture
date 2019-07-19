@@ -21,13 +21,24 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
-        <include
+        <LinearLayout
+            android:id="@+id/picture_ui_title_layout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/picture_ui_title"
+            android:orientation="vertical"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/picture_white"
+            android:paddingTop="20dp"
+            >
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/picture_ui_title"
+                 />
+        </LinearLayout>
+
         <include
             android:layout_width="match_parent"
             android:layout_height="@dimen/picture_navi_bar_height_bottom"
