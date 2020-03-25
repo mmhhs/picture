@@ -37,6 +37,7 @@ public class ImageChooseUtil implements Serializable{
 	public static final int PHOTO_WITH_CAMERA = 116;//拍照
 	public static final int CHOOSE_PICTURE = 117;//图库选取
 	public static final int PHOTO_PICKED_WITH_CROP = 118;//裁剪
+	public static final int VIDEO_REQUEST = 119;
 
 	private static Uri imageUri;
 	private  String imageUrl = "";//拍照存储原始路径
@@ -215,6 +216,24 @@ public class ImageChooseUtil implements Serializable{
 			e.printStackTrace();
 		}
 
+	}
+
+	/**
+	 * 录像
+	 */
+	public void recordVideo(int limitTime) {
+		Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+		//限制时长
+		intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, limitTime);
+		//开启摄像机
+		if (activity !=null){
+			activity.startActivityForResult(intent, VIDEO_REQUEST); // 用户点击了从相机获取
+		}else {
+			if (fragment !=null){
+				fragment.startActivityForResult(intent, VIDEO_REQUEST); // 用户点击了从相机获取
+			}
+		}
 	}
 
 	private static Intent doPickPhotoFromGallery() {

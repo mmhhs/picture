@@ -1,11 +1,14 @@
 package com.little.picture;
 
+import android.content.Context;
+
 /**
  * 图片管理
  */
 
 public class PictureStartManager {
     private static PictureStartManager instance;
+    public static Context context;
     public static int SCALE_WIDTH = 1080;//缩放至的宽度
     public static int SCALE_HEIGHT = 1080;//缩放至的高度
     public static int QUALITY = 100;//图像质量
@@ -13,14 +16,19 @@ public class PictureStartManager {
     public static String IMAGE_FOLDER = "";//存储图片的文件夹
     public static int picturePlaceholderId = 0;//图片加载占位图
 
-    public PictureStartManager() {
+    public static final int FIT_CENTER = 1;
+    public static final int CENTER_CROP = 2;
+    public static final int CENTER_INSIDE = 3;
+
+    public PictureStartManager(Context context) {
+        this.context = context;
     }
 
-    public static PictureStartManager getInstance() {
+    public static PictureStartManager getInstance(Context context) {
         if (instance == null) {
             synchronized (PictureStartManager.class) {
                 if (instance == null) {
-                    instance = new PictureStartManager();
+                    instance = new PictureStartManager(context);
                 }
             }
         }

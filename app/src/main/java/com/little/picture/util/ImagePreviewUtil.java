@@ -121,7 +121,7 @@ public class ImagePreviewUtil {
         final Dialog dialog = new Dialog(context, R.style.DialogCentre);
         dialog.setContentView(view);
 
-        setSameConfig(dialog,backLayout);
+        setSameConfig(dialog,backLayout,false);
 
 
         picturePreviewAdapter = new PicturePreviewAdapter(context, imageList);
@@ -357,7 +357,7 @@ public class ImagePreviewUtil {
         final Dialog dialog = new Dialog(context, R.style.DialogCentre);
         dialog.setContentView(view);
 
-        setSameConfig(dialog,backLayout);
+        setSameConfig(dialog,backLayout,true);
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -410,7 +410,7 @@ public class ImagePreviewUtil {
 
     }
 
-    private void setSameConfig(final Dialog dialog,View tvCancel){
+    private void setSameConfig(final Dialog dialog,View tvCancel,boolean isInner){
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.gravity = Gravity.CENTER;
@@ -418,13 +418,18 @@ public class ImagePreviewUtil {
         wlp.height = WindowManager.LayoutParams.MATCH_PARENT;
         window.setAttributes(wlp);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+        if (!isInner){
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            } else {
+//                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            }
+        }else {
             dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        } else {
-//            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+
         if (isXiaomi()) {
             StatusBarUtils.setXiaomiStatusBar(window, true);
         } else if (isMeizu()) {

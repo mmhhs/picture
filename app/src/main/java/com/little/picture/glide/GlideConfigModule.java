@@ -1,22 +1,23 @@
 package com.little.picture.glide;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
-import com.bumptech.glide.load.DecodeFormat;
+import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.engine.cache.InternalCacheDiskCacheFactory;
 import com.bumptech.glide.load.engine.cache.LruResourceCache;
-import com.bumptech.glide.module.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 import com.little.picture.PictureStartManager;
 
 import java.io.File;
 
-public class GlideConfigModule implements GlideModule {
+@GlideModule
+public class GlideConfigModule extends AppGlideModule {
 
     @Override
-    public void applyOptions(Context context, GlideBuilder builder) {
+    public void applyOptions(@NonNull Context context,@NonNull GlideBuilder builder) {
         String folder = PictureStartManager.getImageFolder()+"glide_cache";
         File f = new File(folder);
         if (!f.exists()){
@@ -28,10 +29,14 @@ public class GlideConfigModule implements GlideModule {
         builder.setMemoryCache(new LruResourceCache(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
         //全部的内存缓存用来作为图片缓存
         builder.setBitmapPool(new LruBitmapPool(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
-        builder.setDecodeFormat(DecodeFormat.PREFER_RGB_565);//和Picasso配置一样
+
     }
 
     @Override
-    public void registerComponents(Context context, Glide glide) {
+    public boolean isManifestParsingEnabled() {
+        return false;
     }
+
+
+
 }

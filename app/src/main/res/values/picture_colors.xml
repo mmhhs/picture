@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="picture_white">#F5F5F5</color>
+    <color name="picture_white">#FFFFFF</color>
     <color name="picture_press_on">#00000000</color>
     <color name="picture_press_off">#40000000</color>
     <color name="picture_grey">#eeeeee</color>

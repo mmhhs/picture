@@ -17,6 +17,8 @@ import com.little.picture.util.ImageUtil;
 
 import java.util.List;
 
+import static com.little.picture.PictureStartManager.CENTER_CROP;
+
 
 public class PictureFolderAdapter extends BaseAdapter{
     public Context context;
@@ -56,7 +58,7 @@ public class PictureFolderAdapter extends BaseAdapter{
         ImageFolderEntity imageFolderEntity = list.get(position);
         viewHolder.nameText.setText(imageFolderEntity.getFolderName());
         viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit));
-        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageFolderEntity.getTopImagePath()),viewHolder.topImage, GlideUtil.CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageFolderEntity.getTopImagePath()),viewHolder.topImage, CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
         if (imageFolderEntity.getSelected()){
             viewHolder.selectImage.setVisibility(View.VISIBLE);
         }else {

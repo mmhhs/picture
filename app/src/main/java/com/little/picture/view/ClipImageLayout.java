@@ -1,6 +1,7 @@
 package com.little.picture.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.AttributeSet;
@@ -8,6 +9,7 @@ import android.util.TypedValue;
 import android.widget.RelativeLayout;
 
 import com.little.picture.PictureStartManager;
+import com.little.picture.R;
 import com.little.picture.util.ImageUtil;
 
 import java.io.File;
@@ -16,6 +18,7 @@ import java.io.File;
 public class ClipImageLayout extends RelativeLayout
 {
 
+	private Context mContext;
 	private ClipZoomImageView mZoomImageView;
 	private ClipImageBorderView mClipImageView;
 
@@ -24,12 +27,34 @@ public class ClipImageLayout extends RelativeLayout
 	 */
 	private int mHorizontalPadding = 20;
 
-	public ClipImageLayout(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
+	public ClipImageLayout(Context context) {
+		super(context);
+		mContext = context;
+		init(null, 0);
+	}
 
-		mZoomImageView = new ClipZoomImageView(context);
-		mClipImageView = new ClipImageBorderView(context);
+	public ClipImageLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		mContext = context;
+		init(attrs, 0);
+	}
+
+	public ClipImageLayout(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		mContext = context;
+		init(attrs, defStyle);
+	}
+
+
+
+	public void init(AttributeSet attrs, int defStyle)
+	{
+		final TypedArray a = getContext().obtainStyledAttributes(
+				attrs, R.styleable.PageIndicatorView, defStyle, 0);
+		mHorizontalPadding = a.getDimensionPixelSize(R.styleable.ClipImageLayout_clipImageHorizontalPadding, 20);
+
+		mZoomImageView = new ClipZoomImageView(mContext);
+		mClipImageView = new ClipImageBorderView(mContext);
 
 		android.view.ViewGroup.LayoutParams lp = new LayoutParams(
 				android.view.ViewGroup.LayoutParams.MATCH_PARENT,

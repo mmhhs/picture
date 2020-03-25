@@ -20,6 +20,8 @@ import com.little.picture.util.ToastUtil;
 
 import java.util.List;
 
+import static com.little.picture.PictureStartManager.CENTER_CROP;
+
 
 public class PictureGridAdapter extends BaseAdapter{
     public Context context;
@@ -76,7 +78,7 @@ public class PictureGridAdapter extends BaseAdapter{
             viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
             viewHolder.checkBox.setVisibility(View.GONE);
         }else {
-            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage,GlideUtil.CENTER_CROP, itemWidth, itemWidth);
+            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
         }
         if (funcType == PicturePickActivity.PICK_AVATAR||funcType==PicturePickActivity.PICK_CROP_IMAGE){

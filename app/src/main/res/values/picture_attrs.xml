@@ -9,4 +9,9 @@
         <attr name="indicatorSpace" format="dimension|integer" />
         <attr name="indicatorGravity" format="integer" />
     </declare-styleable>
+
+    <!-- 指示器 -->
+    <declare-styleable name="ClipImageLayout">
+        <attr name="clipImageHorizontalPadding" format="dimension|integer" />
+    </declare-styleable>
 </resources>
