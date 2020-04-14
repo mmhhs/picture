@@ -2,6 +2,10 @@ package com.little.picture;
 
 import android.content.Context;
 
+import com.little.picture.util.AppApplication;
+
+import java.io.File;
+
 /**
  * 图片管理
  */
@@ -22,6 +26,11 @@ public class PictureStartManager {
 
     public PictureStartManager(Context context) {
         this.context = context;
+        IMAGE_FOLDER = AppApplication.getAppContext().getExternalFilesDir("") + "/cache/image/";
+        File folder = new File(IMAGE_FOLDER);
+        if (!folder.exists()){
+            folder.mkdirs();
+        }
     }
 
     public static PictureStartManager getInstance(Context context) {
@@ -43,12 +52,12 @@ public class PictureStartManager {
      * @param authority 7.0以上调取相机相册需要权限
      * @param imageFolder 存储图片的文件夹
      */
-    public void init(int scaleWidth, int scaleHeight, int quality, String authority, String imageFolder) {
-        this.SCALE_WIDTH = scaleWidth;
-        this.SCALE_HEIGHT = scaleHeight;
-        this.QUALITY = quality;
-        this.AUTHORITY = authority;
-        this.IMAGE_FOLDER = imageFolder;
+    public static void init(int scaleWidth, int scaleHeight, int quality, String authority, String imageFolder) {
+        SCALE_WIDTH = scaleWidth;
+        SCALE_HEIGHT = scaleHeight;
+        QUALITY = quality;
+        AUTHORITY = authority;
+        IMAGE_FOLDER = imageFolder;
     }
 
     public static int getScaleWidth() {
