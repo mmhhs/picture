@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 28
@@ -36,11 +36,11 @@ dependencies {
 
 }
 
-//publish {
-//    userOrg = 'mmhhs'//bintray.com用户名
-//    groupId = 'com.little'//jcenter上的路径
-//    artifactId = 'picture'//项目名称
-//    publishVersion = '1.2.3'//版本号
-//    desc = 'choose picture'
-//    website = 'https://github.com/mmhhs/picture.git'
-//}
+publish {
+    userOrg = 'mmhhs'//bintray.com用户名
+    groupId = 'com.little'//jcenter上的路径
+    artifactId = 'picture'//项目名称
+    publishVersion = '1.2.3'//版本号
+    desc = 'choose picture'
+    website = 'https://github.com/mmhhs/picture.git'
+}

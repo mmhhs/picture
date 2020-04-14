@@ -2,10 +2,6 @@ package com.little.picture;
 
 import android.content.Context;
 
-import com.little.picture.util.AppApplication;
-
-import java.io.File;
-
 /**
  * 图片管理
  */
@@ -26,11 +22,11 @@ public class PictureStartManager {
 
     public PictureStartManager(Context context) {
         this.context = context;
-        IMAGE_FOLDER = AppApplication.getAppContext().getExternalFilesDir("") + "/cache/image/";
-        File folder = new File(IMAGE_FOLDER);
-        if (!folder.exists()){
-            folder.mkdirs();
-        }
+//        IMAGE_FOLDER = AppApplication.getAppContext().getExternalFilesDir("") + "/cache/image/";
+//        File folder = new File(IMAGE_FOLDER);
+//        if (!folder.exists()){
+//            folder.mkdirs();
+//        }
     }
 
     public static PictureStartManager getInstance(Context context) {
