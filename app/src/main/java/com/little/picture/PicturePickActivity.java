@@ -190,6 +190,7 @@ public class PicturePickActivity extends Activity {
         };
 
         queryData();
+        
     }
 
 
