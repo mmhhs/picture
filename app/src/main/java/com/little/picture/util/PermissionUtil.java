@@ -151,11 +151,11 @@ public class PermissionUtil {
     }
 
     public static boolean hasPicturePermission(Activity activity,boolean needRetry){
-        if (PermissionUtils.hasSelfPermissions(activity, CHECK_FILE_PERMISSION_NAME)&& PermissionUtils.hasSelfPermissions(activity, CHECK_CAMERA_PERMISSION_NAME)) {
+        if (PermissionUtils.hasSelfPermissions(activity, CHECK_FILE_PERMISSION_NAME)&& PermissionUtils.hasSelfPermissions(activity, CHECK_CAMERA_PERMISSION_NAME)&& PermissionUtils.hasSelfPermissions(activity, CHECK_AUDIO_PERMISSION_NAME)) {
             return true;
         }else {
             if (needRetry){
-                String[] PERMISSION_DOACACHENEEDSPERMISSION = new String[]{CHECK_FILE_PERMISSION_NAME,CHECK_CAMERA_PERMISSION_NAME};
+                String[] PERMISSION_DOACACHENEEDSPERMISSION = new String[]{CHECK_FILE_PERMISSION_NAME,CHECK_CAMERA_PERMISSION_NAME,CHECK_AUDIO_PERMISSION_NAME};
                 ActivityCompat.requestPermissions(activity, PERMISSION_DOACACHENEEDSPERMISSION, CHECK_CAMERA_PERMISSION_CODE);
             }
             return false;

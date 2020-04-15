@@ -83,7 +83,7 @@
     </style>
 
     <style name="picture_background_grey">
-        <item name="android:background">@color/bg_grey</item>
+        <item name="android:background">@color/picture_bg</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:clipToPadding">true</item>
     </style>

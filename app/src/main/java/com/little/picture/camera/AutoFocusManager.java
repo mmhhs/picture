@@ -18,10 +18,8 @@ package com.little.picture.camera;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
 
   private static final String TAG = AutoFocusManager.class.getSimpleName();
 
-  private static final long AUTO_FOCUS_INTERVAL_MS = 1000L;//对焦时间：正常为2000；
+  private static final long AUTO_FOCUS_INTERVAL_MS = 500L;//对焦时间：正常为2000；
   private static final Collection<String> FOCUS_MODES_CALLING_AF;
   static {
     FOCUS_MODES_CALLING_AF = new ArrayList<String>(2);
@@ -54,7 +52,6 @@ final class AutoFocusManager implements Camera.AutoFocusCallback {
 
   AutoFocusManager(Context context, Camera camera) {
     this.camera = camera;
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
     String currentFocusMode = camera.getParameters().getFocusMode();
     useAutoFocus = true;
     Log.i(TAG, "Current focus mode '" + currentFocusMode + "'; use auto focus? " + useAutoFocus);

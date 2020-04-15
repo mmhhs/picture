@@ -38,6 +38,8 @@ public class CircularProgressView extends View {
     private int mode = 0;//模式：0：拍照，1：录像
     private int maxTakeTime = 15;//支持最大拍摄时长，单位秒
     private int currentTime = 0;//当前拍摄时间，单位毫秒
+    private Timer timer;
+    private TimerTask timerTask;
 
     public CircularProgressView(Context context) {
         this(context, null);
@@ -247,7 +249,16 @@ public class CircularProgressView extends View {
             invalidate();
         }else {
             currentTime = 0;
-            timer.schedule(timerTask,500,500);//延时500毫秒，每隔500毫秒执行一次run方法
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    Message message = new Message();
+                    message.what = 1;
+                    handler.sendMessage(message);
+                }
+            };
+            timer.schedule(timerTask,100,100);//延时500毫秒，每隔500毫秒执行一次run方法
             invalidate();
         }
     }
@@ -257,14 +268,14 @@ public class CircularProgressView extends View {
         public void handleMessage(Message msg) {
             if (msg.what == 1){
                 //do something
-                currentTime = currentTime + 500;
-                if (currentTime>=maxTakeTime*1000){
+                currentTime = currentTime + 100;
+                if (currentTime>maxTakeTime*1000){
                     //TODO 拍摄结束
                     timer.cancel();
-                    setMode(0);
+//                    setMode(0);
 
                 }else {
-                    int progress = currentTime*100/maxTakeTime;
+                    int progress = currentTime*100/(maxTakeTime*1000);
                     setProgress(progress);
                 }
             }
@@ -272,15 +283,7 @@ public class CircularProgressView extends View {
         }
     };
 
-    Timer timer = new Timer();
-    TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            Message message = new Message();
-            message.what = 1;
-            handler.sendMessage(message);
-        }
-    };
+
 
 
 }

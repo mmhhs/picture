@@ -2,18 +2,12 @@ package com.little.picture.camera;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -23,9 +17,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.fos.fosmvp.common.utils.LogUtils;
+import com.little.picture.PictureStartManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,10 +40,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private MediaRecorder mMediaRecorder;
     private Uri outputMediaFileUri;
     private String outputMediaFileType;
+    private IOnCameraListener onCameraListener;
 
     private float oldDist = 1f;
 
-    public void takePicture(final ImageView view) {
+    public void takePicture() {
         mCamera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
@@ -63,7 +58,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     fos.write(data);
                     fos.close();
 
-                    view.setImageURI(outputMediaFileUri);
+                    if (onCameraListener!=null){
+                        onCameraListener.onPictureResult(pictureFile.getAbsolutePath());
+                    }
                     camera.startPreview();
                 } catch (FileNotFoundException e) {
                     Log.d(TAG, "File not found: " + e.getMessage());
@@ -84,11 +81,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         return false;
     }
 
-    public void stopRecording(final ImageView view) {
+    public void stopRecording() {
         if (mMediaRecorder != null) {
             mMediaRecorder.stop();
-            Bitmap thumbnail = ThumbnailUtils.createVideoThumbnail(outputMediaFileUri.getPath(), MediaStore.Video.Thumbnails.MINI_KIND);
-            view.setImageBitmap(thumbnail);
         }
         releaseMediaRecorder();
     }
@@ -271,12 +266,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String prefVideoSize = prefs.getString("video_size", "");
-        String[] split = prefVideoSize.split("x");
-        mMediaRecorder.setVideoSize(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+//        String prefVideoSize = prefs.getString("video_size", "");
+//        String[] split = prefVideoSize.split("x");
+//        mMediaRecorder.setVideoSize(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
 
-        mMediaRecorder.setOutputFile(getOutputMediaFile(MEDIA_TYPE_VIDEO).toString());
+        File videoFile = getOutputMediaFile(MEDIA_TYPE_VIDEO);
+        mMediaRecorder.setOutputFile(videoFile.getAbsolutePath());
 
         mMediaRecorder.setPreviewDisplay(mHolder.getSurface());
 
@@ -306,8 +302,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     private File getOutputMediaFile(int type) {
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(PictureStartManager.IMAGE_FOLDER);
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
                 Log.d(TAG, "failed to create directory");
@@ -317,12 +312,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath()  +  "IMG_" + timeStamp + ".jpg");
             outputMediaFileType = "image/*";
         } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
+            mediaFile = new File(mediaStorageDir.getPath() + "VID_" + timeStamp + ".mp4");
             outputMediaFileType = "video/*";
         } else {
             return null;
@@ -465,5 +458,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         Camera.Parameters parameters = mCamera.getParameters();
         CameraConfigurationUtils.setTorch(parameters,on);
         mCamera.setParameters(parameters);
+    }
+
+    public IOnCameraListener getOnCameraListener() {
+        return onCameraListener;
+    }
+
+    public void setOnCameraListener(IOnCameraListener onCameraListener) {
+        this.onCameraListener = onCameraListener;
     }
 }
