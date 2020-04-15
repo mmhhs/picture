@@ -118,7 +118,7 @@ public class ImagePreviewUtil {
         final LinearLayout deleteLayout = view.findViewById(R.id.picture_ui_title_delete_layout);
         final TextView indexText = view.findViewById(R.id.picture_ui_title_index);
 
-        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
         dialog.setContentView(view);
 
         setSameConfig(dialog,backLayout,false);
@@ -335,7 +335,7 @@ public class ImagePreviewUtil {
                     if (chooseImageList.size() < maxSize) {
                         setSelected(previewPath, true, doneText);
                     } else {
-                        ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                        PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                         chooseCheckBox.setChecked(false);
                     }
                 }
@@ -354,7 +354,7 @@ public class ImagePreviewUtil {
             }
         });
 
-        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
         dialog.setContentView(view);
 
         setSameConfig(dialog,backLayout,true);
@@ -510,7 +510,7 @@ public class ImagePreviewUtil {
                 if (chooseImageList.size()<maxSize){
                     chooseImageList.add(path);
                 }else {
-                    ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                    PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                 }
             }
         }else {

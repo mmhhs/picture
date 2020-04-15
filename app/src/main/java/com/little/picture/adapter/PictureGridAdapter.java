@@ -16,7 +16,7 @@ import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
 import com.little.picture.util.ImageUtil;
-import com.little.picture.util.ToastUtil;
+import com.little.picture.util.PaToastUtils;
 
 import java.util.List;
 
@@ -143,7 +143,7 @@ public class PictureGridAdapter extends BaseAdapter{
                 if (chooseList.size()<maxSize){
                     chooseList.add(path);
                 }else {
-                    ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                    PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                 }
             }
         }else {

@@ -15,4 +15,7 @@
     <string name="picture_cancel">取消</string>
     <string name="picture_clip">裁剪</string>
     <string name="picture_original">原图</string>
+    <string name="picture_ignore">忽略</string>
+    <string name="picture_tip">温馨提示</string>
+    <string name="picture_tip2">轻触拍照，长按摄像</string>
 </resources>

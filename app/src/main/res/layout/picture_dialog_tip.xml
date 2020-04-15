@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/popup_dialog_tip_container_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:background="@drawable/picture_bg_white"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/popup_dialog_tip_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:gravity="center"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/picture_tip"
+                android:textColor="@color/text_black"
+                android:textSize="18sp"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/popup_dialog_tip_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:visibility="visible"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginTop="15dp"
+                android:paddingBottom="15dp"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="15dp"
+                android:text="x"
+                android:textColor="@color/text_black2"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/popup_dialog_tip_option_layout"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="25dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/popup_dialog_tip_cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="30dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/picture_bg_white2"
+                    android:gravity="center"
+                    android:text="@string/picture_cancel"
+                    android:textColor="#6E6F70"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/popup_dialog_tip_other"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/picture_bg_white2"
+                    android:gravity="center"
+                    android:text="@string/picture_ignore"
+                    android:textColor="#6E6F70"
+                    android:textSize="14sp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/popup_dialog_tip_confirm"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/picture_shape_corner_blue"
+                    android:gravity="center"
+                    android:text="@string/picture_confirm"
+                    android:textColor="@color/picture_white"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

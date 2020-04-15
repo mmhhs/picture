@@ -25,7 +25,7 @@ import com.little.picture.util.ImageChooseUtil;
 import com.little.picture.util.ImagePreviewUtil;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.StatusBarUtils;
-import com.little.picture.util.ToastUtil;
+import com.little.picture.util.PaToastUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -184,7 +184,7 @@ public class PicturePickActivity extends Activity {
                     folderImageFolderEntityList = subGroupOfImage(mGroupMap);
                     setFolderShow(0);
                 } else {
-                    ToastUtil.addToast(PicturePickActivity.this, getString(R.string.picture_fail));
+                    PaToastUtils.addToast(PicturePickActivity.this, getString(R.string.picture_fail));
                 }
             }
         };
@@ -258,7 +258,7 @@ public class PicturePickActivity extends Activity {
      */
     private Boolean queryLocalImages() {
         if (!ImageUtil.sdCardExist()) {
-            ToastUtil.addToast(this, getString(R.string.picture_sd));
+            PaToastUtils.addToast(this, getString(R.string.picture_sd));
             return false;
         }
 

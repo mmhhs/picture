@@ -16,7 +16,7 @@ public class PictureStartManager {
     public static int SCALE_WIDTH = 1080;//缩放至的宽度
     public static int SCALE_HEIGHT = 1080;//缩放至的高度
     public static int QUALITY = 100;//图像质量
-    public static String AUTHORITY = "com.foton.almighty.fileprovider";//7.0以上调取相机相册需要
+    public static String AUTHORITY = "com.little.picture.fileprovider";//7.0以上调取相机相册需要
     public static String IMAGE_FOLDER = "";//存储图片的文件夹
     public static int picturePlaceholderId = 0;//图片加载占位图
 
