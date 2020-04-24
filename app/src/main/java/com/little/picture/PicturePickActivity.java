@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.little.picture.adapter.PictureGridAdapter;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.util.ImageChooseUtil;
 import com.little.picture.util.ImagePreviewUtil;
@@ -50,9 +51,9 @@ public class PicturePickActivity extends Activity {
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
 
-    private HashMap<String, List<String>> mGroupMap = new HashMap<>();//本地图片分组集合
-    private List<String> allImageList = new ArrayList<String>();//所有图片路径集合
-    private ArrayList<String> chooseImageList = new ArrayList<>();//选中图片路径集合
+    private Map<String, List<ImageEntity>> mGroupMap = new HashMap<>();//本地图片分组集合
+    private List<ImageEntity> allImageList = new ArrayList<>();//所有图片路径集合
+    private List<ImageEntity> chooseImageList = new ArrayList<>();//选中图片路径集合
     private List<ImageFolderEntity> folderImageFolderEntityList = new ArrayList<>();//图片文件夹集合
 
     public GridView gridView;
@@ -109,44 +110,7 @@ public class PicturePickActivity extends Activity {
     }
 
     public void init() {
-        gridView = (GridView) findViewById(R.id.picture_ui_home_gridview);
-        doneText = (TextView) findViewById(R.id.picture_ui_title_done);
-        backLayout = (LinearLayout) findViewById(R.id.picture_ui_title_back_layout);
-        folderText = (TextView) findViewById(R.id.picture_ui_footer_folder);
-        previewText = (TextView) findViewById(R.id.picture_ui_footer_preview);
-        footerLayout = (LinearLayout) findViewById(R.id.picture_ui_footer_layout);
-        doneText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDone();
-            }
-        });
-        previewText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onPreview();
-            }
-        });
-        folderText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imagePreviewUtil.showFolderWindow(folderImageFolderEntityList);
-                imagePreviewUtil.setOnItemClickListener(new IOnItemClickListener() {
-                    @Override
-                    public void onItemClick(int position) {
-                        setFolderShow(position);
-                    }
-                });
-            }
-        });
-        backLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        doneText.setEnabled(false);
-
+        bindView();
         screenWidth = ImageUtil.getScreenWidth(this);
         statusBarHeight = ImageUtil.getStatusBarHeight(this);
         try {
@@ -191,6 +155,46 @@ public class PicturePickActivity extends Activity {
 
         queryData();
         
+    }
+
+    private void bindView(){
+        gridView = (GridView) findViewById(R.id.picture_ui_home_gridview);
+        doneText = (TextView) findViewById(R.id.picture_ui_title_done);
+        backLayout = (LinearLayout) findViewById(R.id.picture_ui_title_back_layout);
+        folderText = (TextView) findViewById(R.id.picture_ui_footer_folder);
+        previewText = (TextView) findViewById(R.id.picture_ui_footer_preview);
+        footerLayout = (LinearLayout) findViewById(R.id.picture_ui_footer_layout);
+        doneText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDone();
+            }
+        });
+        previewText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPreview();
+            }
+        });
+        folderText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagePreviewUtil.showFolderWindow(folderImageFolderEntityList);
+                imagePreviewUtil.setOnItemClickListener(new IOnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        setFolderShow(position);
+                    }
+                });
+            }
+        });
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        doneText.setEnabled(false);
     }
 
 

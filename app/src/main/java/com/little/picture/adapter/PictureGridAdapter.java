@@ -86,10 +86,10 @@ public class PictureGridAdapter extends BaseAdapter{
         }
         if (isSelected(path)){
             viewHolder.selectorImage.setVisibility(View.VISIBLE);
-            viewHolder.checkBox.setChecked(true);
+            viewHolder.checkBox.setSelected(true);
         }else {
             viewHolder.selectorImage.setVisibility(View.GONE);
-            viewHolder.checkBox.setChecked(false);
+            viewHolder.checkBox.setSelected(false);
         }
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +116,14 @@ public class PictureGridAdapter extends BaseAdapter{
     public final static class ViewHolder {
         public ImageView contentImage;
         public ImageView selectorImage;
-        public CheckBox checkBox;
+        public ImageView checkBox;
         public RelativeLayout containerLayout;
 
         public ViewHolder(View convertView) {
-            contentImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_imageView);
-            selectorImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_selector);
-            checkBox = (CheckBox)convertView.findViewById(R.id.picture_adapter_grid_checkBox);
-            containerLayout = (RelativeLayout)convertView.findViewById(R.id.picture_adapter_grid_layout);
+            contentImage = convertView.findViewById(R.id.picture_adapter_grid_imageView);
+            selectorImage = convertView.findViewById(R.id.picture_adapter_grid_selector);
+            checkBox = convertView.findViewById(R.id.picture_adapter_grid_checkBox);
+            containerLayout = convertView.findViewById(R.id.picture_adapter_grid_layout);
         }
     }
 

@@ -28,6 +28,11 @@ public class ImageFolderEntity implements Serializable{
 	 */
 	private List<String> imagePathList;
 
+	/**
+	 * 文件夹中图片路径集合
+	 */
+	private List<ImageEntity> imageList;
+
 
 	public ImageFolderEntity() {
 	}
@@ -70,5 +75,13 @@ public class ImageFolderEntity implements Serializable{
 
 	public void setImagePathList(List<String> imagePathList) {
 		this.imagePathList = imagePathList;
+	}
+
+	public List<ImageEntity> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<ImageEntity> imageList) {
+		this.imageList = imageList;
 	}
 }

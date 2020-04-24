@@ -9,15 +9,16 @@ import java.io.Serializable;
 public class ImageEntity implements Serializable{
     private static final long serialVersionUID = 510488828187140949L;
 
-    private String imagePath = "";
-    private String originalPath = "";
-    private String scalePath = "";
+    private String imagePath = "";//图片路径
+    private String originalPath = "";//原始图片路径
+    private String scalePath = "";//压缩后图片路径
     private int width = 0;
     private int height = 0;
 
     private int type=0;//类型：0：照片，1：视频
     private String videoPath;//视频路径
     private String videoThumbPath;//视频缩略图路径
+    private int duration = 0;//时长，单位秒
 
     public ImageEntity() {
     }
@@ -88,5 +89,13 @@ public class ImageEntity implements Serializable{
 
     public void setVideoThumbPath(String videoThumbPath) {
         this.videoThumbPath = videoThumbPath;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }
