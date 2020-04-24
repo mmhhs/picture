@@ -29,9 +29,9 @@ public final class OpenCameraInterface {
 
   
   /**
-   * Opens the requested camera with {@link Camera#open(int)}, if one exists.
+   * Opens the requested mCamera with {@link Camera#open(int)}, if one exists.
    *
-   * @param cameraId camera ID of the camera to use. A negative value means "no preference"
+   * @param cameraId mCamera ID of the mCamera to use. A negative value means "no preference"
    * @return handle to {@link Camera} that was opened
    */
   @SuppressLint("NewApi")
@@ -46,7 +46,7 @@ public static Camera open(int cameraId) {
     boolean explicitRequest = cameraId >= 0;
 
     if (!explicitRequest) {
-      // Select a camera if no explicit camera requested
+      // Select a mCamera if no explicit mCamera requested
       int index = 0;
       while (index < numCameras) {
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
@@ -62,14 +62,14 @@ public static Camera open(int cameraId) {
 
     Camera camera;
     if (cameraId < numCameras) {
-      Log.i(TAG, "Opening camera #" + cameraId);
+      Log.i(TAG, "Opening mCamera #" + cameraId);
       camera = Camera.open(cameraId);
     } else {
       if (explicitRequest) {
-        Log.w(TAG, "Requested camera does not exist: " + cameraId);
+        Log.w(TAG, "Requested mCamera does not exist: " + cameraId);
         camera = null;
       } else {
-        Log.i(TAG, "No camera facing back; returning camera #0");
+        Log.i(TAG, "No mCamera facing back; returning mCamera #0");
         camera = Camera.open(0);
       }
     }
@@ -79,7 +79,7 @@ public static Camera open(int cameraId) {
   
   
   /**
-   * Opens a rear-facing camera with {@link Camera#open(int)}, if one exists, or opens camera 0.
+   * Opens a rear-facing mCamera with {@link Camera#open(int)}, if one exists, or opens mCamera 0.
    *
    * @return handle to {@link Camera} that was opened
    */

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 /**
- * Utility methods for configuring the Android camera.
+ * Utility methods for configuring the Android mCamera.
  * 
  * @author Sean Owen
  */

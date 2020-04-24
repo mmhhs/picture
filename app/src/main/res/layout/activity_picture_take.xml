@@ -82,8 +82,8 @@
 
         <com.little.picture.view.CircularProgressView
             android:id="@+id/pv_pz"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             app:backColor="@color/picture_grey"

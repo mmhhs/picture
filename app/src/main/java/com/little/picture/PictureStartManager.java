@@ -2,6 +2,7 @@ package com.little.picture;
 
 import android.content.Context;
 
+import com.fos.fosmvp.common.utils.LogUtils;
 import com.little.picture.util.AppApplication;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public class PictureStartManager {
         if (!folder.exists()){
             folder.mkdirs();
         }
+        LogUtils.setShowLogEnabled(true);
     }
 
     public static PictureStartManager getInstance(Context context) {

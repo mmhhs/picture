@@ -15,6 +15,10 @@ public class ImageEntity implements Serializable{
     private int width = 0;
     private int height = 0;
 
+    private int type=0;//类型：0：照片，1：视频
+    private String videoPath;//视频路径
+    private String videoThumbPath;//视频缩略图路径
+
     public ImageEntity() {
     }
 
@@ -56,5 +60,33 @@ public class ImageEntity implements Serializable{
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public String getVideoThumbPath() {
+        return videoThumbPath;
+    }
+
+    public void setVideoThumbPath(String videoThumbPath) {
+        this.videoThumbPath = videoThumbPath;
     }
 }

@@ -8,6 +8,7 @@ import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Display;
@@ -43,6 +44,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private IOnCameraListener onCameraListener;
 
     private float oldDist = 1f;
+
+    private int currentCameraType = 0;//类型：0：后置，1：前置
+    private int cameraId = 0;//摄像头索引
+    private int VIDEO_WIDTH,VIDEO_HEIGHT;
 
     public void takePicture() {
         mCamera.takePicture(null, null, new Camera.PictureCallback() {
@@ -82,8 +87,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void stopRecording() {
-        if (mMediaRecorder != null) {
-            mMediaRecorder.stop();
+        try {
+            if (mMediaRecorder != null) {
+                mMediaRecorder.setOnErrorListener(null);
+                mMediaRecorder.setPreviewDisplay(null);
+
+                try {
+                    mMediaRecorder.stop();
+                } catch (RuntimeException e) {
+                    Log.e(TAG, "stopRecord", e);
+                }
+            }
+            
+        }catch (Exception e){
+            e.printStackTrace();
         }
         releaseMediaRecorder();
     }
@@ -109,7 +126,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             try {
                 mCamera = Camera.open();
             } catch (Exception e) {
-                LogUtils.e(TAG+ "camera is not available");
+                LogUtils.e(TAG+ "mCamera is not available");
             }
         }
         return mCamera;
@@ -129,7 +146,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
         } catch (IOException e) {
-            Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+            Log.d(TAG, "Error setting mCamera preview: " + e.getMessage());
         }
     }
 
@@ -264,12 +281,22 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-        mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
-
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 //        String prefVideoSize = prefs.getString("video_size", "");
 //        String[] split = prefVideoSize.split("x");
 //        mMediaRecorder.setVideoSize(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+
+//        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        // mx4 前置摄像头尺寸设置后,硬件不识别,导致打开失败
+//        if (Build.MODEL.equalsIgnoreCase("MX4") &&
+//                currentCameraType == 1) {
+//        } else {
+//            mMediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
+//        }
+
+//        mMediaRecorder.setProfile(profile);
+
+        setCamcorderProfile(mMediaRecorder);
 
         File videoFile = getOutputMediaFile(MEDIA_TYPE_VIDEO);
         mMediaRecorder.setOutputFile(videoFile.getAbsolutePath());
@@ -292,6 +319,51 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         return true;
     }
 
+    private CamcorderProfile getProfile(int cameraId, int quality) {
+        if (CamcorderProfile.hasProfile(cameraId, quality)) {
+            return CamcorderProfile.get(cameraId, quality);
+        }
+        return null;
+    }
+
+
+    @SuppressLint("NewApi")
+    private void setCamcorderProfile(MediaRecorder mediaRecorder) {
+        CamcorderProfile profile = getProfile(cameraId, CamcorderProfile.QUALITY_HIGH);
+        if (profile == null) {
+            profile = getProfile(cameraId, CamcorderProfile.QUALITY_LOW);
+        }
+
+        if (profile != null) {
+            profile.fileFormat = MediaRecorder.OutputFormat.MPEG_4;
+
+            if (Build.MODEL.equalsIgnoreCase("MB525") || Build.MODEL.equalsIgnoreCase("C8812") || Build.MODEL
+                    .equalsIgnoreCase("C8650")) {
+                profile.videoCodec = MediaRecorder.VideoEncoder.H263;
+            } else {
+                profile.videoCodec = MediaRecorder.VideoEncoder.H264;
+            }
+
+            if (android.os.Build.VERSION.SDK_INT >= 14) {
+                profile.audioCodec = MediaRecorder.AudioEncoder.AAC;
+            } else {
+                if (android.os.Build.DISPLAY != null && android.os.Build.DISPLAY.indexOf("MIUI") >= 0) {
+                    profile.audioCodec = MediaRecorder.AudioEncoder.AAC;
+                } else {
+                    profile.audioCodec = MediaRecorder.AudioEncoder.AMR_NB;
+                }
+            }
+
+            mediaRecorder.setProfile(profile);
+        } else {
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+//            mediaRecorder.setVideoSize(VIDEO_WIDTH, VIDEO_HEIGHT);
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        }
+    }
+
+
     private void releaseMediaRecorder() {
         if (mMediaRecorder != null) {
             mMediaRecorder.reset();
@@ -301,7 +373,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
     }
 
-    private File getOutputMediaFile(int type) {
+    public File getOutputMediaFile(int type) {
         File mediaStorageDir = new File(PictureStartManager.IMAGE_FOLDER);
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -312,10 +384,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
-            mediaFile = new File(mediaStorageDir.getPath()  +  "IMG_" + timeStamp + ".jpg");
+            mediaFile = new File(mediaStorageDir.getPath()  +  "/IMG_" + timeStamp + ".jpg");
             outputMediaFileType = "image/*";
         } else if (type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + "VID_" + timeStamp + ".mp4");
+            mediaFile = new File(mediaStorageDir.getPath() + "/VID_" + timeStamp + ".mp4");
             outputMediaFileType = "video/*";
         } else {
             return null;
@@ -412,7 +484,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         }
         final String currentFocusMode = params.getFocusMode();
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
-        camera.setParameters(params);
+        try {
+            camera.setParameters(params);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         camera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
@@ -459,6 +535,30 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         CameraConfigurationUtils.setTorch(parameters,on);
         mCamera.setParameters(parameters);
     }
+
+    public int getCurrentCameraType() {
+        return currentCameraType;
+    }
+
+    public void setCurrentCameraType(int currentCameraType) {
+        this.currentCameraType = currentCameraType;
+    }
+
+    public int getCameraId() {
+        return cameraId;
+    }
+
+    public void setCameraId(int cameraId) {
+        this.cameraId = cameraId;
+    }
+
+
+    public void setVideoSize(int VIDEO_WIDTH,int VIDEO_HEIGHT) {
+        this.VIDEO_WIDTH = VIDEO_WIDTH;
+        this.VIDEO_HEIGHT = VIDEO_HEIGHT;
+    }
+
+
 
     public IOnCameraListener getOnCameraListener() {
         return onCameraListener;

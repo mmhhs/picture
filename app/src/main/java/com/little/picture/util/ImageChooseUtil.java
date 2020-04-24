@@ -274,7 +274,7 @@ public class ImageChooseUtil implements Serializable{
 	}
 
 	private static Intent getCropImageIntent(Uri uri) {
-		Intent intent = new Intent("com.android.camera.action.CROP");
+		Intent intent = new Intent("com.android.mCamera.action.CROP");
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		}

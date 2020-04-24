@@ -17,7 +17,9 @@
 package com.little.picture.camera;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.util.Log;
@@ -50,7 +52,7 @@ final class CameraConfigurationManager {
 	}
 
 	/**
-	 * Reads, one time, values from the camera that are needed by the app.
+	 * Reads, one time, values from the mCamera that are needed by the app.
 	 */
 	@SuppressLint("NewApi")
 	void initFromCameraParameters(Camera camera, int previewWidth, int previewHeight) {
@@ -78,6 +80,7 @@ final class CameraConfigurationManager {
 		}
 		LogUtils.e("CameraConfigurationManager screenResolutionForCamera.x="+screenResolutionForCamera.x+" y="+screenResolutionForCamera.y);
 
+		//更换分辨率
 		cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(
 				parameters, screenResolutionForCamera);
 
@@ -91,15 +94,15 @@ final class CameraConfigurationManager {
 
 		if (parameters == null) {
 			Log.w(TAG,
-					"Device error: no camera parameters are available. Proceeding without configuration.");
+					"Device error: no mCamera parameters are available. Proceeding without configuration.");
 			return;
 		}
 
-		Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+		Log.i(TAG, "Initial mCamera parameters: " + parameters.flatten());
 
 		if (safeMode) {
 			Log.w(TAG,
-					"In camera config safe mode -- most settings will not be honored");
+					"In mCamera config safe mode -- most settings will not be honored");
 		}
 
 		CameraConfigurationUtils.setFocus(parameters, true, true, safeMode);
@@ -110,7 +113,7 @@ final class CameraConfigurationManager {
 		/****************** 竖屏更改2 *********************/
 		setDisplayOrientation(camera, 90);
 
-		Log.i(TAG, "Final camera parameters: " + parameters.flatten());
+		Log.i(TAG, "Final mCamera parameters: " + parameters.flatten());
 
 		setZoom(parameters);
 		camera.setParameters(parameters);
@@ -238,4 +241,6 @@ final class CameraConfigurationManager {
 		}
 		return tenBestValue;
 	}
+
+
 }

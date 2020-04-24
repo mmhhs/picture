@@ -4,6 +4,18 @@
     <style name="AppThemePic" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="AppThemePic2" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:colorForeground">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="picture_background_white">
         <item name="android:background">@color/picture_white</item>
         <item name="android:fitsSystemWindows">true</item>

@@ -16,7 +16,10 @@
 
 package com.little.picture.camera;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -25,6 +28,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 
 
+import com.fos.fosmvp.common.utils.LogUtils;
 
 import java.io.IOException;
 
@@ -46,7 +50,7 @@ public final class CameraManager {
 
 	private final Context context;
 	private final CameraConfigurationManager configManager;
-	public Camera camera;
+	public Camera mCamera;
 	private AutoFocusManager autoFocusManager;
 	private Rect framingRect;
 	private Rect framingRectInPreview;
@@ -72,35 +76,37 @@ public final class CameraManager {
 	}
 
 	/**
-	 * Opens the camera driver and initializes the hardware parameters.
+	 * Opens the mCamera driver and initializes the hardware parameters.
 	 * 
 	 * @param holder
-	 *            The surface object which the camera will draw preview frames
+	 *            The surface object which the mCamera will draw preview frames
 	 *            into.
 	 * @throws IOException
-	 *             Indicates the camera driver failed to open.
+	 *             Indicates the mCamera driver failed to open.
 	 */
 	public synchronized void openDriver(SurfaceHolder holder, int previewWidth, int previewHeight)
 			throws IOException {
-		Camera theCamera = camera;
-		if (theCamera == null) {
+
+		if (mCamera == null) {
 
 			if (requestedCameraId >= 0) {
-				theCamera = OpenCameraInterface.open(requestedCameraId);
+				LogUtils.e("OpenCameraInterface requestedCameraId= "+requestedCameraId);
+				mCamera = OpenCameraInterface.open(requestedCameraId);
+
 			} else {
-				theCamera = OpenCameraInterface.open();
+				mCamera = OpenCameraInterface.open();
 			}
 
-			if (theCamera == null) {
+			if (mCamera == null) {
 				throw new IOException();
 			}
-			camera = theCamera;
 		}
-		theCamera.setPreviewDisplay(holder);
+		mCamera.setPreviewDisplay(holder);
 
+		LogUtils.e("------openDriver= "+ mCamera);
 		if (!initialized) {
 			initialized = true;
-			configManager.initFromCameraParameters(theCamera,previewWidth,previewHeight);
+			configManager.initFromCameraParameters(mCamera,previewWidth,previewHeight);
 			if (requestedFramingRectWidth > 0 && requestedFramingRectHeight > 0) {
 				setManualFramingRect(requestedFramingRectWidth,
 						requestedFramingRectHeight);
@@ -109,24 +115,24 @@ public final class CameraManager {
 			}
 		}
 
-		Camera.Parameters parameters = theCamera.getParameters();
+		Camera.Parameters parameters = mCamera.getParameters();
 		String parametersFlattened = parameters == null ? null : parameters
 				.flatten(); // Save these, temporarily
 		try {
-			configManager.setDesiredCameraParameters(theCamera, false);
+			configManager.setDesiredCameraParameters(mCamera, false);
 		} catch (RuntimeException re) {
 			// Driver failed
 			Log.w(TAG,
 					"Camera rejected parameters. Setting only minimal safe-mode parameters");
-			Log.i(TAG, "Resetting to saved camera params: "
+			Log.i(TAG, "Resetting to saved mCamera params: "
 					+ parametersFlattened);
 			// Reset:
 			if (parametersFlattened != null) {
-				parameters = theCamera.getParameters();
+				parameters = mCamera.getParameters();
 				parameters.unflatten(parametersFlattened);
 				try {
-					theCamera.setParameters(parameters);
-					configManager.setDesiredCameraParameters(theCamera, true);
+					mCamera.setParameters(parameters);
+					configManager.setDesiredCameraParameters(mCamera, true);
 				} catch (RuntimeException re2) {
 					// Well, darn. Give up
 					Log.w(TAG,
@@ -138,17 +144,23 @@ public final class CameraManager {
 	}
 
 	public synchronized boolean isOpen() {
-		return camera != null;
+		LogUtils.e("----- isOpen mCamera= "+ mCamera);
+		if (mCamera!=null){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	/**
-	 * Closes the camera driver if still in use.
+	 * Closes the mCamera driver if still in use.
 	 */
 	public synchronized void closeDriver() {
-		if (camera != null) {
-			camera.release();
-			camera = null;
-			// Make sure to clear these each time we close the camera, so that
+		if (mCamera != null) {
+			LogUtils.e("--------closeDriver---------");
+			mCamera.release();
+			mCamera = null;
+			// Make sure to clear these each time we close the mCamera, so that
 			// any scanning rect
 			// requested by intent is forgotten.
 			framingRect = null;
@@ -157,27 +169,27 @@ public final class CameraManager {
 	}
 
 	/**
-	 * Asks the camera hardware to begin drawing preview frames to the screen.
+	 * Asks the mCamera hardware to begin drawing preview frames to the screen.
 	 */
 	public synchronized void startPreview() {
-		Camera theCamera = camera;
-		if (theCamera != null && !previewing) {
-			theCamera.startPreview();
+		if (mCamera != null && !previewing) {
+			mCamera.startPreview();
 			previewing = true;
-			autoFocusManager = new AutoFocusManager(context, camera);
+			autoFocusManager = new AutoFocusManager(context, mCamera);
 		}
 	}
 
 	/**
-	 * Tells the camera to stop drawing preview frames.
+	 * Tells the mCamera to stop drawing preview frames.
 	 */
 	public synchronized void stopPreview() {
 		if (autoFocusManager != null) {
 			autoFocusManager.stop();
 			autoFocusManager = null;
 		}
-		if (camera != null && previewing) {
-			camera.stopPreview();
+		if (mCamera != null && previewing) {
+			LogUtils.e("--------stopPreview---------");
+			mCamera.stopPreview();
 			previewCallback.setHandler(null, 0);
 			previewing = false;
 		}
@@ -194,7 +206,7 @@ public final class CameraManager {
 	 *            The what field of the message to be sent.
 	 */
 	public synchronized void requestPreviewFrame(Handler handler, int message) {
-		Camera theCamera = camera;
+		Camera theCamera = mCamera;
 		if (theCamera != null && previewing) {
 			previewCallback.setHandler(handler, message);
 			theCamera.setOneShotPreviewCallback(previewCallback);
@@ -211,7 +223,7 @@ public final class CameraManager {
 	 */
 	public synchronized Rect getFramingRect() {
 		if (framingRect == null) {
-			if (camera == null) {
+			if (mCamera == null) {
 				return null;
 			}
 			Point screenResolution = configManager.getScreenResolution();
@@ -304,11 +316,11 @@ public final class CameraManager {
 	}
 
 	/**
-	 * Allows third party apps to specify the camera ID, rather than determine
+	 * Allows third party apps to specify the mCamera ID, rather than determine
 	 * it automatically based on available cameras and their orientation.
 	 * 
 	 * @param cameraId
-	 *            camera ID of the camera to use. A negative value means
+	 *            mCamera ID of the mCamera to use. A negative value means
 	 *            "no preference".
 	 */
 	public synchronized void setManualCameraId(int cameraId) {
@@ -347,8 +359,62 @@ public final class CameraManager {
 
 
 
-	public Camera getCamera() {
-		return camera;
+	public Camera getmCamera() {
+		return mCamera;
 	}
 
+	public void setmCamera(Camera mCamera) {
+		this.mCamera = mCamera;
+	}
+
+	private static final int FRONT = 1;//前置摄像头标记
+	private static final int BACK = 2;//后置摄像头标记
+	private int currentCameraType = 2;//当前打开的摄像头标记
+
+	public boolean checkCamera(Activity activity){
+		return activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
+	}
+
+	@SuppressLint("NewApi")
+	private Camera openCamera(int type){
+		int frontIndex =-1;//前置摄像头的ID
+		int backIndex = -1;//后置摄像头的ID
+		int cameraCount = Camera.getNumberOfCameras();
+		Camera.CameraInfo info = new Camera.CameraInfo();
+		for(int cameraIndex = 0; cameraIndex<cameraCount; cameraIndex++){
+			Camera.getCameraInfo(cameraIndex, info);
+			if(info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+				frontIndex = cameraIndex;
+			}else if(info.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
+				backIndex = cameraIndex;
+			}
+		}
+
+		currentCameraType = type;
+		if(type == FRONT && frontIndex != -1){
+			requestedCameraId = frontIndex;
+			return Camera.open(frontIndex);
+		}else if(type == BACK && backIndex != -1){
+			requestedCameraId = backIndex;
+			return Camera.open(backIndex);
+		}
+		return null;
+	}
+
+	public void changeCamera(CameraPreview cameraPreview){
+		try {
+			mCamera.stopPreview();
+			mCamera.release();
+			if(currentCameraType == FRONT){
+				mCamera = openCamera(BACK);
+			}else if(currentCameraType == BACK){
+				mCamera = openCamera(FRONT);
+			}
+			mCamera.setPreviewDisplay(cameraPreview.getHolder());
+			mCamera.startPreview();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+	}
 }

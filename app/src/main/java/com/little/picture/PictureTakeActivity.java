@@ -2,6 +2,7 @@ package com.little.picture;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -16,18 +19,29 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.fos.fosmvp.common.utils.LogUtils;
+import com.fos.fosmvp.common.view.LoadViewUtil;
 import com.little.picture.camera.BeepManager;
 import com.little.picture.camera.CameraManager;
 import com.little.picture.camera.CameraPreview;
 import com.little.picture.camera.IOnCameraListener;
 import com.little.picture.camera.InactivityTimer;
 import com.little.picture.glide.GlideUtil;
+import com.little.picture.listener.IOnProgressListener;
+import com.little.picture.model.ImageListEntity;
 import com.little.picture.util.DensityUtils;
+import com.little.picture.util.ImageUtil;
 import com.little.picture.util.PermissionUtil;
+import com.little.picture.util.VideoUtil;
 import com.little.picture.view.CircularProgressView;
 import com.little.picture.view.dialog.PAPopupManager;
+import com.vincent.videocompressor.VideoCompress;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PictureTakeActivity extends AppCompatActivity implements SurfaceHolder.Callback{
     private ImageView ivFz;
@@ -56,12 +70,24 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     private int type;//类型：0：拍摄，1：预览
     private int mode = 0;//模式：0：拍照，1：录像
+    private int currentCameraType = 0;//类型：0：后置，1：前置
+    private int currentCameraIndex = 0;//摄像头索引
     private String imagePath;//照片路径
-    private String videoPath;//视频路径
+    private String videoPath,outputVideoPath,videoThumbPath;//视频路径
+
+    private String fromTag= "";//来源标志
+
+    private LoadViewUtil loadViewUtil;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// 隐藏标题
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
+
         setContentView(R.layout.activity_picture_take);
         bindView();
         initView();
@@ -98,13 +124,33 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
                     case MotionEvent.ACTION_UP:
                         //抬起
                         if (isRecording){
-                            stopRecording();
+//                            stopRecording();
+                            pvPz.setRecording(false);
                         }
                         break;
                     case MotionEvent.ACTION_CANCEL:
                         break;
                 }
                 return gestureDetector.onTouchEvent(event);
+            }
+        });
+        pvPz.setOnProgressListener(new IOnProgressListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (isRecording){
+                    isRecording= false;
+                    stopRecording();
+                }
             }
         });
         ivFh.setOnClickListener(new View.OnClickListener() {
@@ -120,13 +166,20 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         tvWc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (mode==0){
+                    imagePath = compressImage();
+                    sendTakeResult();
+                    finish();
+                }else {
+                    compressVideo();
+                }
 
             }
         });
         ivFz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                changeCamera();
             }
         });
         ivXx.setOnClickListener(new View.OnClickListener() {
@@ -139,13 +192,18 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     private void initView(){
         popupManager = new PAPopupManager(this);
+        loadViewUtil = new LoadViewUtil(this,ivXx,"",1);
 
         previewWidth = DensityUtils.getWidthInPx(this);
-        previewHeight = DensityUtils.getHeightInPx(this)-DensityUtils.getStatusBarHeight(this);
+        previewHeight = DensityUtils.getHeightInPx(this);
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
         beepManager.updatePrefs();
         inactivityTimer.onResume();
+
+        LogUtils.e("previewWidth="+previewWidth+" previewHeight="+previewHeight);
+
+        surfaceView.setVideoSize((int)previewWidth,(int)previewHeight);
 
         if (!PermissionUtil.hasPicturePermission(this,true)){
             popupManager.showTipDialog("","没有权限");
@@ -268,6 +326,10 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         // 这是必须的，因为当我们第一次进入时需要显示帮助页，我们并不想打开Camera,测量屏幕大小
         // 当扫描框的尺寸不正确时会出现bug
         cameraManager = new CameraManager(this);
+        LogUtils.e("currentCameraIndex= "+currentCameraIndex+" hasSurface= "+hasSurface);
+        cameraManager.setManualCameraId(currentCameraIndex);
+        cameraManager.setmCamera(surfaceView.getmCamera());
+
         surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
             // activity在paused时但不会stopped,因此surface仍旧存在；
@@ -289,14 +351,19 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         if (surfaceHolder == null) {
             throw new IllegalStateException("No SurfaceHolder provided");
         }
+        LogUtils.e("cameraManager.isOpen()= "+cameraManager.isOpen());
         if (cameraManager.isOpen()) {
-            return;
+            cameraManager.stopPreview();
+            cameraManager.closeDriver();
+
+//            return;
         }
         try {
             // 打开Camera硬件设备
             cameraManager.openDriver(surfaceHolder,(int)previewWidth,(int)previewHeight);
-            surfaceView.setmCamera(cameraManager.camera);
+            surfaceView.setmCamera(cameraManager.mCamera);
             // 创建一个handler来打开预览，并抛出一个运行时异常
+            cameraManager.getmCamera().setPreviewDisplay(surfaceView.getHolder());
             cameraManager.startPreview();
             surfaceView.setOnCameraListener(new IOnCameraListener() {
                 @Override
@@ -313,12 +380,14 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
                     videoPath = path;
                     setType(1);
                     setMode(1);
+//                    compressVideo();
+
                 }
             });
         } catch (IOException ioe) {
-            LogUtils.e(ioe.getMessage());
+            LogUtils.e(""+ioe.getMessage());
         } catch (RuntimeException e) {
-            LogUtils.e(e.getMessage());
+            LogUtils.e("RuntimeException= "+e.getMessage());
         }
     }
 
@@ -335,12 +404,63 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         surfaceView.getOnCameraListener().onVideoResult(surfaceView.getOutputMediaFileUri().getPath());
     }
 
+    private String compressVideo(){
+        try {
+            LogUtils.e("compressVideo length = "+new File(videoPath).length()/1024);
+            outputVideoPath = PictureStartManager.IMAGE_FOLDER+"VID_" + System.currentTimeMillis() + ".mp4";
+            VideoCompress.compressVideoLow(videoPath, outputVideoPath, new VideoCompress.CompressListener() {
+                @Override
+                public void onStart() {
+                    LogUtils.e("---------VideoCompress onStart----------");
+                    loadViewUtil.showLoadView();
+                }
+
+                @Override
+                public void onSuccess() {
+                    LogUtils.e("---------VideoCompress onSuccess----------");
+                    LogUtils.e("compressVideo after length = "+new File(outputVideoPath).length()/1024);
+                    videoThumbPath = PictureStartManager.IMAGE_FOLDER+"THUMB_" + System.currentTimeMillis() + ".jpg";
+                    ImageUtil.saveJPGE_After(VideoUtil.getVideoThumb2(outputVideoPath),100,videoThumbPath);
+                    LogUtils.e("compressVideo videoThumbPath length = "+new File(videoThumbPath).length()/1024);
+                    loadViewUtil.hideLoadView();
+                    sendTakeResult();
+                    finish();
+                }
+
+                @Override
+                public void onFail() {
+                    LogUtils.e("---------VideoCompress onFail----------");
+                    loadViewUtil.hideLoadView();
+                }
+
+                @Override
+                public void onProgress(float percent) {
+                    LogUtils.e("---------VideoCompress percent---------- "+percent);
+                }
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return outputVideoPath;
+    }
+
+    private String compressImage(){
+        String filePath = "";
+        try {
+            filePath = ImageUtil.saveScaleImage(imagePath, PictureStartManager.getImageFolder(), PictureStartManager.SCALE_WIDTH, PictureStartManager.SCALE_HEIGHT, PictureStartManager.QUALITY);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return filePath;
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (!hasSurface) {
             hasSurface = true;
-            initCamera(holder);
+            setCamera();
+//            initCamera(holder);
         }
     }
 
@@ -355,7 +475,65 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     }
 
+    public void changeCamera(){
+        try {
+            if(currentCameraType == 0){
+                setManualCameraId(1);
+            }else if(currentCameraType == 1){
+                setManualCameraId(0);
+            }
+            setCamera();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+    }
+
+    /**
+     * 设置前后摄像头
+     * @param type
+     */
+    private void setManualCameraId(int type){
+        int frontIndex =-1;//前置摄像头的ID
+        int backIndex = -1;//后置摄像头的ID
+        int cameraCount = Camera.getNumberOfCameras();
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        for(int cameraIndex = 0; cameraIndex<cameraCount; cameraIndex++){
+            Camera.getCameraInfo(cameraIndex, info);
+            if(info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT){
+                frontIndex = cameraIndex;
+            }else if(info.facing == Camera.CameraInfo.CAMERA_FACING_BACK){
+                backIndex = cameraIndex;
+            }
+        }
+        LogUtils.e("frontIndex= "+frontIndex+" backIndex= "+backIndex);
+        currentCameraType = type;
+        if(type == 1 && frontIndex != -1){
+            currentCameraIndex = frontIndex;
+        }else if(type == 0 && backIndex != -1){
+            currentCameraIndex = backIndex;
+        }
+        surfaceView.setCurrentCameraType(currentCameraType);
+        surfaceView.setCameraId(currentCameraIndex);
+    }
+
+    /**
+     * 发送结果广播
+     */
+    public void sendTakeResult(){
+        List<String> imageList = new ArrayList<>();
+        ImageListEntity imageListEntity = new ImageListEntity();
+        imageListEntity.setMode(mode);
+        if (mode==0){
+            imageList.add(imagePath);
+        }else {
+            imageListEntity.setVideoPath(outputVideoPath);
+            imageListEntity.setVideoThumbPath(videoThumbPath);
+        }
+        imageListEntity.setChooseImageList(imageList);
+        imageListEntity.setFromTag(fromTag);
+        EventBus.getDefault().post(imageListEntity);
+    }
 
     @Override
     public void onResume() {
@@ -374,8 +552,8 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         beepManager.close();
         cameraManager.closeDriver();
         if (!hasSurface) {
-//            SurfaceHolder surfaceHolder = surfaceView.getHolder();
-//            surfaceHolder.removeCallback(this);
+            SurfaceHolder surfaceHolder = surfaceView.getHolder();
+            surfaceHolder.removeCallback(this);
         }
     }
 

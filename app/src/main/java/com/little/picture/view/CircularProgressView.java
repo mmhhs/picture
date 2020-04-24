@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
 import com.little.picture.R;
+import com.little.picture.listener.IOnProgressListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,10 +37,16 @@ public class CircularProgressView extends View {
     private int mProgress;      // 圆环进度(0-100)
     private int centerWidth,centerHeight;
     private int mode = 0;//模式：0：拍照，1：录像
-    private int maxTakeTime = 15;//支持最大拍摄时长，单位秒
-    private int currentTime = 0;//当前拍摄时间，单位毫秒
+    private int maxTakeTime = 15000;//支持最大拍摄时长，单位毫秒
+    private int minTakeTime = 2000;//支持最大拍摄时长，单位毫秒
+    public int currentPro = 0;//当前拍摄时间，单位毫秒
+    private int delayTime = 50;//定时时间，单位毫秒
+    private int totalPro = 100;//总进度
+    public int minPro = 40;//最小进度
+    public boolean isRecording = false;//是否在录像中
     private Timer timer;
     private TimerTask timerTask;
+    private IOnProgressListener onProgressListener;
 
     public CircularProgressView(Context context) {
         this(context, null);
@@ -248,7 +255,10 @@ public class CircularProgressView extends View {
         if (mode==0){
             invalidate();
         }else {
-            currentTime = 0;
+            isRecording = true;
+            currentPro = 0;
+            totalPro = maxTakeTime/delayTime+4;
+            minPro = minTakeTime/delayTime;
             timer = new Timer();
             timerTask = new TimerTask() {
                 @Override
@@ -258,8 +268,11 @@ public class CircularProgressView extends View {
                     handler.sendMessage(message);
                 }
             };
-            timer.schedule(timerTask,100,100);//延时500毫秒，每隔500毫秒执行一次run方法
+            timer.schedule(timerTask,delayTime,delayTime);//延时500毫秒，每隔500毫秒执行一次run方法
             invalidate();
+            if (onProgressListener!=null){
+                onProgressListener.onStart();
+            }
         }
     }
 
@@ -268,14 +281,20 @@ public class CircularProgressView extends View {
         public void handleMessage(Message msg) {
             if (msg.what == 1){
                 //do something
-                currentTime = currentTime + 100;
-                if (currentTime>maxTakeTime*1000){
-                    //TODO 拍摄结束
+                currentPro = currentPro + 1;
+                if ((currentPro>totalPro)||(!isRecording&&currentPro>minPro)){
                     timer.cancel();
+                    if (onProgressListener!=null){
+                        onProgressListener.onFinish();
+                    }
+                    isRecording = false;
 //                    setMode(0);
 
                 }else {
-                    int progress = currentTime*100/(maxTakeTime*1000);
+                    int progress = currentPro*100/totalPro;
+                    if (onProgressListener!=null){
+                        onProgressListener.onProgress(progress);
+                    }
                     setProgress(progress);
                 }
             }
@@ -283,7 +302,11 @@ public class CircularProgressView extends View {
         }
     };
 
+    public void setRecording(boolean recording) {
+        isRecording = recording;
+    }
 
-
-
+    public void setOnProgressListener(IOnProgressListener onProgressListener) {
+        this.onProgressListener = onProgressListener;
+    }
 }
