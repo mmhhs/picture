@@ -5,6 +5,8 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 
+import com.fos.fosmvp.common.utils.StringUtils;
+
 /**
  * Created by xxjsb on 2020/4/16.
  */
@@ -36,5 +38,21 @@ public class VideoUtil {
 
     public static Bitmap getVideoThumb2(String path) {
         return getVideoThumb2(path, MediaStore.Video.Thumbnails.FULL_SCREEN_KIND);
+    }
+
+    public static String formatVideoTime(String duration) {
+        String result = "";
+        if (StringUtils.isEmpty(duration)){
+            return result;
+        }
+        int d = Integer.parseInt(duration)/1000;
+        int m = d%60;
+        int f = d/60;
+        if (m<10){
+            result = f+":0"+m;
+        }else {
+            result = f+":"+m;
+        }
+        return result;
     }
 }

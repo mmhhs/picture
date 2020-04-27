@@ -45,32 +45,32 @@ public class GlideUtil {
                 .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .priority(Priority.NORMAL)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
         options2 = new RequestOptions()
                 .priority(Priority.NORMAL)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
         options3 = new RequestOptions()
                 .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .priority(Priority.NORMAL)
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
         options4 = new RequestOptions()
                 .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .priority(Priority.NORMAL)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
         options5 = new RequestOptions()
                 .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .error( new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                 .priority(Priority.NORMAL)
                 .centerInside()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
     }
 
     /**
@@ -134,7 +134,7 @@ public class GlideUtil {
                     .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(true);
+                    .skipMemoryCache(false);
             Glide.with(context)
                     .load(""+url)
                     .listener(mRequestListener)
@@ -241,7 +241,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case FIT_CENTER:
                     options = new RequestOptions()
@@ -251,7 +251,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case CENTER_INSIDE:
                     options = new RequestOptions()
@@ -261,7 +261,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
             }
             Glide.with(context)
@@ -286,7 +286,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case FIT_CENTER:
                     options = new RequestOptions()
@@ -296,7 +296,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case CENTER_INSIDE:
                     options = new RequestOptions()
@@ -306,7 +306,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
             }
             Glide.with(context)
@@ -351,7 +351,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case FIT_CENTER:
                     options = new RequestOptions()
@@ -361,7 +361,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
                 case CENTER_INSIDE:
                     options = new RequestOptions()
@@ -371,7 +371,7 @@ public class GlideUtil {
                             .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .skipMemoryCache(true);
+                            .skipMemoryCache(false);
                     break;
             }
             Glide.with(context)
@@ -414,7 +414,7 @@ public class GlideUtil {
                     .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(true);
+                    .skipMemoryCache(false);
             Glide.with(context)
                     .load(""+url)
                     .listener(mRequestListener)
@@ -501,7 +501,7 @@ public class GlideUtil {
                     .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(true);
+                    .skipMemoryCache(false);
             Glide.with(context)
                     .load(resId)
                     .listener(mRequestListener)
@@ -536,7 +536,7 @@ public class GlideUtil {
                     .placeholder(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .error(new GlidePlaceholderDrawables(PictureStartManager.context.getResources(), picturePlaceholderId))
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .skipMemoryCache(true);
+                    .skipMemoryCache(false);
             Glide.with(context)
                     .load(resId)
                     .listener(mRequestListener)

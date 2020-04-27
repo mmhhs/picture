@@ -12,7 +12,7 @@ public class ImageListEntity implements Serializable{
 
     private List<ImageEntity> imageList;
 
-    private List<String> chooseImageList;//选中的图片
+    private List<ImageEntity> chooseImageList;//选中的图片
 
     private String fromTag = "";//来源标志
 
@@ -31,11 +31,11 @@ public class ImageListEntity implements Serializable{
         this.imageList = imageList;
     }
 
-    public List<String> getChooseImageList() {
+    public List<ImageEntity> getChooseImageList() {
         return chooseImageList;
     }
 
-    public void setChooseImageList(List<String> chooseImageList) {
+    public void setChooseImageList(List<ImageEntity> chooseImageList) {
         this.chooseImageList = chooseImageList;
     }
 

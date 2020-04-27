@@ -1,74 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/picture_navi_bar_height_top"
-    android:orientation="horizontal"
     android:id="@+id/picture_ui_title_layout"
-    android:background="@color/picture_white">
-
-<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="@dimen/picture_navi_bar_height_top"
-    android:orientation="horizontal"
-    android:gravity="center_vertical">
+    android:background="@color/picture_white"
+    android:orientation="horizontal">
 
     <LinearLayout
-        android:id="@+id/picture_ui_title_back_layout"
-        android:orientation="vertical"
-        android:layout_width="@dimen/picture_navi_bar_height_top"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="@drawable/picture_press"
-        >
-        <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/picture_navi_bar_height_top"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/picture_ui_title_back_layout"
+            android:layout_width="@dimen/picture_navi_bar_height_top"
+            android:layout_height="match_parent"
+            android:background="@drawable/picture_press"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/picture_back" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/picture_ui_title_index"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/picture_back" />
-    </LinearLayout>
+            android:layout_marginLeft="5dp"
+            android:text="@string/picture_image"
+            android:textColor="@color/picture_black"
+            android:textSize="16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/picture_image"
-        style="@style/picture_text_white_18"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/picture_ui_title_index" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/picture_ui_title_delete_layout"
-        android:orientation="vertical"
-        android:layout_width="@dimen/picture_navi_bar_height_top"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:background="@drawable/picture_press"
-        >
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/picture_delete" />
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <TextView
-        style="@style/picture_text_14"
-        android:textColor="@color/bg_white"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:gravity="center"
-        android:text="@string/picture_done"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/picture_button_green"
-        android:id="@+id/picture_ui_title_done" />
-</LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/picture_ui_title_delete_layout"
+            android:layout_width="@dimen/picture_navi_bar_height_top"
+            android:layout_height="match_parent"
+            android:background="@drawable/picture_press"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/picture_delete" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/picture_ui_title_done"
+            style="@style/picture_text_14"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/picture_button_green"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/picture_done"
+            android:textColor="@color/bg_white" />
+    </LinearLayout>
 
 </LinearLayout>

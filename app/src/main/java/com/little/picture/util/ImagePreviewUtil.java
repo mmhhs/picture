@@ -27,10 +27,12 @@ import com.little.picture.R;
 import com.little.picture.adapter.PictureFolderAdapter;
 import com.little.picture.adapter.PictureGridAdapter;
 import com.little.picture.adapter.PicturePreviewAdapter;
+import com.little.picture.adapter.PicturePreviewOutAdapter;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnDeleteListener;
 import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.listener.IOnItemClickListener;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.view.ClipImageLayout;
@@ -71,10 +73,10 @@ public class ImagePreviewUtil {
     private IOnItemClickListener onItemClickListener;
     private IOnDeleteListener onDeleteListener;//删除监听
 
-    private String previewPath = "";
+    private ImageEntity previewPath = null;
 
     private List<ImageFolderEntity> folderImageFolderEntityList;
-    private ArrayList<String> chooseImageList;//选中的图片
+    private List<ImageEntity> chooseImageList;//选中的图片
 
     private PictureGridAdapter pictureGridAdapter;
     private PicturePreviewAdapter picturePreviewAdapter;
@@ -124,7 +126,7 @@ public class ImagePreviewUtil {
         setSameConfig(dialog,backLayout,false);
 
 
-        picturePreviewAdapter = new PicturePreviewAdapter(context, imageList);
+        PicturePreviewOutAdapter picturePreviewAdapter = new PicturePreviewOutAdapter(context, imageList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {
@@ -202,11 +204,11 @@ public class ImagePreviewUtil {
      * @param previewList 图片集合
      * @param position 显示图片索引
      */
-    public void showPicturePreview(int type, List<String> previewList, int position){
+    public void showPicturePreview(int type, List<ImageEntity> previewList, int position){
         getPicturePreviewWindow(context, type, previewList, position);
     }
 
-    public void getPicturePreviewWindow(final Context context, final int type, final List<String> previewList, int position) {
+    public void getPicturePreviewWindow(final Context context, final int type, final List<ImageEntity> previewList, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
         ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
         final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout2);
@@ -220,10 +222,10 @@ public class ImagePreviewUtil {
         final CheckBox originalCheckBox = view.findViewById(R.id.picture_ui_footer_original);
         final ClipImageLayout clipImageLayout = view.findViewById(R.id.picture_popup_preview_clipImageLayout);
 
-        clipImageLayout.setImageUri(previewList.get(position));
-        if (folderShowIndex == 0){
-            previewList.remove(0);
-        }
+        clipImageLayout.setImageUri(previewList.get(position).getImagePath());
+//        if (folderShowIndex == 0){
+//            previewList.remove(0);
+//        }
         picturePreviewAdapter = new PicturePreviewAdapter(context,previewList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
@@ -362,10 +364,6 @@ public class ImagePreviewUtil {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (folderShowIndex == 0){
-                    previewList.add(0, "takePhoto");
-                    folderShowIndex = -1;
-                }
                 if (pictureGridAdapter !=null){
                     pictureGridAdapter.notifyDataSetChanged();
                 }
@@ -382,21 +380,24 @@ public class ImagePreviewUtil {
                         Bitmap bitmap = clipImageLayout.clip();
                         String clipImagePath = PictureStartManager.getImageFolder()+"clip"+System.currentTimeMillis()+".jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
-                        ArrayList<String> clipList = new ArrayList<String>();
-                        clipList.add(clipImagePath);
+                        List<ImageEntity> clipList = new ArrayList<>();
+                        ImageEntity ie = new ImageEntity();
+                        ie.setImagePath(clipImagePath);
+                        clipList.add(ie);
                         sendPicturePickBroadcast(clipList);
                     }else if (type== PREVIEW_TAKE){
-                        ArrayList<String> preList = new ArrayList<String>();
-                        preList.add(previewList.get(0));
+                        List<ImageEntity> preList = new ArrayList<>();
+                        ImageEntity ie = new ImageEntity();
+                        ie.setImagePath(previewList.get(0).getImagePath());
+                        preList.add(ie);
                         sendPicturePickBroadcast(preList);
                     }else {
                         if (!isOriginal){
-                            ArrayList<String> imageList = new ArrayList<String>();
-                            for (String path : chooseImageList){
-                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
-                                imageList.add(imagePath);
+                            for (ImageEntity path : chooseImageList){
+                                String imagePath = ImageUtil.saveScaleImage(path.getImagePath(), PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
+                                path.setScalePath(imagePath);
                             }
-                            sendPicturePickBroadcast(imageList);
+                            sendPicturePickBroadcast(chooseImageList);
                         }else {
                             sendPicturePickBroadcast(chooseImageList);
                         }
@@ -492,11 +493,11 @@ public class ImagePreviewUtil {
         alertDialog.show();
     }
 
-    private boolean isSelected(String path){
+    private boolean isSelected(ImageEntity path){
         boolean result = false;
         if (chooseImageList!=null&&chooseImageList.size()>0){
-            for(String imagePath:chooseImageList){
-                if (path.equals(imagePath)){
+            for(ImageEntity imagePath:chooseImageList){
+                if (path.getImagePath().equals(imagePath.getImagePath())){
                     result = true;
                 }
             }
@@ -504,7 +505,7 @@ public class ImagePreviewUtil {
         return result;
     }
 
-    private void setSelected(String path,boolean isChecked,TextView doneText){
+    private void setSelected(ImageEntity path,boolean isChecked,TextView doneText){
         if (isChecked){
             if (!isSelected(path)){
                 if (chooseImageList.size()<maxSize){
@@ -538,7 +539,7 @@ public class ImagePreviewUtil {
      * 发送结果广播
      * @param imageList 选中的图片列表
      */
-    public void sendPicturePickBroadcast(ArrayList<String> imageList){
+    public void sendPicturePickBroadcast(List<ImageEntity> imageList){
         ImageListEntity imageListEntity = new ImageListEntity();
         imageListEntity.setChooseImageList(imageList);
         imageListEntity.setFromTag(fromTag);
@@ -656,19 +657,11 @@ public class ImagePreviewUtil {
         this.folderImageFolderEntityList = folderImageFolderEntityList;
     }
 
-    public String getPreviewPath() {
-        return previewPath;
-    }
-
-    public void setPreviewPath(String previewPath) {
-        this.previewPath = previewPath;
-    }
-
-    public ArrayList<String> getChooseImageList() {
+    public List<ImageEntity> getChooseImageList() {
         return chooseImageList;
     }
 
-    public void setChooseImageList(ArrayList<String> chooseImageList) {
+    public void setChooseImageList(List<ImageEntity> chooseImageList) {
         this.chooseImageList = chooseImageList;
     }
 

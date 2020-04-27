@@ -9,26 +9,18 @@ import java.io.Serializable;
 public class ImageEntity implements Serializable{
     private static final long serialVersionUID = 510488828187140949L;
 
-    private String imagePath = "";//图片路径
-    private String originalPath = "";//原始图片路径
-    private String scalePath = "";//压缩后图片路径
-    private int width = 0;
-    private int height = 0;
+    private int type=0;//类型：0：照片，1：视频，2：音频
 
-    private int type=0;//类型：0：照片，1：视频
-    private String videoPath;//视频路径
-    private String videoThumbPath;//视频缩略图路径
-    private int duration = 0;//时长，单位秒
+    private String imagePath = "";//原始图片路径或视频路径
+    private String scalePath = "";//压缩后图片路径
+    private String thumbPath = "";//视频缩略图路径
+    private int width = 0;//宽度
+    private int height = 0;//高度
+    private String displayName = "";//名称
+    private String mimeType = "";//文件类型
+    private String duration = "0";//时长，单位秒
 
     public ImageEntity() {
-    }
-
-    public String getOriginalPath() {
-        return originalPath;
-    }
-
-    public void setOriginalPath(String originalPath) {
-        this.originalPath = originalPath;
     }
 
     public String getScalePath() {
@@ -75,27 +67,36 @@ public class ImageEntity implements Serializable{
         this.type = type;
     }
 
-    public String getVideoPath() {
-        return videoPath;
+
+    public String getThumbPath() {
+        return thumbPath;
     }
 
-    public void setVideoPath(String videoPath) {
-        this.videoPath = videoPath;
+    public void setThumbPath(String thumbPath) {
+        this.thumbPath = thumbPath;
     }
 
-    public String getVideoThumbPath() {
-        return videoThumbPath;
-    }
-
-    public void setVideoThumbPath(String videoThumbPath) {
-        this.videoThumbPath = videoThumbPath;
-    }
-
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getMimeType() {
+        return mimeType;
+    }
+
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 }

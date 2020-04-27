@@ -3,11 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     style="@style/picture_background_grey"
+    android:background="@color/bg_white"
+    android:padding="@dimen/dp_50"
     >
     <Button
         android:id="@+id/btn_pz"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_50"
         android:background="@drawable/fosmvp_shape_corner_blue"
         android:text="拍照/录像"
         android:textColor="@color/bg_white"
@@ -17,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:background="@drawable/fosmvp_shape_corner_blue"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         android:text="选图"
         android:textColor="@color/bg_white"
         android:textSize="16sp"/>

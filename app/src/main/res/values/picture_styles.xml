@@ -9,9 +9,9 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
-        <item name="android:colorForeground">@color/colorPrimary</item>
-        <item name="android:colorBackground">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/picture_white</item>
+        <item name="android:colorForeground">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/picture_white</item>
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>

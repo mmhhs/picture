@@ -27,6 +27,7 @@ import com.little.picture.camera.IOnCameraListener;
 import com.little.picture.camera.InactivityTimer;
 import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnProgressListener;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.util.DensityUtils;
 import com.little.picture.util.ImageUtil;
@@ -68,7 +69,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     private GestureDetector gestureDetector;
     private boolean isRecording = false;
 
-    private int type;//类型：0：拍摄，1：预览
+    private int type = 0;//类型：0：拍摄，1：预览
     private int mode = 0;//模式：0：拍照，1：录像
     private int currentCameraType = 0;//类型：0：后置，1：前置
     private int currentCameraIndex = 0;//摄像头索引
@@ -76,6 +77,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     private String videoPath,outputVideoPath,videoThumbPath;//视频路径
 
     private String fromTag= "";//来源标志
+    private ImageEntity videoEntity;
 
     private LoadViewUtil loadViewUtil;
 
@@ -93,8 +95,10 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         initView();
     }
 
-    public static void startAction(Activity activity){
+    public static void startAction(Activity activity,int type,ImageEntity entity){
         Intent intent = new Intent(activity,PictureTakeActivity.class);
+        intent.putExtra("type",type);
+        intent.putExtra("data",entity);
         activity.startActivity(intent);
     }
 
@@ -156,11 +160,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         ivFh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                type = 0;
-                mode = 0;
-                setType(type);
-                setMode(mode);
-                onResume();
+                back();
             }
         });
         tvWc.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +191,12 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     }
 
     private void initView(){
+        type = getIntent().getIntExtra("type",0);
+        videoEntity = (ImageEntity) getIntent().getSerializableExtra("data");
+        if (videoEntity!=null){
+            videoPath = videoEntity.getImagePath();
+        }
+
         popupManager = new PAPopupManager(this);
         loadViewUtil = new LoadViewUtil(this,ivXx,"",1);
 
@@ -209,7 +215,10 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
             popupManager.showTipDialog("","没有权限");
         }
 
-        setType(0);
+        setType(type);
+        if (type==1){
+            setMode(1);
+        }
     }
 
     public void setType(int type) {
@@ -521,11 +530,13 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
      * 发送结果广播
      */
     public void sendTakeResult(){
-        List<String> imageList = new ArrayList<>();
+        List<ImageEntity> imageList = new ArrayList<>();
         ImageListEntity imageListEntity = new ImageListEntity();
         imageListEntity.setMode(mode);
         if (mode==0){
-            imageList.add(imagePath);
+            ImageEntity ie = new ImageEntity();
+            ie.setImagePath(imagePath);
+            imageList.add(ie);
         }else {
             imageListEntity.setVideoPath(outputVideoPath);
             imageListEntity.setVideoThumbPath(videoThumbPath);
@@ -533,6 +544,23 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         imageListEntity.setChooseImageList(imageList);
         imageListEntity.setFromTag(fromTag);
         EventBus.getDefault().post(imageListEntity);
+    }
+
+    private void back(){
+        if (videoEntity!=null||type == 0){
+            finish();
+        }else {
+            type = 0;
+            mode = 0;
+            setType(type);
+            setMode(mode);
+            onResume();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        back();
     }
 
     @Override
@@ -561,6 +589,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     public void onDestroy() {
         super.onDestroy();
         inactivityTimer.shutdown();
-
     }
+
+
 }
