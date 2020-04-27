@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -305,7 +306,10 @@ public class PicturePickActivity extends Activity {
         }
 
         queryImages();
-        queryVideo();
+        if (funcType==PICK_IMAGE){
+            queryVideo();
+        }
+
 
         return true;
     }
@@ -320,9 +324,10 @@ public class PicturePickActivity extends Activity {
                 MediaStore.Images.Media.SIZE,
                 MediaStore.Images.Media.MIME_TYPE,
                 MediaStore.Images.Media.MINI_THUMB_MAGIC,
+                MediaStore.Images.Media.DATE_ADDED,
                 MediaStore.Images.Media.DATE_ADDED
         };
-        String orderBy = MediaStore.Images.Media.DISPLAY_NAME;
+        String orderBy = MediaStore.Images.Media.DATE_ADDED+ " DESC";
         Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         getContentProvider(0,uri,projection, orderBy);
     }
@@ -337,9 +342,10 @@ public class PicturePickActivity extends Activity {
                 MediaStore.Video.Media.SIZE,
                 MediaStore.Video.Media.MIME_TYPE,
                 MediaStore.Video.Media.MINI_THUMB_MAGIC,
+                MediaStore.Images.Media.DATE_ADDED,
                 MediaStore.Video.Media.DURATION
         };
-        String orderBy = MediaStore.Video.Media.DISPLAY_NAME;
+        String orderBy = MediaStore.Video.Media.DATE_ADDED+ " DESC";
         Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
         getContentProvider(1,uri,projection, orderBy);
     }
@@ -354,9 +360,10 @@ public class PicturePickActivity extends Activity {
                 MediaStore.Audio.Media.SIZE,
                 MediaStore.Audio.Media.MIME_TYPE,
                 MediaStore.Audio.Media.DATE_ADDED,
+                MediaStore.Images.Media.DATE_ADDED,
                 MediaStore.Audio.Media.DURATION
         };
-        String orderBy = MediaStore.Audio.Media.DISPLAY_NAME;
+        String orderBy = MediaStore.Audio.Media.DATE_ADDED+ " DESC";
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         getContentProvider(2,uri,projection, orderBy);
     }
@@ -387,7 +394,8 @@ public class PicturePickActivity extends Activity {
 //            imageEntity.setWidth(cursor.getString(3));
             imageEntity.setMimeType(cursor.getString(4));
             imageEntity.setThumbPath(cursor.getString(5));
-            imageEntity.setDuration(cursor.getString(6));
+            imageEntity.setAddTime(cursor.getString(6));
+            imageEntity.setDuration(cursor.getString(7));
             imageEntity.setType(type);
             if (type==0){
                 allImageList.add(imageEntity);
@@ -456,6 +464,8 @@ public class PicturePickActivity extends Activity {
         }
         folderImageFolderEntityList.get(position).setSelected(true);
         folderText.setText(folderImageFolderEntityList.get(position).getFolderName());
+        //排序
+        Collections.sort(folderImageFolderEntityList.get(position).getImagePathList());
         pictureGridAdapter = new PictureGridAdapter(PicturePickActivity.this, folderImageFolderEntityList.get(position).getImagePathList(), chooseImageList, screenWidth, maxSize, folderShowIndex, funcType);
         pictureGridAdapter.setOnCheckListener(onCheckListener);
         pictureGridAdapter.setOnItemClickListener(onItemClickListener);

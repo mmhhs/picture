@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fos.fosmvp.common.utils.StringUtils;
+import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.glide.GlideUtil;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.util.ImageUtil;
 
@@ -58,7 +61,16 @@ public class PictureFolderAdapter extends BaseAdapter{
         ImageFolderEntity imageFolderEntity = list.get(position);
         viewHolder.nameText.setText(imageFolderEntity.getFolderName());
         viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit));
-        GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imageFolderEntity.getTopImagePath().getImagePath()),viewHolder.topImage, CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+
+        ImageEntity topImage = imageFolderEntity.getTopImagePath();
+        if (StringUtils.isEmpty(topImage.getThumbPath())){
+            GlideUtil.getInstance().displayFillet(context, ImageUtil.completeImagePath(topImage.getImagePath()),viewHolder.topImage, PictureStartManager.FIT_CENTER,5);
+//            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(topImage.getImagePath()),viewHolder.topImage, CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        }else {
+            GlideUtil.getInstance().displayFillet(context, ImageUtil.completeImagePath(topImage.getThumbPath()),viewHolder.topImage, PictureStartManager.FIT_CENTER,5);
+//            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(topImage.getThumbPath()),viewHolder.topImage, CENTER_CROP,ImageUtil.dip2px(context, 80), ImageUtil.dip2px(context, 80));
+        }
+
         if (imageFolderEntity.getSelected()){
             viewHolder.selectImage.setVisibility(View.VISIBLE);
         }else {

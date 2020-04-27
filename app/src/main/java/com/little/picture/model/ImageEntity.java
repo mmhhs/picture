@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by xxjsb on 2019/3/12.
  */
 
-public class ImageEntity implements Serializable{
+public class ImageEntity implements Serializable , Comparable<ImageEntity>{
     private static final long serialVersionUID = 510488828187140949L;
 
     private int type=0;//类型：0：照片，1：视频，2：音频
@@ -19,6 +19,8 @@ public class ImageEntity implements Serializable{
     private String displayName = "";//名称
     private String mimeType = "";//文件类型
     private String duration = "0";//时长，单位秒
+
+    private String addTime = "";//添加时间
 
     public ImageEntity() {
     }
@@ -98,5 +100,19 @@ public class ImageEntity implements Serializable{
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public String getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(String addTime) {
+        this.addTime = addTime;
+    }
+
+    @Override
+    public int compareTo(ImageEntity o) {
+        int i = o.getAddTime().compareTo(this.getAddTime());
+        return i;
     }
 }

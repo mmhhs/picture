@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/picture_popup_folder_layout">
+    android:id="@+id/picture_popup_folder_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/picture_transparent">
+
+    </LinearLayout>
 
     <ListView
+        android:id="@+id/picture_popup_folder_listView"
+        style="@style/picture_style_listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/picture_style_listView"
-        android:layout_marginTop="100dp"
         android:layout_marginBottom="@dimen/picture_navi_bar_height_bottom"
-        android:id="@+id/picture_popup_folder_listView" />
+        android:background="@color/picture_white" />
 </LinearLayout>
