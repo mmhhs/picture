@@ -60,8 +60,12 @@ public class PictureFolderAdapter extends BaseAdapter{
         }
         ImageFolderEntity imageFolderEntity = list.get(position);
         viewHolder.nameText.setText(imageFolderEntity.getFolderName());
-        viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit));
 
+        if (imageFolderEntity.getFolderName().contains(context.getString(R.string.picture_all_video))){
+            viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit2));
+        }else {
+            viewHolder.countText.setText(imageFolderEntity.getImageCounts()+context.getString(R.string.picture_unit));
+        }
         ImageEntity topImage = imageFolderEntity.getTopImagePath();
         if (StringUtils.isEmpty(topImage.getThumbPath())){
             GlideUtil.getInstance().displayFillet(context, ImageUtil.completeImagePath(topImage.getImagePath()),viewHolder.topImage, PictureStartManager.FIT_CENTER,5);

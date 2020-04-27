@@ -291,6 +291,11 @@ public class PicturePickActivity extends Activity {
             }
 
         }
+        if (funcType==PICK_AVATAR||funcType==PICK_CROP_IMAGE){
+            ImageEntity pzEntity = new ImageEntity();
+            pzEntity.setAddTime("949494949494");
+            allImageList.add(0,pzEntity);
+        }
         return list;
     }
 
@@ -508,12 +513,20 @@ public class PicturePickActivity extends Activity {
                         imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_FOLDER, folderImageFolderEntityList.get(folderShowIndex).getImagePathList(), position);
                     }
                 } else if (funcType == PICK_AVATAR) {
+                    if (position == 0 && folderShowIndex == 0) {
+                        imageChooseUtil.doTakePhoto();
+                        return;
+                    }
                     imagePreviewUtil.setChooseImageList(chooseImageList);
                     imagePreviewUtil.setOnItemClickListener(onItemClickListener);
                     imagePreviewUtil.setOnCheckListener(onCheckListener);
                     imagePreviewUtil.setPictureGridAdapter(pictureGridAdapter);
                     imagePreviewUtil.showPicturePreview(ImagePreviewUtil.PREVIEW_EDIT, folderImageFolderEntityList.get(folderShowIndex).getImagePathList(), position);
                 } else if (funcType == PICK_CROP_IMAGE) {
+                    if (position == 0 && folderShowIndex == 0) {
+                        imageChooseUtil.doTakePhoto();
+                        return;
+                    }
                     imagePreviewUtil.setRate(rate);
                     imagePreviewUtil.setChooseImageList(chooseImageList);
                     imagePreviewUtil.setOnItemClickListener(onItemClickListener);

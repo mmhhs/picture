@@ -8,6 +8,7 @@
     <string name="picture_delete">确定删除该图片？</string>
     <string name="picture_image">图库</string>
     <string name="picture_unit">张</string>
+    <string name="picture_unit2">个</string>
     <string name="picture_done">完成</string>
     <string name="picture_preview">预览</string>
     <string name="picture_choose">选择</string>

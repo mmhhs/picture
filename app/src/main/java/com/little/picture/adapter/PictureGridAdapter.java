@@ -79,12 +79,19 @@ public class PictureGridAdapter extends BaseAdapter{
         viewHolder.containerLayout.getLayoutParams().height = itemWidth;
 
         if (path.getType()==0){
-            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path.getImagePath()),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
 
             viewHolder.tvSc.setVisibility(View.GONE);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
             if (funcType == PicturePickActivity.PICK_AVATAR||funcType==PicturePickActivity.PICK_CROP_IMAGE){
                 viewHolder.checkBox.setVisibility(View.GONE);
+                if (position==0&&folderShowIndex==0){
+                    //全部图片文件夹时显示拍照
+                    viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
+                }else {
+                    GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path.getImagePath()),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
+                }
+            }else {
+                GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path.getImagePath()),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
             }
             if (isSelected(path)){
                 viewHolder.selectorImage.setVisibility(View.VISIBLE);

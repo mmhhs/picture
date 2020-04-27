@@ -26,10 +26,12 @@ import com.little.picture.camera.CameraPreview;
 import com.little.picture.camera.IOnCameraListener;
 import com.little.picture.camera.InactivityTimer;
 import com.little.picture.glide.GlideUtil;
+import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnProgressListener;
 import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.util.DensityUtils;
+import com.little.picture.util.ImagePreviewUtil;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.PermissionUtil;
 import com.little.picture.util.VideoUtil;
@@ -43,6 +45,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.little.picture.PicturePickActivity.PICK_AVATAR;
+import static com.little.picture.PicturePickActivity.PICK_CROP_IMAGE;
+import static com.little.picture.PicturePickActivity.PICK_IMAGE;
 
 public class PictureTakeActivity extends AppCompatActivity implements SurfaceHolder.Callback{
     private ImageView ivFz;
@@ -284,8 +290,10 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
             }
         }
-
     }
+
+
+
 
     private void setGestureDetector(){
         gestureDetector = new GestureDetector(PictureTakeActivity.this, new GestureDetector.OnGestureListener() {
