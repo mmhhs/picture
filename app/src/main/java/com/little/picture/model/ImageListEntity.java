@@ -12,11 +12,9 @@ public class ImageListEntity implements Serializable{
 
     private List<ImageEntity> imageList;
 
-    private List<ImageEntity> chooseImageList;//选中的图片
-
-    private String fromTag = "";//来源标志
-
     private int mode = 0;//模式：0：拍照，1：录像
+    private String fromTag = "";//来源标志
+    private List<ImageEntity> chooseImageList;//选中的图片
     private String videoPath;//视频路径
     private String videoThumbPath;//视频缩略图路径
 

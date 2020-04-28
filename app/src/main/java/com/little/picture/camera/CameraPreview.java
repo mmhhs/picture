@@ -2,10 +2,13 @@ package com.little.picture.camera;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
+import android.media.ExifInterface;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
@@ -21,6 +24,7 @@ import android.view.WindowManager;
 
 import com.fos.fosmvp.common.utils.LogUtils;
 import com.little.picture.PictureStartManager;
+import com.little.picture.util.ImageUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +51,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     private int currentCameraType = 0;//类型：0：后置，1：前置
     private int cameraId = 0;//摄像头索引
+    public int rotation = 0;//手机屏幕方向
     private int VIDEO_WIDTH,VIDEO_HEIGHT;
 
     public void takePicture() {
@@ -59,18 +64,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     return;
                 }
                 try {
-                    FileOutputStream fos = new FileOutputStream(pictureFile);
-                    fos.write(data);
-                    fos.close();
-
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(data,0,data.length);
+                    ImageUtil.saveJPGE_After(bitmap,100,pictureFile.getAbsolutePath());
+//                    FileOutputStream fos = new FileOutputStream(pictureFile);
+//                    fos.write(data);
+//                    fos.close();
+                    LogUtils.e(TAG+ " pictureFile.getAbsolutePath(): " + pictureFile.getAbsolutePath());
+                    ImageUtil.setPictureDegreeZero(currentCameraType,getDisplayOrientation(),pictureFile.getAbsolutePath());
                     if (onCameraListener!=null){
                         onCameraListener.onPictureResult(pictureFile.getAbsolutePath());
                     }
                     camera.startPreview();
-                } catch (FileNotFoundException e) {
+                } catch (Exception e) {
                     Log.d(TAG, "File not found: " + e.getMessage());
-                } catch (IOException e) {
-                    Log.d(TAG, "Error accessing file: " + e.getMessage());
                 }
             }
         });
@@ -160,7 +166,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
         int rotation = getDisplayOrientation();
-        LogUtils.e("rotation= "+rotation);
+        LogUtils.e("-------------rotation= "+rotation);
 //        mCamera.setDisplayOrientation(rotation);
         setCameraDisplayOrientation(mCamera,rotation);
         Camera.Parameters parameters = mCamera.getParameters();
@@ -176,8 +182,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
      */
     @SuppressLint("NewApi")
     public void setCameraDisplayOrientation(Camera camera, int orientation) {
-        if(android.os.Build.VERSION.SDK_INT>=8)
-            setDisplayOrientation(camera,90);
+        if(android.os.Build.VERSION.SDK_INT>=8){
+
+            setDisplayOrientation(camera,orientation);
+//            setDisplayOrientation(camera,90);
+        }
+
         else {
             if(null == camera)
                 return;
@@ -247,26 +257,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 new Camera.CameraInfo();
         Camera.getCameraInfo(Camera.CameraInfo.CAMERA_FACING_BACK, camInfo);
 
+        int result = ImageUtil.getCameraOri(rotation, cameraId);
+//        camera.setDisplayOrientation(angel);
+        LogUtils.e(TAG+" rotation="+rotation+" result="+result);
 
-        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int rotation = display.getRotation();
-        int degrees = 0;
-        switch (rotation) {
-            case Surface.ROTATION_0:
-                degrees = 0;
-                break;
-            case Surface.ROTATION_90:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_180:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_270:
-                degrees = 270;
-                break;
-        }
-
-        int result = (camInfo.orientation - degrees + 360) % 360;
         return result;
     }
 
@@ -281,21 +275,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-//        String prefVideoSize = prefs.getString("video_size", "");
-//        String[] split = prefVideoSize.split("x");
-//        mMediaRecorder.setVideoSize(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
-
-//        CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-        // mx4 前置摄像头尺寸设置后,硬件不识别,导致打开失败
-//        if (Build.MODEL.equalsIgnoreCase("MX4") &&
-//                currentCameraType == 1) {
-//        } else {
-//            mMediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
-//        }
-
-//        mMediaRecorder.setProfile(profile);
-
         setCamcorderProfile(mMediaRecorder);
 
         File videoFile = getOutputMediaFile(MEDIA_TYPE_VIDEO);
@@ -304,6 +283,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mMediaRecorder.setPreviewDisplay(mHolder.getSurface());
 
         int rotation = getDisplayOrientation();
+        rotation = getRecorderOrientation(rotation);
+
         mMediaRecorder.setOrientationHint(rotation);
         try {
             mMediaRecorder.prepare();
@@ -317,6 +298,41 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return false;
         }
         return true;
+    }
+
+    private int getRecorderOrientation(int rotation){
+        int rotate = 0;
+        switch (rotation) {
+            case 0:
+                if (currentCameraType==0){
+                    rotate = 180;
+                }else {
+                    rotate = 180;
+                }
+                break;
+            case 90://竖屏
+                if (currentCameraType==0){
+                    rotate = 90;
+                }else {
+                    rotate = 270;
+                }
+                break;
+            case 180://左横屏
+                if (currentCameraType==0){
+                    rotate = 0;
+                }else {
+                    rotate = 0;
+                }
+                break;
+            case 270:
+                if (currentCameraType==0){
+                    rotate = 90;
+                }else {
+                    rotate = 270;
+                }
+                break;
+        }
+        return rotate;
     }
 
     private CamcorderProfile getProfile(int cameraId, int quality) {
@@ -552,8 +568,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         this.cameraId = cameraId;
     }
 
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
 
-    public void setVideoSize(int VIDEO_WIDTH,int VIDEO_HEIGHT) {
+    public void setVideoSize(int VIDEO_WIDTH, int VIDEO_HEIGHT) {
         this.VIDEO_WIDTH = VIDEO_WIDTH;
         this.VIDEO_HEIGHT = VIDEO_HEIGHT;
     }

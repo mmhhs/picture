@@ -2,12 +2,15 @@ package com.little.picture;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
@@ -40,6 +43,8 @@ import com.little.picture.view.dialog.PAPopupManager;
 import com.vincent.videocompressor.VideoCompress;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -173,7 +178,6 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
             @Override
             public void onClick(View v) {
                 if (mode==0){
-                    imagePath = compressImage();
                     sendTakeResult();
                     finish();
                 }else {
@@ -203,6 +207,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
             videoPath = videoEntity.getImagePath();
         }
 
+        EventBus.getDefault().register(this);
         popupManager = new PAPopupManager(this);
         loadViewUtil = new LoadViewUtil(this,ivXx,"",1);
 
@@ -218,6 +223,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         surfaceView.setVideoSize((int)previewWidth,(int)previewHeight);
 
         if (!PermissionUtil.hasPicturePermission(this,true)){
+            popupManager.setOptionCount(1);
             popupManager.showTipDialog("","没有权限");
         }
 
@@ -225,6 +231,9 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         if (type==1){
             setMode(1);
         }
+
+        startWatch();
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
     public void setType(int type) {
@@ -272,11 +281,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
                 ivTp.setVisibility(View.VISIBLE);
                 GlideUtil.getInstance().display(this,imagePath,ivTp);
             }else {
-                MediaController mc = new MediaController(this);
                 vvSp.setVisibility(View.VISIBLE);
-                mc.setAnchorView(vvSp);
-                mc.setMediaPlayer(vvSp);
-                vvSp.setMediaController(mc);
                 vvSp.setVideoPath(videoPath);
                 vvSp.start();
                 vvSp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -387,6 +392,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
                 public void onPictureResult(String path) {
                     type = 1;
                     imagePath = path;
+                    imagePath = compressImage();
                     setType(1);
                     setMode(0);
                 }
@@ -395,6 +401,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
                 public void onVideoResult(String path) {
                     type = 1;
                     videoPath = path;
+//                    ImageUtil.setPictureDegreeZero(surfaceView.getDisplayOrientation(),videoPath);
                     setType(1);
                     setMode(1);
 //                    compressVideo();
@@ -419,6 +426,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     public void stopRecording() {
         surfaceView.stopRecording();
         surfaceView.getOnCameraListener().onVideoResult(surfaceView.getOutputMediaFileUri().getPath());
+
     }
 
     private String compressVideo(){
@@ -474,6 +482,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+//        surfaceView.surfaceCreated(holder);
         if (!hasSurface) {
             hasSurface = true;
             setCamera();
@@ -484,12 +493,13 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         hasSurface = false;
+//        surfaceView.surfaceDestroyed(holder);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
                                int height) {
-
+//        surfaceView.surfaceChanged(holder,format,width,height);
     }
 
     public void changeCamera(){
@@ -532,7 +542,36 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         }
         surfaceView.setCurrentCameraType(currentCameraType);
         surfaceView.setCameraId(currentCameraIndex);
+        if (type==1){
+
+        }
     }
+
+
+
+    public void startWatch(){
+        OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                int rotation = 0;
+                if (orientation < 100 && orientation > 80){
+                    rotation = Surface.ROTATION_90;
+                }else if (orientation < 280 && orientation > 260){
+                    rotation = Surface.ROTATION_270;
+                }else if (orientation < 10 || orientation > 350){
+                    rotation = Surface.ROTATION_0;
+                }else if (orientation < 190 && orientation > 170){
+                    rotation = Surface.ROTATION_180;
+                }
+
+                surfaceView.setRotation(rotation);
+
+            }
+        };
+        orientationEventListener.enable();
+    }
+
+
 
     /**
      * 发送结果广播
@@ -596,8 +635,20 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     @Override
     public void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         inactivityTimer.shutdown();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ImageEntity entity) {
+        try {
+            LogUtils.e("getWidth="+entity.getWidth()+" getHeight="+entity.getHeight());
+            previewHeight = entity.getHeight()*previewWidth/entity.getWidth();
+//            surfaceView.getLayoutParams().height = (int)previewHeight;
+            LogUtils.e("-------previewHeight="+previewHeight+"-------previewWidth="+previewWidth);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

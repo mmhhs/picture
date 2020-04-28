@@ -19,8 +19,8 @@ public class ImageEntity implements Serializable , Comparable<ImageEntity>{
     private String displayName = "";//名称
     private String mimeType = "";//文件类型
     private String duration = "0";//时长，单位秒
-
     private String addTime = "";//添加时间
+    private boolean showDelete = false;//是否显示删除按钮
 
     public ImageEntity() {
     }
@@ -108,6 +108,14 @@ public class ImageEntity implements Serializable , Comparable<ImageEntity>{
 
     public void setAddTime(String addTime) {
         this.addTime = addTime;
+    }
+
+    public boolean isShowDelete() {
+        return showDelete;
+    }
+
+    public void setShowDelete(boolean showDelete) {
+        this.showDelete = showDelete;
     }
 
     @Override

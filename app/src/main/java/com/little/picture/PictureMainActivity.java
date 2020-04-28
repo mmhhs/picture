@@ -19,7 +19,7 @@ public class PictureMainActivity extends AppCompatActivity {
         findViewById(R.id.btn_xt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PicturePickActivity.startAction(PictureMainActivity.this,2,9,"");
+                PicturePickActivity.startAction(PictureMainActivity.this,1,9,"");
             }
         });
     }

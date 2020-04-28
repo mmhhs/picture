@@ -27,6 +27,9 @@ import android.view.Display;
 import android.view.WindowManager;
 
 import com.fos.fosmvp.common.utils.LogUtils;
+import com.little.picture.model.ImageEntity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
@@ -85,8 +88,11 @@ final class CameraConfigurationManager {
 				parameters, screenResolutionForCamera);
 
 		LogUtils.e("CameraConfigurationManager cameraResolution.x="+cameraResolution.x+" y="+cameraResolution.y);
-		Log.i(TAG, "Camera resolution: " + cameraResolution);
 
+		ImageEntity screenEntity = new ImageEntity();
+		screenEntity.setWidth(cameraResolution.x);
+		screenEntity.setHeight(cameraResolution.y);
+		EventBus.getDefault().post(screenEntity);
 	}
 
 	void setDesiredCameraParameters(Camera camera, boolean safeMode) {

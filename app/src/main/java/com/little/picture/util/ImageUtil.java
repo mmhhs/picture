@@ -8,11 +8,13 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Surface;
 import android.view.View;
 
 import com.fos.fosmvp.common.utils.LogUtils;
@@ -304,13 +306,13 @@ public class ImageUtil {
                 return "";
             }
             if (imagePath.endsWith(".jpg")){
-                fileSavePath = imagePathFolder +time+"temp.jpg";
+                fileSavePath = imagePathFolder +"TEMP_"+time+".jpg";
             }else if (imagePath.endsWith(".png")){
-                fileSavePath = imagePathFolder +time+"temp.png";
+                fileSavePath = imagePathFolder +"TEMP_"+time+".png";
             }else if (imagePath.endsWith(".gif")){
-                fileSavePath = imagePathFolder +time+"temp.gif";
+                fileSavePath = imagePathFolder +"TEMP_"+time+".gif";
             }else {
-                fileSavePath = imagePathFolder +time+"temp.jpg";
+                fileSavePath = imagePathFolder +"TEMP_"+time+".jpg";
             }
 
             File folder = new File(imagePathFolder);
@@ -411,6 +413,7 @@ public class ImageUtil {
         }
     }
 
+
     private static MediaScannerConnection msc;
 
     public static boolean save2DCIM(final Context context, File file, String fileName) {
@@ -444,6 +447,59 @@ public class ImageUtil {
         return true;
     }
 
+    /**
+     * 将图片的旋转角度置为0
+     * @Title: setPictureDegreeZero
+     * @param path
+     * @return void
+     * @date 2012-12-10 上午10:54:46
+     */
+    public static void setPictureDegreeZero(int type,int degree,String path){
+        try {
+            int rotate = 0;
+            switch (degree) {
+                case 0:
+                    if (type==0){
+                        rotate = ExifInterface.ORIENTATION_ROTATE_180;
+                    }else {
+                        rotate = ExifInterface.ORIENTATION_ROTATE_180;
+                    }
+                    break;
+                case 90://竖屏
+                    if (type==0){
+                        rotate = ExifInterface.ORIENTATION_ROTATE_90;
+                    }else {
+                        rotate = ExifInterface.ORIENTATION_ROTATE_270;
+                    }
+                    break;
+                case 180://左横屏
+                    if (type==0){
+                        rotate = ExifInterface.ORIENTATION_NORMAL;
+                    }else {
+                        rotate = ExifInterface.ORIENTATION_NORMAL;
+                    }
+                    break;
+                case 270:
+                    if (type==0){
+                        rotate = ExifInterface.ORIENTATION_ROTATE_90;
+                    }else {
+                        rotate = ExifInterface.ORIENTATION_ROTATE_270;
+                    }
+                    break;
+            }
+            LogUtils.e("setPictureDegreeZero rotate= "+rotate);
+            ExifInterface exifInterface = new ExifInterface(path);
+            //修正图片的旋转角度，设置其不旋转。这里也可以设置其旋转的角度，可以传值过去，
+            //例如旋转90度，传值ExifInterface.ORIENTATION_ROTATE_90，需要将这个值转换为String类型的
+//            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, ""+ExifInterface.ORIENTATION_ROTATE_90);
+            exifInterface.setAttribute(ExifInterface.TAG_ORIENTATION, ""+rotate);
+            exifInterface.saveAttributes();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     //获取图片的旋转角度
     public static int getPictureDegree(String path) {
         int degree = 0;
@@ -466,6 +522,42 @@ public class ImageUtil {
         }
         return degree;
     }
+
+
+
+    public static int getCameraOri(int rotation, int cameraId) {
+        int degrees = rotation * 90;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+            default:
+                break;
+        }
+
+        // result 即为在camera.setDisplayOrientation(int)的参数
+        int result;
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(cameraId, info);
+        LogUtils.e("info.facing= "+info.facing+" info.orientation= "+info.orientation);
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360;
+        } else {
+            result = (info.orientation - degrees + 360) % 360;
+        }
+        return result;
+    }
+
 
     /**
      * 旋转图片

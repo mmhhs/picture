@@ -378,7 +378,7 @@ public class ImagePreviewUtil {
                     dialog.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = PictureStartManager.getImageFolder()+"clip"+System.currentTimeMillis()+".jpg";
+                        String clipImagePath = PictureStartManager.getImageFolder()+"CLIP_"+System.currentTimeMillis()+".jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
                         List<ImageEntity> clipList = new ArrayList<>();
                         ImageEntity ie = new ImageEntity();
