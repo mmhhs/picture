@@ -21,6 +21,7 @@ public class ImageEntity implements Serializable , Comparable<ImageEntity>{
     private String duration = "0";//时长，单位秒
     private String addTime = "";//添加时间
     private boolean showDelete = false;//是否显示删除按钮
+    private int position = 0;//删除第几张
 
     public ImageEntity() {
     }
@@ -116,6 +117,14 @@ public class ImageEntity implements Serializable , Comparable<ImageEntity>{
 
     public void setShowDelete(boolean showDelete) {
         this.showDelete = showDelete;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override

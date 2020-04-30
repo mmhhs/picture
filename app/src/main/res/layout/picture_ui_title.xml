@@ -66,6 +66,7 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/picture_button_green"
             android:gravity="center"
+            android:visibility="visible"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="@string/picture_done"

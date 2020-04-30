@@ -643,7 +643,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     public void onEvent(ImageEntity entity) {
         try {
             LogUtils.e("getWidth="+entity.getWidth()+" getHeight="+entity.getHeight());
-            previewHeight = entity.getHeight()*previewWidth/entity.getWidth();
+//            previewHeight = entity.getHeight()*previewWidth/entity.getWidth();
 //            surfaceView.getLayoutParams().height = (int)previewHeight;
             LogUtils.e("-------previewHeight="+previewHeight+"-------previewWidth="+previewWidth);
         }catch (Exception e){

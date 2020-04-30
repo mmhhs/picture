@@ -17,6 +17,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.adapter.PictureGridAdapter;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
@@ -79,6 +80,7 @@ public class PicturePickActivity extends Activity {
     private Handler handler;
     private ImagePreviewUtil imagePreviewUtil;//图片预览弹窗
     private float rate = 1;//裁剪图片宽高比
+    private int maxDuration = 15000;//支持最大视频时长
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -400,7 +402,8 @@ public class PicturePickActivity extends Activity {
             imageEntity.setMimeType(cursor.getString(4));
             imageEntity.setThumbPath(cursor.getString(5));
             imageEntity.setAddTime(cursor.getString(6));
-            imageEntity.setDuration(cursor.getString(7));
+            String duration = cursor.getString(7);
+            imageEntity.setDuration(duration);
             imageEntity.setType(type);
             if (type==0){
                 allImageList.add(imageEntity);
@@ -415,8 +418,15 @@ public class PicturePickActivity extends Activity {
                     mGroupMap.get(parentName).add(imageEntity);
                 }
             }else if (type==1){
-                allImageList.add(imageEntity);
-                allVideoList.add(imageEntity);
+                if (!StringUtils.isEmpty(duration)){
+                    int d = Integer.parseInt(duration);
+                    if (d<maxDuration){
+                        allImageList.add(imageEntity);
+                        allVideoList.add(imageEntity);
+                    }
+                }
+
+
             }
 
         }
@@ -500,7 +510,9 @@ public class PicturePickActivity extends Activity {
             try {
                 ImageEntity entity = folderImageFolderEntityList.get(folderShowIndex).getImagePathList().get(position);
                 if (entity.getType()==1){
-                    PictureTakeActivity.startAction(PicturePickActivity.this,1,entity);
+//                    PictureTakeActivity.startAction(PicturePickActivity.this,1,entity);
+//                    entity.setShowDelete(true);
+                    imagePreviewUtil.showVideoDialog(entity);
                     return;
                 }
                 if (funcType == PICK_IMAGE) {

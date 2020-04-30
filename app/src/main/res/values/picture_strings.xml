@@ -5,7 +5,7 @@
     <string name="picture_query">查询图库</string>
     <string name="picture_sd">SD卡不存在或者正在使用USB连接</string>
     <string name="picture_max">最多能选择图片个数为</string>
-    <string name="picture_delete">确定删除该图片？</string>
+    <string name="picture_delete">您确定删除吗？</string>
     <string name="picture_image">图库</string>
     <string name="picture_unit">张</string>
     <string name="picture_unit2">个</string>

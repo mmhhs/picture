@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -16,18 +17,23 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import com.fos.fosmvp.common.utils.LogUtils;
+import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.adapter.PictureFolderAdapter;
 import com.little.picture.adapter.PictureGridAdapter;
 import com.little.picture.adapter.PicturePreviewAdapter;
 import com.little.picture.adapter.PicturePreviewOutAdapter;
+import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnDeleteListener;
 import com.little.picture.listener.IOnGestureListener;
@@ -37,6 +43,9 @@ import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.view.ClipImageLayout;
 import com.little.picture.view.PageIndicatorView;
+import com.little.picture.view.dialog.IOnDialogListener;
+import com.little.picture.view.dialog.PAPopupManager;
+import com.little.picture.view.dialog.PopupListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -191,10 +200,95 @@ public class ImagePreviewUtil {
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDeleteTip(dialog,indexText,viewPager);
+                showDeleteTip(context,dialog,indexText,viewPager);
 
             }
         });
+    }
+
+    public void showVideoDialog(final ImageEntity imageEntity){
+        View view = LayoutInflater.from(context).inflate(R.layout.picture_dialog_video,null, false);
+        VideoView videoView = view.findViewById(R.id.picture_vv_sp);
+        ImageView thumbImageView = view.findViewById(R.id.picture_iv_tp);
+        LinearLayout containLayout =  view.findViewById(R.id.popup_dialog_video_container_layout);
+        final LinearLayout titleLayout =  view.findViewById(R.id.picture_ui_title_layout);
+        LinearLayout backLayout =  view.findViewById(R.id.picture_ui_title_back_layout);
+        LinearLayout deleteLayout =  view.findViewById(R.id.picture_ui_title_delete_layout);
+        TextView tvDone =  view.findViewById(R.id.picture_ui_title_done);
+        TextView tvIndex =  view.findViewById(R.id.picture_ui_title_index);
+
+        tvDone.setVisibility(View.GONE);
+        deleteLayout.setVisibility(View.VISIBLE);
+        tvIndex.setVisibility(View.GONE);
+        if (imageEntity.isShowDelete()){
+            titleLayout.setVisibility(View.VISIBLE);
+        }else {
+            titleLayout.setVisibility(View.GONE);
+        }
+
+        if (!StringUtils.isEmpty(imageEntity.getThumbPath())){
+            GlideUtil.getInstance().display(context,imageEntity.getThumbPath(),thumbImageView);
+        }
+
+        videoView.setVisibility(View.VISIBLE);
+        videoView.setVideoPath(imageEntity.getImagePath());
+        videoView.start();
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+                mp.setLooping(true);
+            }
+        });
+
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
+        dialog.setContentView(view);
+
+        setSameConfig(dialog,backLayout,true);
+
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        containLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!imageEntity.isShowDelete()){
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        deleteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PAPopupManager popupManager = new PAPopupManager(context);
+                popupManager.showTipDialog("",context.getString(R.string.picture_delete));
+                popupManager.setOnPopupListener(new IOnDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        if (onDeleteListener!=null){
+                            onDeleteListener.onDelete(imageEntity.getPosition());
+                        }
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onOther() {
+
+                    }
+                });
+            }
+        });
+
     }
 
 
@@ -411,6 +505,8 @@ public class ImagePreviewUtil {
 
     }
 
+
+
     private void setSameConfig(final Dialog dialog,View tvCancel,boolean isInner){
         Window window = dialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -456,41 +552,41 @@ public class ImagePreviewUtil {
 
     }
 
-    private void showDeleteTip(final Dialog dialog,final TextView indexText,final ViewPager viewPager){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage(context.getString(R.string.picture_delete));
-        alertDialog.setPositiveButton(context.getString(R.string.picture_confirm),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        imageList.remove(imageIndex);
-                        picturePreviewAdapter.notifyDataSetChanged();
-                        if (imageList.size() == 0) {
-                            dialog.dismiss();
+    private void showDeleteTip(Context context,final Dialog dialog,final TextView indexText,final ViewPager viewPager){
+        PAPopupManager popupManager = new PAPopupManager(context);
+        popupManager.showTipDialog("",context.getString(R.string.picture_delete));
+        popupManager.setOnPopupListener(new IOnDialogListener() {
+            @Override
+            public void onConfirm() {
+                imageList.remove(imageIndex);
+                picturePreviewAdapter.notifyDataSetChanged();
+                if (imageList.size() == 0) {
+                    dialog.dismiss();
 
-                        } else {
-                            if ((imageIndex) < imageList.size()) {
+                } else {
+                    if ((imageIndex) < imageList.size()) {
 
-                            } else {
-                                imageIndex = imageIndex - 1;
-                            }
-                            indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
-                            viewPager.setCurrentItem(imageIndex);
-                        }
-                        if (onDeleteListener != null) {
-                            onDeleteListener.onDelete(imageIndex);
-                        }
+                    } else {
+                        imageIndex = imageIndex - 1;
                     }
-                });
-        alertDialog.setNegativeButton(context.getString(R.string.picture_cancel),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
+                    viewPager.setCurrentItem(imageIndex);
+                }
+                if (onDeleteListener != null) {
+                    onDeleteListener.onDelete(imageIndex);
+                }
+            }
 
-                    }
-                });
-        alertDialog.show();
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOther() {
+
+            }
+        });
     }
 
     private boolean isSelected(ImageEntity path){
