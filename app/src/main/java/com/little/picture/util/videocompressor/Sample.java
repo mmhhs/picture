@@ -1,4 +1,4 @@
-package com.vincent.videocompressor;
+package com.little.picture.util.videocompressor;
 
 public class Sample {
     private long offset = 0;

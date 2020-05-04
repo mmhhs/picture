@@ -639,6 +639,7 @@ public class ImagePreviewUtil {
         ImageListEntity imageListEntity = new ImageListEntity();
         imageListEntity.setChooseImageList(imageList);
         imageListEntity.setFromTag(fromTag);
+        imageListEntity.setMode(0);
         EventBus.getDefault().post(imageListEntity);
     }
 

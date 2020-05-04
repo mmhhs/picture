@@ -35,7 +35,8 @@ dependencies {
     implementation 'com.github.hotchemi:permissionsdispatcher:2.3.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    compile project(':videocompressor')
+    compile files('libs/isoparser-1.0.6.jar')
+    compile files('libs/aspectjrt-1.7.3.jar')
 }
 
 //publish {

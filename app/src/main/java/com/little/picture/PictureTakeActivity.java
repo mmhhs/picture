@@ -38,9 +38,10 @@ import com.little.picture.util.ImagePreviewUtil;
 import com.little.picture.util.ImageUtil;
 import com.little.picture.util.PermissionUtil;
 import com.little.picture.util.VideoUtil;
+import com.little.picture.util.videocompressor.VideoCompress;
 import com.little.picture.view.CircularProgressView;
 import com.little.picture.view.dialog.PAPopupManager;
-import com.vincent.videocompressor.VideoCompress;
+
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -106,10 +107,11 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         initView();
     }
 
-    public static void startAction(Activity activity,int type,ImageEntity entity){
+    public static void startAction(Activity activity,int type,String fromTag,ImageEntity entity){
         Intent intent = new Intent(activity,PictureTakeActivity.class);
         intent.putExtra("type",type);
         intent.putExtra("data",entity);
+        intent.putExtra("fromTag",fromTag);
         activity.startActivity(intent);
     }
 
@@ -202,6 +204,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     private void initView(){
         type = getIntent().getIntExtra("type",0);
+        fromTag = getIntent().getStringExtra("fromTag");
         videoEntity = (ImageEntity) getIntent().getSerializableExtra("data");
         if (videoEntity!=null){
             videoPath = videoEntity.getImagePath();

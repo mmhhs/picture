@@ -510,9 +510,9 @@ public class PicturePickActivity extends Activity {
             try {
                 ImageEntity entity = folderImageFolderEntityList.get(folderShowIndex).getImagePathList().get(position);
                 if (entity.getType()==1){
-//                    PictureTakeActivity.startAction(PicturePickActivity.this,1,entity);
+                    PictureTakeActivity.startAction(PicturePickActivity.this,1,fromTag,entity);
 //                    entity.setShowDelete(true);
-                    imagePreviewUtil.showVideoDialog(entity);
+//                    imagePreviewUtil.showVideoDialog(entity);
                     return;
                 }
                 if (funcType == PICK_IMAGE) {
