@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">Picture</string>
-    <string name="picture_all">所有图片</string>
+    <string name="picture_all">图片和视频</string>
+    <string name="picture_all_video">所有视频</string>
     <string name="picture_query">查询图库</string>
     <string name="picture_sd">SD卡不存在或者正在使用USB连接</string>
     <string name="picture_max">最多能选择图片个数为</string>
-    <string name="picture_delete">确定删除该图片？</string>
-    <string name="picture_image">图片</string>
+    <string name="picture_delete">您确定删除吗？</string>
+    <string name="picture_image">图库</string>
     <string name="picture_unit">张</string>
+    <string name="picture_unit2">个</string>
     <string name="picture_done">完成</string>
     <string name="picture_preview">预览</string>
     <string name="picture_choose">选择</string>
@@ -15,4 +17,7 @@
     <string name="picture_cancel">取消</string>
     <string name="picture_clip">裁剪</string>
     <string name="picture_original">原图</string>
+    <string name="picture_ignore">忽略</string>
+    <string name="picture_tip">温馨提示</string>
+    <string name="picture_tip2">轻触拍照，长按摄像</string>
 </resources>

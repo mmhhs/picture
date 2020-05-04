@@ -12,9 +12,11 @@ public class ImageListEntity implements Serializable{
 
     private List<ImageEntity> imageList;
 
-    private List<String> chooseImageList;//选中的图片
-
+    private int mode = 0;//模式：0：拍照，1：录像
     private String fromTag = "";//来源标志
+    private List<ImageEntity> chooseImageList;//选中的图片
+    private String videoPath;//视频路径
+    private String videoThumbPath;//视频缩略图路径
 
     public ImageListEntity() {
     }
@@ -27,11 +29,11 @@ public class ImageListEntity implements Serializable{
         this.imageList = imageList;
     }
 
-    public List<String> getChooseImageList() {
+    public List<ImageEntity> getChooseImageList() {
         return chooseImageList;
     }
 
-    public void setChooseImageList(List<String> chooseImageList) {
+    public void setChooseImageList(List<ImageEntity> chooseImageList) {
         this.chooseImageList = chooseImageList;
     }
 
@@ -41,5 +43,33 @@ public class ImageListEntity implements Serializable{
 
     public void setFromTag(String fromTag) {
         this.fromTag = fromTag;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public String getVideoThumbPath() {
+        return videoThumbPath;
+    }
+
+    public void setVideoThumbPath(String videoThumbPath) {
+        this.videoThumbPath = videoThumbPath;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 }

@@ -1,66 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/picture_ui_footer_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/picture_navi_bar_height_bottom"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:id="@+id/picture_ui_footer_layout"
-    android:background="@color/picture_white"
-    >
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="1/1"
-        style="@style/picture_text_16"
-        android:layout_marginLeft="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp"
-        android:gravity="center_vertical"
-        android:minWidth="70dp"
-        android:background="@drawable/picture_menu_bg"
-        android:id="@+id/picture_ui_footer_folder" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/picture_original"
-        android:visibility="gone"
-        android:layout_marginLeft="15dp"
-        android:paddingLeft="10dp"
-        android:button="@drawable/picture_select"
-        style="@style/picture_text_16"
-        android:id="@+id/picture_ui_footer_original" />
+    android:orientation="vertical">
+    <View
+        style="@style/picture_line_horizontal"/>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/picture_white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/picture_ui_footer_folder"
+        style="@style/picture_text_16"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:drawableRight="@drawable/picture_menu_bg2"
+        android:drawablePadding="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:minWidth="70dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="图片和视频" />
+
+    <CheckBox
+        android:id="@+id/picture_ui_footer_original"
+        style="@style/picture_text_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:button="@drawable/picture_check2"
+        android:paddingLeft="10dp"
+        android:text="@string/picture_original"
+        android:visibility="gone" />
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
     </LinearLayout>
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/picture_choose"
-        android:visibility="gone"
-        android:layout_marginRight="15dp"
-        android:paddingLeft="10dp"
-        android:button="@drawable/picture_check"
+        android:id="@+id/picture_ui_footer_choose"
         style="@style/picture_text_16"
-        android:id="@+id/picture_ui_footer_choose" />
+        android:layout_width="80dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="15dp"
+        android:button="@drawable/picture_check2"
+        android:paddingLeft="10dp"
+        android:text="@string/picture_choose"
+        android:visibility="gone" />
 
     <TextView
-        android:background="@drawable/picture_press"
+        android:id="@+id/picture_ui_footer_preview"
+        style="@style/picture_text_16"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/picture_press"
         android:gravity="center"
-        android:text="@string/picture_preview"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_marginRight="15dp"
-        style="@style/picture_text_16"
-        android:id="@+id/picture_ui_footer_preview" />
+        android:text="@string/picture_preview" />
+
+    </LinearLayout>
 </LinearLayout>

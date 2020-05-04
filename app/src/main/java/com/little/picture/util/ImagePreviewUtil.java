@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -16,25 +17,35 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
+import com.fos.fosmvp.common.utils.LogUtils;
+import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.PictureStartManager;
 import com.little.picture.R;
 import com.little.picture.adapter.PictureFolderAdapter;
 import com.little.picture.adapter.PictureGridAdapter;
 import com.little.picture.adapter.PicturePreviewAdapter;
+import com.little.picture.adapter.PicturePreviewOutAdapter;
+import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnDeleteListener;
 import com.little.picture.listener.IOnGestureListener;
 import com.little.picture.listener.IOnItemClickListener;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.view.ClipImageLayout;
 import com.little.picture.view.PageIndicatorView;
+import com.little.picture.view.dialog.IOnDialogListener;
+import com.little.picture.view.dialog.PAPopupManager;
+import com.little.picture.view.dialog.PopupListAdapter;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -71,10 +82,10 @@ public class ImagePreviewUtil {
     private IOnItemClickListener onItemClickListener;
     private IOnDeleteListener onDeleteListener;//删除监听
 
-    private String previewPath = "";
+    private ImageEntity previewPath = null;
 
     private List<ImageFolderEntity> folderImageFolderEntityList;
-    private ArrayList<String> chooseImageList;//选中的图片
+    private List<ImageEntity> chooseImageList;//选中的图片
 
     private PictureGridAdapter pictureGridAdapter;
     private PicturePreviewAdapter picturePreviewAdapter;
@@ -118,13 +129,13 @@ public class ImagePreviewUtil {
         final LinearLayout deleteLayout = view.findViewById(R.id.picture_ui_title_delete_layout);
         final TextView indexText = view.findViewById(R.id.picture_ui_title_index);
 
-        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
         dialog.setContentView(view);
 
         setSameConfig(dialog,backLayout,false);
 
 
-        picturePreviewAdapter = new PicturePreviewAdapter(context, imageList);
+        PicturePreviewOutAdapter picturePreviewAdapter = new PicturePreviewOutAdapter(context, imageList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
             public void onClick() {
@@ -189,10 +200,95 @@ public class ImagePreviewUtil {
         deleteLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDeleteTip(dialog,indexText,viewPager);
+                showDeleteTip(context,dialog,indexText,viewPager);
 
             }
         });
+    }
+
+    public void showVideoDialog(final ImageEntity imageEntity){
+        View view = LayoutInflater.from(context).inflate(R.layout.picture_dialog_video,null, false);
+        VideoView videoView = view.findViewById(R.id.picture_vv_sp);
+        ImageView thumbImageView = view.findViewById(R.id.picture_iv_tp);
+        LinearLayout containLayout =  view.findViewById(R.id.popup_dialog_video_container_layout);
+        final LinearLayout titleLayout =  view.findViewById(R.id.picture_ui_title_layout);
+        LinearLayout backLayout =  view.findViewById(R.id.picture_ui_title_back_layout);
+        LinearLayout deleteLayout =  view.findViewById(R.id.picture_ui_title_delete_layout);
+        TextView tvDone =  view.findViewById(R.id.picture_ui_title_done);
+        TextView tvIndex =  view.findViewById(R.id.picture_ui_title_index);
+
+        tvDone.setVisibility(View.GONE);
+        deleteLayout.setVisibility(View.VISIBLE);
+        tvIndex.setVisibility(View.GONE);
+        if (imageEntity.isShowDelete()){
+            titleLayout.setVisibility(View.VISIBLE);
+        }else {
+            titleLayout.setVisibility(View.GONE);
+        }
+
+        if (!StringUtils.isEmpty(imageEntity.getThumbPath())){
+            GlideUtil.getInstance().display(context,imageEntity.getThumbPath(),thumbImageView);
+        }
+
+        videoView.setVisibility(View.VISIBLE);
+        videoView.setVideoPath(imageEntity.getImagePath());
+        videoView.start();
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+                mp.setLooping(true);
+            }
+        });
+
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
+        dialog.setContentView(view);
+
+        setSameConfig(dialog,backLayout,true);
+
+        backLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        containLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!imageEntity.isShowDelete()){
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        deleteLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PAPopupManager popupManager = new PAPopupManager(context);
+                popupManager.showTipDialog("",context.getString(R.string.picture_delete));
+                popupManager.setOnPopupListener(new IOnDialogListener() {
+                    @Override
+                    public void onConfirm() {
+                        if (onDeleteListener!=null){
+                            onDeleteListener.onDelete(imageEntity.getPosition());
+                        }
+                        dialog.dismiss();
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public void onOther() {
+
+                    }
+                });
+            }
+        });
+
     }
 
 
@@ -202,11 +298,11 @@ public class ImagePreviewUtil {
      * @param previewList 图片集合
      * @param position 显示图片索引
      */
-    public void showPicturePreview(int type, List<String> previewList, int position){
+    public void showPicturePreview(int type, List<ImageEntity> previewList, int position){
         getPicturePreviewWindow(context, type, previewList, position);
     }
 
-    public void getPicturePreviewWindow(final Context context, final int type, final List<String> previewList, int position) {
+    public void getPicturePreviewWindow(final Context context, final int type, final List<ImageEntity> previewList, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.picture_popup_preview,null, false);
         ViewPager viewPager = view.findViewById(R.id.picture_popup_preview_viewPager);
         final LinearLayout titleLayout = view.findViewById(R.id.picture_ui_title_layout2);
@@ -220,10 +316,10 @@ public class ImagePreviewUtil {
         final CheckBox originalCheckBox = view.findViewById(R.id.picture_ui_footer_original);
         final ClipImageLayout clipImageLayout = view.findViewById(R.id.picture_popup_preview_clipImageLayout);
 
-        clipImageLayout.setImageUri(previewList.get(position));
-        if (folderShowIndex == 0){
-            previewList.remove(0);
-        }
+        clipImageLayout.setImageUri(previewList.get(position).getImagePath());
+//        if (folderShowIndex == 0){
+//            previewList.remove(0);
+//        }
         picturePreviewAdapter = new PicturePreviewAdapter(context,previewList);
         picturePreviewAdapter.setOnGestureListener(new IOnGestureListener() {
             @Override
@@ -335,7 +431,7 @@ public class ImagePreviewUtil {
                     if (chooseImageList.size() < maxSize) {
                         setSelected(previewPath, true, doneText);
                     } else {
-                        ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                        PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                         chooseCheckBox.setChecked(false);
                     }
                 }
@@ -354,7 +450,7 @@ public class ImagePreviewUtil {
             }
         });
 
-        final Dialog dialog = new Dialog(context, R.style.DialogCentre);
+        final Dialog dialog = new Dialog(context, R.style.PictureDialogCentre);
         dialog.setContentView(view);
 
         setSameConfig(dialog,backLayout,true);
@@ -362,10 +458,6 @@ public class ImagePreviewUtil {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if (folderShowIndex == 0){
-                    previewList.add(0, "takePhoto");
-                    folderShowIndex = -1;
-                }
                 if (pictureGridAdapter !=null){
                     pictureGridAdapter.notifyDataSetChanged();
                 }
@@ -380,23 +472,26 @@ public class ImagePreviewUtil {
                     dialog.dismiss();
                     if (type== PREVIEW_EDIT){
                         Bitmap bitmap = clipImageLayout.clip();
-                        String clipImagePath = PictureStartManager.getImageFolder()+"clip"+System.currentTimeMillis()+".jpg";
+                        String clipImagePath = PictureStartManager.getImageFolder()+"CLIP_"+System.currentTimeMillis()+".jpg";
                         ImageUtil.saveJPGE_After(bitmap,100,clipImagePath);
-                        ArrayList<String> clipList = new ArrayList<String>();
-                        clipList.add(clipImagePath);
+                        List<ImageEntity> clipList = new ArrayList<>();
+                        ImageEntity ie = new ImageEntity();
+                        ie.setImagePath(clipImagePath);
+                        clipList.add(ie);
                         sendPicturePickBroadcast(clipList);
                     }else if (type== PREVIEW_TAKE){
-                        ArrayList<String> preList = new ArrayList<String>();
-                        preList.add(previewList.get(0));
+                        List<ImageEntity> preList = new ArrayList<>();
+                        ImageEntity ie = new ImageEntity();
+                        ie.setImagePath(previewList.get(0).getImagePath());
+                        preList.add(ie);
                         sendPicturePickBroadcast(preList);
                     }else {
                         if (!isOriginal){
-                            ArrayList<String> imageList = new ArrayList<String>();
-                            for (String path : chooseImageList){
-                                String imagePath = ImageUtil.saveScaleImage(path, PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
-                                imageList.add(imagePath);
+                            for (ImageEntity path : chooseImageList){
+                                String imagePath = ImageUtil.saveScaleImage(path.getImagePath(), PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
+                                path.setScalePath(imagePath);
                             }
-                            sendPicturePickBroadcast(imageList);
+                            sendPicturePickBroadcast(chooseImageList);
                         }else {
                             sendPicturePickBroadcast(chooseImageList);
                         }
@@ -409,6 +504,8 @@ public class ImagePreviewUtil {
         });
 
     }
+
+
 
     private void setSameConfig(final Dialog dialog,View tvCancel,boolean isInner){
         Window window = dialog.getWindow();
@@ -455,48 +552,48 @@ public class ImagePreviewUtil {
 
     }
 
-    private void showDeleteTip(final Dialog dialog,final TextView indexText,final ViewPager viewPager){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-        alertDialog.setTitle("提示");
-        alertDialog.setMessage(context.getString(R.string.picture_delete));
-        alertDialog.setPositiveButton(context.getString(R.string.picture_confirm),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        imageList.remove(imageIndex);
-                        picturePreviewAdapter.notifyDataSetChanged();
-                        if (imageList.size() == 0) {
-                            dialog.dismiss();
+    private void showDeleteTip(Context context,final Dialog dialog,final TextView indexText,final ViewPager viewPager){
+        PAPopupManager popupManager = new PAPopupManager(context);
+        popupManager.showTipDialog("",context.getString(R.string.picture_delete));
+        popupManager.setOnPopupListener(new IOnDialogListener() {
+            @Override
+            public void onConfirm() {
+                imageList.remove(imageIndex);
+                picturePreviewAdapter.notifyDataSetChanged();
+                if (imageList.size() == 0) {
+                    dialog.dismiss();
 
-                        } else {
-                            if ((imageIndex) < imageList.size()) {
+                } else {
+                    if ((imageIndex) < imageList.size()) {
 
-                            } else {
-                                imageIndex = imageIndex - 1;
-                            }
-                            indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
-                            viewPager.setCurrentItem(imageIndex);
-                        }
-                        if (onDeleteListener != null) {
-                            onDeleteListener.onDelete(imageIndex);
-                        }
+                    } else {
+                        imageIndex = imageIndex - 1;
                     }
-                });
-        alertDialog.setNegativeButton(context.getString(R.string.picture_cancel),
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
+                    viewPager.setCurrentItem(imageIndex);
+                }
+                if (onDeleteListener != null) {
+                    onDeleteListener.onDelete(imageIndex);
+                }
+            }
 
-                    }
-                });
-        alertDialog.show();
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOther() {
+
+            }
+        });
     }
 
-    private boolean isSelected(String path){
+    private boolean isSelected(ImageEntity path){
         boolean result = false;
         if (chooseImageList!=null&&chooseImageList.size()>0){
-            for(String imagePath:chooseImageList){
-                if (path.equals(imagePath)){
+            for(ImageEntity imagePath:chooseImageList){
+                if (path.getImagePath().equals(imagePath.getImagePath())){
                     result = true;
                 }
             }
@@ -504,13 +601,13 @@ public class ImagePreviewUtil {
         return result;
     }
 
-    private void setSelected(String path,boolean isChecked,TextView doneText){
+    private void setSelected(ImageEntity path,boolean isChecked,TextView doneText){
         if (isChecked){
             if (!isSelected(path)){
                 if (chooseImageList.size()<maxSize){
                     chooseImageList.add(path);
                 }else {
-                    ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                    PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                 }
             }
         }else {
@@ -538,10 +635,11 @@ public class ImagePreviewUtil {
      * 发送结果广播
      * @param imageList 选中的图片列表
      */
-    public void sendPicturePickBroadcast(ArrayList<String> imageList){
+    public void sendPicturePickBroadcast(List<ImageEntity> imageList){
         ImageListEntity imageListEntity = new ImageListEntity();
         imageListEntity.setChooseImageList(imageList);
         imageListEntity.setFromTag(fromTag);
+        imageListEntity.setMode(0);
         EventBus.getDefault().post(imageListEntity);
     }
 
@@ -656,19 +754,11 @@ public class ImagePreviewUtil {
         this.folderImageFolderEntityList = folderImageFolderEntityList;
     }
 
-    public String getPreviewPath() {
-        return previewPath;
-    }
-
-    public void setPreviewPath(String previewPath) {
-        this.previewPath = previewPath;
-    }
-
-    public ArrayList<String> getChooseImageList() {
+    public List<ImageEntity> getChooseImageList() {
         return chooseImageList;
     }
 
-    public void setChooseImageList(ArrayList<String> chooseImageList) {
+    public void setChooseImageList(List<ImageEntity> chooseImageList) {
         this.chooseImageList = chooseImageList;
     }
 

@@ -9,14 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.PicturePickActivity;
 import com.little.picture.R;
 import com.little.picture.glide.GlideUtil;
 import com.little.picture.listener.IOnCheckListener;
 import com.little.picture.listener.IOnItemClickListener;
+import com.little.picture.model.ImageEntity;
 import com.little.picture.util.ImageUtil;
-import com.little.picture.util.ToastUtil;
+import com.little.picture.util.PaToastUtils;
+import com.little.picture.util.VideoUtil;
 
 import java.util.List;
 
@@ -25,8 +29,8 @@ import static com.little.picture.PictureStartManager.CENTER_CROP;
 
 public class PictureGridAdapter extends BaseAdapter{
     public Context context;
-    private List<String> list;//当前显示图片列表
-    private List<String> chooseList;//已选择的图片列表
+    private List<ImageEntity> list;//当前显示图片列表
+    private List<ImageEntity> chooseList;//已选择的图片列表
     private int itemWidth = 0;
     private IOnCheckListener onCheckListener;
     private IOnItemClickListener onItemClickListener;
@@ -34,7 +38,7 @@ public class PictureGridAdapter extends BaseAdapter{
     private int folderShowIndex;//文件夹索引
     private int funcType;//功能类型
 
-    public PictureGridAdapter(Context context, List<String> list, List<String> chooseList, int screenWidth, int maxSize, int folderShowIndex, int funcType) {
+    public PictureGridAdapter(Context context, List<ImageEntity> list, List<ImageEntity> chooseList, int screenWidth, int maxSize, int folderShowIndex, int funcType) {
         this.context = context;
         this.list = list;
         this.chooseList = chooseList;
@@ -70,27 +74,43 @@ public class PictureGridAdapter extends BaseAdapter{
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        final String path = list.get(position);
+        final ImageEntity path = list.get(position);
         viewHolder.containerLayout.getLayoutParams().width = itemWidth;
         viewHolder.containerLayout.getLayoutParams().height = itemWidth;
-        if (position==0&&folderShowIndex==0){
-            //全部图片文件夹时显示拍照
-            viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
-            viewHolder.checkBox.setVisibility(View.GONE);
-        }else {
-            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
+
+        if (path.getType()==0){
+
+            viewHolder.tvSc.setVisibility(View.GONE);
             viewHolder.checkBox.setVisibility(View.VISIBLE);
-        }
-        if (funcType == PicturePickActivity.PICK_AVATAR||funcType==PicturePickActivity.PICK_CROP_IMAGE){
-            viewHolder.checkBox.setVisibility(View.GONE);
-        }
-        if (isSelected(path)){
-            viewHolder.selectorImage.setVisibility(View.VISIBLE);
-            viewHolder.checkBox.setChecked(true);
+            if (funcType == PicturePickActivity.PICK_AVATAR||funcType==PicturePickActivity.PICK_CROP_IMAGE){
+                viewHolder.checkBox.setVisibility(View.GONE);
+                if (position==0&&folderShowIndex==0){
+                    //全部图片文件夹时显示拍照
+                    viewHolder.contentImage.setImageResource(R.drawable.picture_shoot);
+                }else {
+                    GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path.getImagePath()),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
+                }
+            }else {
+                GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(path.getImagePath()),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
+            }
+            if (isSelected(path)){
+                viewHolder.selectorImage.setVisibility(View.VISIBLE);
+                viewHolder.checkBox.setSelected(true);
+            }else {
+                viewHolder.selectorImage.setVisibility(View.GONE);
+                viewHolder.checkBox.setSelected(false);
+            }
         }else {
-            viewHolder.selectorImage.setVisibility(View.GONE);
-            viewHolder.checkBox.setChecked(false);
+            String imagePath = path.getImagePath();
+            if (!StringUtils.isEmpty(path.getThumbPath())){
+                imagePath = path.getThumbPath();
+            }
+            GlideUtil.getInstance().display(context, ImageUtil.completeImagePath(imagePath),viewHolder.contentImage,CENTER_CROP, itemWidth, itemWidth);
+            viewHolder.tvSc.setVisibility(View.VISIBLE);
+            viewHolder.checkBox.setVisibility(View.GONE);
+            viewHolder.tvSc.setText(VideoUtil.formatVideoTime(path.getDuration()));
         }
+
         viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,34 +136,36 @@ public class PictureGridAdapter extends BaseAdapter{
     public final static class ViewHolder {
         public ImageView contentImage;
         public ImageView selectorImage;
-        public CheckBox checkBox;
+        public ImageView checkBox;
         public RelativeLayout containerLayout;
+        public TextView tvSc;
 
         public ViewHolder(View convertView) {
-            contentImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_imageView);
-            selectorImage = (ImageView)convertView.findViewById(R.id.picture_adapter_grid_selector);
-            checkBox = (CheckBox)convertView.findViewById(R.id.picture_adapter_grid_checkBox);
-            containerLayout = (RelativeLayout)convertView.findViewById(R.id.picture_adapter_grid_layout);
+            contentImage = convertView.findViewById(R.id.picture_adapter_grid_imageView);
+            selectorImage = convertView.findViewById(R.id.picture_adapter_grid_selector);
+            checkBox = convertView.findViewById(R.id.picture_adapter_grid_checkBox);
+            containerLayout = convertView.findViewById(R.id.picture_adapter_grid_layout);
+            tvSc = convertView.findViewById(R.id.picture_adapter_grid_sc);
         }
     }
 
-    private boolean isSelected(String path){
+    private boolean isSelected(ImageEntity path){
         boolean result = false;
-        for(String imagePath:chooseList){
-            if (path.equals(imagePath)){
+        for(ImageEntity imagePath:chooseList){
+            if (path.getImagePath().equals(imagePath.getImagePath())){
                 result = true;
             }
         }
         return result;
     }
 
-    private void setSelected(String path,boolean isChecked){
+    private void setSelected(ImageEntity path,boolean isChecked){
         if (isChecked){
             if (!isSelected(path)){
                 if (chooseList.size()<maxSize){
                     chooseList.add(path);
                 }else {
-                    ToastUtil.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
+                    PaToastUtils.addToast(context, "" + context.getString(R.string.picture_max) + maxSize);
                 }
             }
         }else {

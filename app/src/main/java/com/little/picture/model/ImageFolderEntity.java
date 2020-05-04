@@ -10,7 +10,7 @@ public class ImageFolderEntity implements Serializable{
 	/**
 	 * 文件夹的第一张图片路径
 	 */
-	private String topImagePath;
+	private ImageEntity topImagePath;
 	/**
 	 * 文件夹名
 	 */
@@ -26,17 +26,22 @@ public class ImageFolderEntity implements Serializable{
 	/**
 	 * 文件夹中图片路径集合
 	 */
-	private List<String> imagePathList;
+	private List<ImageEntity> imagePathList;
+
+	/**
+	 * 文件夹中图片路径集合
+	 */
+	private List<ImageEntity> imageList;
 
 
 	public ImageFolderEntity() {
 	}
 
-	public String getTopImagePath() {
+	public ImageEntity getTopImagePath() {
 		return topImagePath;
 	}
 
-	public void setTopImagePath(String topImagePath) {
+	public void setTopImagePath(ImageEntity topImagePath) {
 		this.topImagePath = topImagePath;
 	}
 
@@ -64,11 +69,19 @@ public class ImageFolderEntity implements Serializable{
 		this.selected = selected;
 	}
 
-	public List<String> getImagePathList() {
+	public List<ImageEntity> getImagePathList() {
 		return imagePathList;
 	}
 
-	public void setImagePathList(List<String> imagePathList) {
+	public void setImagePathList(List<ImageEntity> imagePathList) {
 		this.imagePathList = imagePathList;
+	}
+
+	public List<ImageEntity> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(List<ImageEntity> imageList) {
+		this.imageList = imageList;
 	}
 }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    style="@style/picture_background_grey"
+    >
+    <com.little.picture.camera.CameraPreview
+        android:id="@+id/cp_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <VideoView
+        android:id="@+id/vv_sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        />
+    <ImageView
+        android:id="@+id/iv_tp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"/>
+
+    <LinearLayout
+        android:id="@+id/ll_ps_yl"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/iv_fh"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/dp_10"
+            android:scaleType="centerInside"
+            android:src="@mipmap/picture_fh"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/tv_wc"
+            style="@style/picture_text_14"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:gravity="center"
+            android:text="@string/picture_done"
+            android:textColor="@color/bg_white"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_margin="@dimen/dp_10"
+            android:background="@drawable/picture_button_green"
+            />
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/iv_fz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:layout_gravity="right"
+        android:layout_margin="@dimen/dp_10"
+        android:src="@mipmap/picture_fanzhuan"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/iv_xx"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:src="@mipmap/picture_xjt"/>
+
+        <com.little.picture.view.CircularProgressView
+            android:id="@+id/pv_pz"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            app:backColor="@color/picture_grey"
+            app:backWidth="4dp"
+            app:progColor="@color/picture_green_on"
+            app:progWidth="4dp"
+            app:progress="0" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_10"
+            android:visibility="invisible"
+            android:src="@mipmap/picture_xjt"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="120dp"
+        android:text="@string/picture_tip2"
+        android:textSize="14sp"
+        android:textColor="@color/picture_light_grey"/>
+</FrameLayout>

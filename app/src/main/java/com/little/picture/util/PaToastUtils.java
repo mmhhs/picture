@@ -3,7 +3,7 @@ package com.little.picture.util;
 import android.content.Context;
 import android.widget.Toast;
 
-public class ToastUtil {
+public class PaToastUtils {
 
     public static void addToast(Context context,String value){
         try {
