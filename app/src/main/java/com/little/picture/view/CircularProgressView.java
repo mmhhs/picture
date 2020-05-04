@@ -38,7 +38,7 @@ public class CircularProgressView extends View {
     private int centerWidth,centerHeight;
     private int mode = 0;//模式：0：拍照，1：录像
     private int maxTakeTime = 15000;//支持最大拍摄时长，单位毫秒
-    private int minTakeTime = 2000;//支持最大拍摄时长，单位毫秒
+    private int minTakeTime = 1500;//支持最大拍摄时长，单位毫秒
     public int currentPro = 0;//当前拍摄时间，单位毫秒
     private int delayTime = 50;//定时时间，单位毫秒
     private int totalPro = 100;//总进度
