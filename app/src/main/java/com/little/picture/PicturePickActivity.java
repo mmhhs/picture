@@ -3,6 +3,7 @@ package com.little.picture;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -104,34 +105,34 @@ public class PicturePickActivity extends Activity {
 
     /**
      * 打开选择照片
-     * @param activity
-     * @param funcType 功能类型，0：头像选取；1：多照片选取
+     * @param cxt
+     * @param funcType 功能类型，0：头像选取；1：多照片选取；2：照片选取裁剪
      * @param maxSize 选取数量 1-9
      * @param fromTag 来源标志 用于区分哪个界面调用
      */
-    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag){
-        Intent intent = new Intent(activity,PicturePickActivity.class);
+    public static void startAction(Context cxt, int funcType, int maxSize, String fromTag){
+        Intent intent = new Intent(cxt,PicturePickActivity.class);
         intent.putExtra(PICTURE_PICK_TYPE,funcType);
         intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
         intent.putExtra(PICTURE_FROM_TAG,fromTag);
-        activity.startActivity(intent);
+        cxt.startActivity(intent);
     }
 
     /**
      * 打开选择照片
-     * @param activity
-     * @param funcType 功能类型，0：头像选取；1：多照片选取
+     * @param ctx
+     * @param funcType 功能类型，0：头像选取；1：多照片选取；2：照片选取裁剪
      * @param maxSize 选取数量 1-9
      * @param fromTag 来源标志 用于区分哪个界面调用
      * @param rate 裁剪比例
      */
-    public static void startAction(Activity activity,int funcType,int maxSize,String fromTag,float rate){
-        Intent intent = new Intent(activity,PicturePickActivity.class);
+    public static void startAction(Context ctx,int funcType,int maxSize,String fromTag,float rate){
+        Intent intent = new Intent(ctx,PicturePickActivity.class);
         intent.putExtra(PICTURE_PICK_TYPE,funcType);
         intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
         intent.putExtra(PICTURE_FROM_TAG,fromTag);
         intent.putExtra("rate",rate);
-        activity.startActivity(intent);
+        ctx.startActivity(intent);
     }
 
     public void init() {

@@ -4,8 +4,12 @@ import android.content.Context;
 
 import com.fos.fosmvp.common.utils.LogUtils;
 import com.little.picture.util.AppApplication;
+import com.little.picture.view.dialog.IOnItemListener;
+import com.little.picture.view.dialog.PAPopupManager;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 图片管理
@@ -108,5 +112,29 @@ public class PictureStartManager {
 
     public static void setPicturePlaceholderId(int picturePlaceholderId) {
         PictureStartManager.picturePlaceholderId = picturePlaceholderId;
+    }
+
+    /**
+     * 照片选择框
+     * @param cxt 上下文
+     * @param fromTag 区分来源
+     * @param maxSize 最多选择的数量
+     */
+    public static void showChooseDialog(final Context cxt,final String fromTag,final int maxSize){
+        PAPopupManager popupManager = new PAPopupManager(cxt);
+        List<String> list = new ArrayList<>();
+        list.add("拍摄");
+        list.add("从相册选择");
+        popupManager.showListDialog(list);
+        popupManager.setOnItemListener(new IOnItemListener() {
+            @Override
+            public void onItem(int position) {
+                if (position==0){
+                    PictureTakeActivity.startAction(cxt,0,fromTag,null);
+                }else if (position==1){
+                    PicturePickActivity.startAction(cxt,1,maxSize,fromTag);
+                }
+            }
+        });
     }
 }

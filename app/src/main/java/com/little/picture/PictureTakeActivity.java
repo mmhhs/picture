@@ -1,6 +1,7 @@
 package com.little.picture;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -107,12 +108,12 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         initView();
     }
 
-    public static void startAction(Activity activity,int type,String fromTag,ImageEntity entity){
-        Intent intent = new Intent(activity,PictureTakeActivity.class);
+    public static void startAction(Context cxt, int type, String fromTag, ImageEntity entity){
+        Intent intent = new Intent(cxt,PictureTakeActivity.class);
         intent.putExtra("type",type);
         intent.putExtra("data",entity);
         intent.putExtra("fromTag",fromTag);
-        activity.startActivity(intent);
+        cxt.startActivity(intent);
     }
 
     private void bindView(){
