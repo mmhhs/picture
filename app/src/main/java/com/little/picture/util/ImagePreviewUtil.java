@@ -558,8 +558,11 @@ public class ImagePreviewUtil {
         popupManager.setOnPopupListener(new IOnDialogListener() {
             @Override
             public void onConfirm() {
+
                 imageList.remove(imageIndex);
-                picturePreviewAdapter.notifyDataSetChanged();
+                if (picturePreviewAdapter!=null){
+                    picturePreviewAdapter.notifyDataSetChanged();
+                }
                 if (imageList.size() == 0) {
                     dialog.dismiss();
 
