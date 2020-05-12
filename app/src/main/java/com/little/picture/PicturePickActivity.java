@@ -288,7 +288,12 @@ public class PicturePickActivity extends Activity {
                 if (value.size() > 0){
                     mImageFolderEntity.setTopImagePath(value.get(0));
                 }
-                list.add(1, mImageFolderEntity);
+                if (list.size()>0){
+                    list.add(1, mImageFolderEntity);
+                }else {
+                    list.add(0, mImageFolderEntity);
+                }
+
             }else {
                 list.add(mImageFolderEntity);
             }
