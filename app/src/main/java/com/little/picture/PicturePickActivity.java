@@ -474,19 +474,26 @@ public class PicturePickActivity extends Activity {
      * @param position
      */
     private void setFolderShow(int position) {
-        folderShowIndex = position;
-        for (ImageFolderEntity imageFolderEntity : folderImageFolderEntityList) {
-            imageFolderEntity.setSelected(false);
+        try {
+            if (position>=folderImageFolderEntityList.size()){
+                return;
+            }
+            folderShowIndex = position;
+            for (ImageFolderEntity imageFolderEntity : folderImageFolderEntityList) {
+                imageFolderEntity.setSelected(false);
+            }
+            folderImageFolderEntityList.get(position).setSelected(true);
+            folderText.setText(folderImageFolderEntityList.get(position).getFolderName());
+            //排序
+            Collections.sort(folderImageFolderEntityList.get(position).getImagePathList());
+            pictureGridAdapter = new PictureGridAdapter(PicturePickActivity.this, folderImageFolderEntityList.get(position).getImagePathList(), chooseImageList, screenWidth, maxSize, folderShowIndex, funcType);
+            pictureGridAdapter.setOnCheckListener(onCheckListener);
+            pictureGridAdapter.setOnItemClickListener(onItemClickListener);
+            gridView.setAdapter(pictureGridAdapter);
+            pictureGridAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+
         }
-        folderImageFolderEntityList.get(position).setSelected(true);
-        folderText.setText(folderImageFolderEntityList.get(position).getFolderName());
-        //排序
-        Collections.sort(folderImageFolderEntityList.get(position).getImagePathList());
-        pictureGridAdapter = new PictureGridAdapter(PicturePickActivity.this, folderImageFolderEntityList.get(position).getImagePathList(), chooseImageList, screenWidth, maxSize, folderShowIndex, funcType);
-        pictureGridAdapter.setOnCheckListener(onCheckListener);
-        pictureGridAdapter.setOnItemClickListener(onItemClickListener);
-        gridView.setAdapter(pictureGridAdapter);
-        pictureGridAdapter.notifyDataSetChanged();
     }
 
 
