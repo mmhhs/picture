@@ -393,7 +393,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         File mediaStorageDir = new File(PictureStartManager.IMAGE_FOLDER);
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d(TAG, "failed to create directory");
+                LogUtils.e(TAG+"failed to create directory");
                 return null;
             }
         }
