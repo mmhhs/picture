@@ -587,6 +587,8 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         if (mode==0){
             ImageEntity ie = new ImageEntity();
             ie.setImagePath(imagePath);
+            String ip = ImageUtil.saveScaleImage(imagePath, PictureStartManager.getImageFolder(),PictureStartManager.SCALE_WIDTH,PictureStartManager.SCALE_HEIGHT,100);
+            ie.setScalePath(ip);
             imageList.add(ie);
         }else {
             imageListEntity.setVideoPath(outputVideoPath);
