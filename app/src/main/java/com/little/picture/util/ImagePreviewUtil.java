@@ -43,6 +43,7 @@ import com.little.picture.model.ImageFolderEntity;
 import com.little.picture.model.ImageListEntity;
 import com.little.picture.view.ClipImageLayout;
 import com.little.picture.view.PageIndicatorView;
+import com.little.picture.view.PreVideoView;
 import com.little.picture.view.dialog.IOnDialogListener;
 import com.little.picture.view.dialog.PAPopupManager;
 import com.little.picture.view.dialog.PopupListAdapter;
@@ -208,7 +209,7 @@ public class ImagePreviewUtil {
 
     public void showVideoDialog(final ImageEntity imageEntity){
         View view = LayoutInflater.from(context).inflate(R.layout.picture_dialog_video,null, false);
-        VideoView videoView = view.findViewById(R.id.picture_vv_sp);
+        final PreVideoView videoView = view.findViewById(R.id.picture_vv_sp);
         ImageView thumbImageView = view.findViewById(R.id.picture_iv_tp);
         LinearLayout containLayout =  view.findViewById(R.id.popup_dialog_video_container_layout);
         final LinearLayout titleLayout =  view.findViewById(R.id.picture_ui_title_layout);
@@ -230,15 +231,15 @@ public class ImagePreviewUtil {
             GlideUtil.getInstance().display(context,imageEntity.getThumbPath(),thumbImageView);
         }
 
+
         videoView.setVisibility(View.VISIBLE);
         videoView.setVideoPath(imageEntity.getImagePath());
-        videoView.start();
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
             @Override
             public void onPrepared(MediaPlayer mp) {
-                mp.start();
-                mp.setLooping(true);
+                videoView.setLooping(true);
+                videoView.start();
             }
         });
 
@@ -286,6 +287,13 @@ public class ImagePreviewUtil {
 
                     }
                 });
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                videoView.release();
             }
         });
 

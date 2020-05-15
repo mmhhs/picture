@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"/>
-        <VideoView
+        <com.little.picture.view.PreVideoView
             android:id="@+id/picture_vv_sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
