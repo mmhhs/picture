@@ -58,6 +58,7 @@ public class PicturePickActivity extends Activity {
 
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
+    private int canRecord = 0;//类型：0：可拍摄，1：不可拍摄
 
     private Map<String, List<ImageEntity>> mGroupMap = new HashMap<>();//本地图片分组集合
     private List<ImageEntity> allImageList = new ArrayList<>();//所有图片路径集合
@@ -115,6 +116,23 @@ public class PicturePickActivity extends Activity {
         intent.putExtra(PICTURE_PICK_TYPE,funcType);
         intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
         intent.putExtra(PICTURE_FROM_TAG,fromTag);
+        intent.putExtra("canRecord",0);
+        cxt.startActivity(intent);
+    }
+
+    /**
+     * 打开选择照片
+     * @param cxt
+     * @param funcType 功能类型，0：头像选取；1：多照片选取；2：照片选取裁剪
+     * @param maxSize 选取数量 1-9
+     * @param fromTag 来源标志 用于区分哪个界面调用
+     */
+    public static void startAction(Context cxt, int funcType, int maxSize, String fromTag, int canRecord){
+        Intent intent = new Intent(cxt,PicturePickActivity.class);
+        intent.putExtra(PICTURE_PICK_TYPE,funcType);
+        intent.putExtra(PICTURE_PICK_IMAGE,maxSize);
+        intent.putExtra(PICTURE_FROM_TAG,fromTag);
+        intent.putExtra("canRecord",canRecord);
         cxt.startActivity(intent);
     }
 
@@ -144,6 +162,7 @@ public class PicturePickActivity extends Activity {
             fromTag = getIntent().getExtras().getString(PICTURE_FROM_TAG);
             maxSize = getIntent().getExtras().getInt(PICTURE_PICK_IMAGE, 9);
             rate = getIntent().getExtras().getFloat("rate", 1);
+            canRecord = getIntent().getIntExtra("canRecord",0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -319,7 +338,7 @@ public class PicturePickActivity extends Activity {
         }
 
         queryImages();
-        if (funcType==PICK_IMAGE){
+        if (funcType==PICK_IMAGE&&canRecord==0){
             queryVideo();
         }
 
@@ -523,7 +542,7 @@ public class PicturePickActivity extends Activity {
             try {
                 ImageEntity entity = folderImageFolderEntityList.get(folderShowIndex).getImagePathList().get(position);
                 if (entity.getType()==1){
-                    PictureTakeActivity.startAction(PicturePickActivity.this,1,fromTag,entity);
+                    PictureTakeActivity.startAction(PicturePickActivity.this,1,fromTag,entity,0);
 //                    entity.setShowDelete(true);
 //                    imagePreviewUtil.showVideoDialog(entity);
                     return;

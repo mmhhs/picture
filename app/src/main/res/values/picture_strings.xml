@@ -20,4 +20,5 @@
     <string name="picture_ignore">忽略</string>
     <string name="picture_tip">温馨提示</string>
     <string name="picture_tip2">轻触拍照，长按摄像</string>
+    <string name="picture_tip3">轻触拍照</string>
 </resources>
