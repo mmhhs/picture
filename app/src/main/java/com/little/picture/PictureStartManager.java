@@ -121,6 +121,16 @@ public class PictureStartManager {
      * @param maxSize 最多选择的数量
      */
     public static void showChooseDialog(final Context cxt,final String fromTag,final int maxSize){
+        showChooseDialog(cxt,fromTag,maxSize,0);
+    }
+
+    /**
+     * 照片选择框
+     * @param cxt 上下文
+     * @param fromTag 区分来源
+     * @param maxSize 最多选择的数量
+     */
+    public static void showChooseDialog(final Context cxt,final String fromTag,final int maxSize,final int canRecord){
         PAPopupManager popupManager = new PAPopupManager(cxt);
         List<String> list = new ArrayList<>();
         list.add("拍摄");
@@ -130,9 +140,9 @@ public class PictureStartManager {
             @Override
             public void onItem(int position) {
                 if (position==0){
-                    PictureTakeActivity.startAction(cxt,0,fromTag,null);
+                    PictureTakeActivity.startAction(cxt,0,fromTag,null,canRecord);
                 }else if (position==1){
-                    PicturePickActivity.startAction(cxt,1,maxSize,fromTag);
+                    PicturePickActivity.startAction(cxt,1,maxSize,fromTag,canRecord);
                 }
             }
         });

@@ -566,26 +566,32 @@ public class ImagePreviewUtil {
         popupManager.setOnPopupListener(new IOnDialogListener() {
             @Override
             public void onConfirm() {
-
-                imageList.remove(imageIndex);
-                if (picturePreviewAdapter!=null){
-                    picturePreviewAdapter.notifyDataSetChanged();
-                }
-                if (imageList.size() == 0) {
-                    dialog.dismiss();
-
-                } else {
-                    if ((imageIndex) < imageList.size()) {
+                try {
+                    imageList.remove(imageIndex);
+                    if (picturePreviewAdapter!=null){
+                        picturePreviewAdapter.notifyDataSetChanged();
+                    }
+                    if (imageList.size() == 0) {
+                        dialog.dismiss();
 
                     } else {
-                        imageIndex = imageIndex - 1;
+                        if ((imageIndex) < imageList.size()) {
+
+                        } else {
+                            imageIndex = imageIndex - 1;
+                        }
+                        indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
+
+                        viewPager.getAdapter().notifyDataSetChanged();
+                        viewPager.setCurrentItem(imageIndex);
                     }
-                    indexText.setText("" + (imageIndex + 1) + "/" + imageList.size());
-                    viewPager.setCurrentItem(imageIndex);
+                    if (onDeleteListener != null) {
+                        onDeleteListener.onDelete(imageIndex);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                if (onDeleteListener != null) {
-                    onDeleteListener.onDelete(imageIndex);
-                }
+
             }
 
             @Override
