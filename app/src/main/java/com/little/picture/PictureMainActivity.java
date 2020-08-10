@@ -1,11 +1,12 @@
 package com.little.picture;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.little.picture.model.ImageEntity;
 import com.little.picture.util.ImagePreviewUtil;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class PictureMainActivity extends AppCompatActivity {
 

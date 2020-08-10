@@ -9,7 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.net.Uri;
-import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -17,6 +16,8 @@ import android.view.ScaleGestureDetector;
 import android.view.animation.LinearInterpolator;
 
 import com.little.picture.listener.IOnGestureListener;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * 缩放

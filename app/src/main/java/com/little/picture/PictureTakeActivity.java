@@ -7,7 +7,6 @@ import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -52,6 +51,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import static com.little.picture.PicturePickActivity.PICK_AVATAR;
 import static com.little.picture.PicturePickActivity.PICK_CROP_IMAGE;
