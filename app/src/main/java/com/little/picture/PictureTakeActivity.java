@@ -91,6 +91,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
 
     private String fromTag= "";//来源标志
     private ImageEntity videoEntity;
+    private int canRecord = 0;//类型：0：可拍摄，1：不可拍摄
 
     private LoadViewUtil loadViewUtil;
 
@@ -108,11 +109,12 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         initView();
     }
 
-    public static void startAction(Context cxt, int type, String fromTag, ImageEntity entity){
+    public static void startAction(Context cxt, int type, String fromTag, ImageEntity entity, int canRecord){
         Intent intent = new Intent(cxt,PictureTakeActivity.class);
         intent.putExtra("type",type);
         intent.putExtra("data",entity);
         intent.putExtra("fromTag",fromTag);
+        intent.putExtra("canRecord",canRecord);
         cxt.startActivity(intent);
     }
 
@@ -206,11 +208,17 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     private void initView(){
         type = getIntent().getIntExtra("type",0);
         fromTag = getIntent().getStringExtra("fromTag");
+        canRecord = getIntent().getIntExtra("canRecord",0);
         videoEntity = (ImageEntity) getIntent().getSerializableExtra("data");
         if (videoEntity!=null){
             videoPath = videoEntity.getImagePath();
         }
 
+        if (canRecord==0){
+            tvTip.setText(getString(R.string.picture_tip2));
+        }else {
+            tvTip.setText(getString(R.string.picture_tip3));
+        }
         EventBus.getDefault().register(this);
         popupManager = new PAPopupManager(this);
         loadViewUtil = new LoadViewUtil(this,ivXx,"",1);
@@ -334,8 +342,11 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
             @Override
             public void onLongPress(MotionEvent e) {
                 // 长按，触摸屏按下后既不抬起也不移动，过一段时间后触发
-                setMode(1);
-                startRecording();
+                if (canRecord==0){
+                    setMode(1);
+                    startRecording();
+                }
+
             }
 
             @Override
