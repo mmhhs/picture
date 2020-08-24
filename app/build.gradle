@@ -43,7 +43,7 @@ publish {
     userOrg = 'mmhhs'//bintray.com用户名
     groupId = 'com.little'//jcenter上的路径
     artifactId = 'picture'//项目名称
-    publishVersion = '1.3.6'//版本号
+    publishVersion = '1.4.0-back'//版本号
     desc = 'choose picture'
     website = 'https://github.com/mmhhs/picture.git'
 }
