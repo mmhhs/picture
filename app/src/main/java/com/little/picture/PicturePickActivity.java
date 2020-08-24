@@ -58,7 +58,7 @@ public class PicturePickActivity extends Activity {
 
     private int funcType = PICK_IMAGE;//功能类型 默认为多照片选取
     private String fromTag= "";//来源标志
-    private int canRecord = 0;//类型：0：可拍摄，1：不可拍摄
+    private int canRecord = 0;//视频类型：0：可拍摄，1：不可拍摄，2：只选视频
 
     private Map<String, List<ImageEntity>> mGroupMap = new HashMap<>();//本地图片分组集合
     private List<ImageEntity> allImageList = new ArrayList<>();//所有图片路径集合
@@ -337,11 +337,15 @@ public class PicturePickActivity extends Activity {
             return false;
         }
 
-        queryImages();
-        if (funcType==PICK_IMAGE&&canRecord==0){
+        if(canRecord==2){
+            maxDuration = 15000*100;
             queryVideo();
+        }else {
+            queryImages();
+            if (funcType==PICK_IMAGE&&canRecord==0){
+                queryVideo();
+            }
         }
-
 
         return true;
     }
