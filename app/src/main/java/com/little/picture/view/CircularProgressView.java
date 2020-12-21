@@ -12,9 +12,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -24,6 +21,10 @@ import com.little.picture.listener.IOnProgressListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 /**
  * 圆形进度条控件

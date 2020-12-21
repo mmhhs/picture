@@ -1,7 +1,7 @@
 package com.little.picture.adapter;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,8 @@ import com.little.picture.util.ImageUtil;
 import com.little.picture.view.ZoomImageView;
 
 import java.util.List;
+
+import androidx.viewpager.widget.PagerAdapter;
 
 import static com.little.picture.PictureStartManager.FIT_CENTER;
 

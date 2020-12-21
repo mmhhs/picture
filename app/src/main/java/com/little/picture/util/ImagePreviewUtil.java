@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.support.v4.view.ViewPager;
+
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +52,8 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.viewpager.widget.ViewPager;
 
 import static com.little.picture.util.StatusBarUtils.isMeizu;
 import static com.little.picture.util.StatusBarUtils.isXiaomi;

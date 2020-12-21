@@ -16,8 +16,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 
 import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.PictureStartManager;
@@ -28,6 +26,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
 
 /**
  * 图片选取工具类

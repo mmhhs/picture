@@ -8,14 +8,15 @@ import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 
 import java.security.MessageDigest;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
 import static com.little.picture.PictureStartManager.CENTER_CROP;
 import static com.little.picture.PictureStartManager.CENTER_INSIDE;
