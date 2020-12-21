@@ -19,7 +19,7 @@ import java.io.File;
 import androidx.annotation.NonNull;
 
 @GlideModule
-public class GlideConfigModule extends LibraryGlideModule {
+public class GlideConfigModule extends AppGlideModule {
 
     public GlideConfigModule() {
         super();
@@ -28,16 +28,27 @@ public class GlideConfigModule extends LibraryGlideModule {
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         super.registerComponents(context, glide, registry);
+    }
+
+    @Override
+    public void applyOptions(@NonNull Context context,@NonNull GlideBuilder builder) {
         String folder = PictureStartManager.getImageFolder()+"glide_cache";
         File f = new File(folder);
         if (!f.exists()){
             f.mkdirs();
         }
         //磁盘缓存
-//        builder.setDiskCache(new InternalCacheDiskCacheFactory(context, folder, ConfigConstants.MAX_CACHE_DISK_SIZE));
-//        //指定内存缓存大小
-//        builder.setMemoryCache(new LruResourceCache(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
-//        //全部的内存缓存用来作为图片缓存
-//        builder.setBitmapPool(new LruBitmapPool(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
+        builder.setDiskCache(new InternalCacheDiskCacheFactory(context, folder, ConfigConstants.MAX_CACHE_DISK_SIZE));
+        //指定内存缓存大小
+        builder.setMemoryCache(new LruResourceCache(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
+        //全部的内存缓存用来作为图片缓存
+        builder.setBitmapPool(new LruBitmapPool(ConfigConstants.MAX_CACHE_MEMORY_SIZE));
+
+        LogUtils.e("------GlideConfigModule set-------");
+    }
+
+    @Override
+    public boolean isManifestParsingEnabled() {
+        return false;
     }
 }
