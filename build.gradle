@@ -3,10 +3,11 @@
 buildscript {
     repositories {
         jcenter()
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+//        maven {
+//            url 'https://maven.google.com/'
+//            name 'Google'
+//        }
+        maven {url 'https://dl.google.com/dl/android/maven2/'}
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
@@ -19,10 +20,11 @@ buildscript {
 allprojects {
     repositories {
         maven { url "https://jitpack.io" }
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
+//        maven {
+//            url 'https://maven.google.com/'
+//            name 'Google'
+//        }
+        maven {url 'https://dl.google.com/dl/android/maven2/'}
         jcenter()
     }
 //    tasks.withType(Javadoc) {
