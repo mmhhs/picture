@@ -54,13 +54,21 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public int rotation = 0;//手机屏幕方向
     private int VIDEO_WIDTH,VIDEO_HEIGHT;
 
+    public boolean isTaking = false;
+
     public void takePicture() {
+        if (isTaking){
+            return;
+        }else {
+            isTaking = true;
+        }
         mCamera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
                 if (pictureFile == null) {
                     Log.d(TAG, "Error creating media file, check storage permissions");
+                    isTaking = false;
                     return;
                 }
                 try {
@@ -77,6 +85,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     camera.startPreview();
                 } catch (Exception e) {
                     Log.d(TAG, "File not found: " + e.getMessage());
+                }finally {
+                    isTaking = false;
                 }
             }
         });
