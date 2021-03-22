@@ -451,37 +451,45 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
     private String compressVideo(){
         try {
             LogUtils.e("compressVideo length = "+new File(videoPath).length()/1024);
-            outputVideoPath = PictureStartManager.IMAGE_FOLDER+"VID_" + System.currentTimeMillis() + ".mp4";
-            VideoCompress.compressVideoHigh(videoPath, outputVideoPath, new VideoCompress.CompressListener() {
-                @Override
-                public void onStart() {
-                    LogUtils.e("---------VideoCompress onStart----------");
-                    loadViewUtil.showLoadView();
-                }
+            outputVideoPath = videoPath;
+            videoThumbPath = PictureStartManager.IMAGE_FOLDER+"THUMB_" + System.currentTimeMillis() + ".jpg";
+            ImageUtil.saveJPGE_After(VideoUtil.getVideoThumb2(outputVideoPath),100,videoThumbPath);
+            LogUtils.e("compressVideo videoThumbPath length = "+new File(videoThumbPath).length()/1024);
+            sendTakeResult();
+            finish();
 
-                @Override
-                public void onSuccess() {
-                    LogUtils.e("---------VideoCompress onSuccess----------");
-                    LogUtils.e("compressVideo after length = "+new File(outputVideoPath).length()/1024);
-                    videoThumbPath = PictureStartManager.IMAGE_FOLDER+"THUMB_" + System.currentTimeMillis() + ".jpg";
-                    ImageUtil.saveJPGE_After(VideoUtil.getVideoThumb2(outputVideoPath),100,videoThumbPath);
-                    LogUtils.e("compressVideo videoThumbPath length = "+new File(videoThumbPath).length()/1024);
-                    loadViewUtil.hideLoadView();
-                    sendTakeResult();
-                    finish();
-                }
 
-                @Override
-                public void onFail() {
-                    LogUtils.e("---------VideoCompress onFail----------");
-                    loadViewUtil.hideLoadView();
-                }
-
-                @Override
-                public void onProgress(float percent) {
-                    LogUtils.e("---------VideoCompress percent---------- "+percent);
-                }
-            });
+//            outputVideoPath = PictureStartManager.IMAGE_FOLDER+"VID_" + System.currentTimeMillis() + ".mp4";
+//            VideoCompress.compressVideoHigh(videoPath, outputVideoPath, new VideoCompress.CompressListener() {
+//                @Override
+//                public void onStart() {
+//                    LogUtils.e("---------VideoCompress onStart----------");
+//                    loadViewUtil.showLoadView();
+//                }
+//
+//                @Override
+//                public void onSuccess() {
+//                    LogUtils.e("---------VideoCompress onSuccess----------");
+//                    LogUtils.e("compressVideo after length = "+new File(outputVideoPath).length()/1024);
+//                    videoThumbPath = PictureStartManager.IMAGE_FOLDER+"THUMB_" + System.currentTimeMillis() + ".jpg";
+//                    ImageUtil.saveJPGE_After(VideoUtil.getVideoThumb2(outputVideoPath),100,videoThumbPath);
+//                    LogUtils.e("compressVideo videoThumbPath length = "+new File(videoThumbPath).length()/1024);
+//                    loadViewUtil.hideLoadView();
+//                    sendTakeResult();
+//                    finish();
+//                }
+//
+//                @Override
+//                public void onFail() {
+//                    LogUtils.e("---------VideoCompress onFail----------");
+//                    loadViewUtil.hideLoadView();
+//                }
+//
+//                @Override
+//                public void onProgress(float percent) {
+//                    LogUtils.e("---------VideoCompress percent---------- "+percent);
+//                }
+//            });
 
         }catch (Exception e){
             e.printStackTrace();
