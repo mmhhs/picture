@@ -452,7 +452,7 @@ public class PictureTakeActivity extends AppCompatActivity implements SurfaceHol
         try {
             LogUtils.e("compressVideo length = "+new File(videoPath).length()/1024);
             outputVideoPath = PictureStartManager.IMAGE_FOLDER+"VID_" + System.currentTimeMillis() + ".mp4";
-            VideoCompress.compressVideoLow(videoPath, outputVideoPath, new VideoCompress.CompressListener() {
+            VideoCompress.compressVideoHigh(videoPath, outputVideoPath, new VideoCompress.CompressListener() {
                 @Override
                 public void onStart() {
                     LogUtils.e("---------VideoCompress onStart----------");
