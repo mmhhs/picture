@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.fos.fosmvp.common.utils.LogUtils;
 import com.fos.fosmvp.common.utils.StringUtils;
 import com.little.picture.PictureStartManager;
@@ -55,6 +56,7 @@ import java.util.List;
 
 import androidx.viewpager.widget.ViewPager;
 
+import static com.little.picture.PictureStartManager.CENTER_CROP;
 import static com.little.picture.util.StatusBarUtils.isMeizu;
 import static com.little.picture.util.StatusBarUtils.isXiaomi;
 
@@ -230,7 +232,7 @@ public class ImagePreviewUtil {
         }
 
         if (!StringUtils.isEmpty(imageEntity.getThumbPath())){
-            GlideUtil.getInstance().display(context,imageEntity.getThumbPath(),thumbImageView);
+            GlideUtil.getInstance().display(context,imageEntity.getThumbPath(),thumbImageView, CENTER_CROP);
         }
 
 
